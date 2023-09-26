@@ -5,18 +5,19 @@ import axios from 'axios';
 function Search({ onSearch }){
 
     const [searchField, setSearchField] = useState('');
-    const [searchType, setSearchType] = useState("title");
+    const [searchType, setSearchType] = useState("Title");
     const [searchFromDate, setSearchFromDate] = useState('');
     const [searchToDate, setSearchToDate] = useState('');
 
     const handleSearch = () => {
         
-        const api = `publication/search?searchBox=` + searchField + `&searchType=` + searchType +
+        const api = `http://localhost:8080/publication/search?searchBox=` + searchField + `&searchType=` + searchType +
         `&searchByDateFrom=` + searchFromDate + `&searchByDateTo=` + searchToDate;
         
         axios.get(api)
         .then(response => {
-            onSearch(response.data);
+            const result = response.data;
+            onSearch(result.data);
         })
         .catch(error => {
             console.log("Error fetching data:",error);
