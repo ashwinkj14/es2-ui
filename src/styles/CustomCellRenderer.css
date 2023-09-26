@@ -1,0 +1,9 @@
+.custom-cell {
+    padding: 10px;
+    line-height: 1.5; /* Adjust this value as needed to reduce line spacing */
+    overflow: visible; /* Ensure content doesn't overflow */
+    white-space: normal; /* Prevent text from wrapping to the next line */
+    /* text-overflow: ellipsis; Add ellipsis for long content if desired */
+    text-align: center;
+  }
+  
