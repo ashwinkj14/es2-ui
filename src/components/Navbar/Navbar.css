@@ -1,0 +1,38 @@
+a{
+    text-decoration: none;
+    color: inherit;
+}
+.navbar-container{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    position: sticky;
+    /* top: 0; */
+    background-color: white;
+    justify-content: space-between;
+}
+
+.navbar-logo-container{
+    align-items: flex-start;
+}
+
+.navbar-logo{
+    margin: 10px;
+    height: 50px;
+    width: 300px;
+}
+
+.navbar-items{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.navbar-item{
+    width: 100px;
+}
+
+.navbar-item:hover{
+    cursor: pointer;
+}
