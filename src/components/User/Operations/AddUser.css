@@ -1,0 +1,52 @@
+.add-user-title{
+    color: #252525;
+    font-size: 30px;
+    font-weight: 400;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px
+}
+
+.add-user-body{
+    margin: 30px;
+    line-height: 1.5;
+}
+
+.add-user-form{
+    text-align: justify;
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+}
+
+.add-user-text-field-container{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.user-type-dropdown{
+    height: 30px;
+}
+
+.text-field{
+    height: 25px;
+}
+
+.add-user-submit-btn-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-top: 15px;
+}
+
+.add-user-submit-btn{
+    padding: 7px 20px;
+    min-width: 120px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--green);
+    color: white;
+    cursor: pointer;
+}
