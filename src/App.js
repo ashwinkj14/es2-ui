@@ -1,9 +1,11 @@
 /* eslint-disable require-jsdoc */
 /* eslint-disable react/react-in-jsx-scope */
-import './App.css';
-import Login from './components/login';
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
-import Publication from './components/publication';
+import Login from './components/Login/Login';
+import Publication from './components/Publication/Publication';
+import Settings from './components/Settings/Settings';
+
+import './App.css';
 
 function App() {
   return (
@@ -11,6 +13,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Login/>}></Route>
         <Route path="/publication" element={<Publication/>}></Route>
+        <Route path="/settings" element={<Settings/>}></Route>
       </Routes>
     </BrowserRouter>
   );
