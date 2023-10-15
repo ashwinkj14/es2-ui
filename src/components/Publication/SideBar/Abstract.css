@@ -1,0 +1,15 @@
+.abstract-title{
+    color: #252525;
+    font-size: 50px;
+    font-weight: 400;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px
+}
+
+.abstract-content{
+    margin: 30px;
+    line-height: 1.5;
+    text-align: justify;
+}
