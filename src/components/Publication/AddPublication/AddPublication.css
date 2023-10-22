@@ -92,8 +92,18 @@
 .add-pub-authors-container{
     display: flex;
     flex-direction: column;
+    margin-top: 15px;
     margin-bottom: 10px;
     width: 100%;
+}
+
+.add-pub-author-details-container{
+    margin-top: 5px;
+    display: flex;
+}
+
+.add-pub-author-label{
+    margin-bottom: 5px;
 }
 
 .abstract-field{
@@ -106,16 +116,49 @@
 
 .author-field{
     width: 240px;
-    margin-right: 15px;
 }
 
 .author-field:focus{
     outline-color: #017155;
 }
 
+.field-margin{
+    margin-left: 15px;
+}
+
+.add-pub-author-delete-btn{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
 .add-pub-add-author-btn{
     height: 30px;
-    margin-right: 25px;
+    /* margin-right: 25px; */
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rgb(8, 90, 167);
+    border-style: dashed;
+    color: rgb(8, 90, 167);
+    cursor: pointer;
+}
+
+.add-pub-upload-field-container{
+    display: flex;
+    flex-direction: column;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.add-pub-upload-btn{
+    height: 100px;
     margin-top: 10px;
     display: flex;
     flex-direction: row;
