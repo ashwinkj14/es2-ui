@@ -33,7 +33,11 @@ function AddUser({action}) {
       'password': password,
     };
 
-    axios.post(api, data)
+    const token = localStorage.getItem('token');
+    axios.defaults.headers.common.Authorization = 'Bearer ' + token;
+    axios.post(api, {
+      withCredentials: true,
+    }, data)
         .then((response) => {
           handleClose();
         })

@@ -40,11 +40,10 @@ function doLogin() {
 
   const errorMsg = 'Error occurred. Unable to login!';
 
+  const token = localStorage.getItem('token');
+  axios.defaults.headers.common.Authorization = 'Bearer ' + token;
   axios.post(api, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    withCredentials: true,
     body: JSON.stringify(requestData),
   }).then((response) => {
     if (response.status === 200) {

@@ -13,6 +13,13 @@ import AddPublication from './AddPublication/AddPublication';
 import './Publication.css';
 
 function Publication() {
+  const token = localStorage.getItem('token');
+  if (token === undefined || token === null) {
+    window.location.href = '/';
+    return (
+      <div></div>
+    );
+  }
   const [searchResult, setSearchResult] = useState('');
   const [popupContent, setPopupContent] = useState('');
   const [selectedTab, setSelectedTab] = useState('search');

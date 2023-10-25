@@ -16,6 +16,13 @@ import Footer from '../../containers/Footer/Footer';
 import './Settings.css';
 
 function Settings() {
+  const token = localStorage.getItem('token');
+  if (token === undefined || token === null) {
+    window.location.href = '/';
+    return (
+      <div></div>
+    );
+  }
   const [selectedTab, setSelectedTab] = useState('usermgmt');
   const [userDetails, setUserDetails] = useState({});
   const [shouldRender, setShouldRender] = useState(false);

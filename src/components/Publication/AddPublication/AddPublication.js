@@ -76,7 +76,11 @@ function AddPublication() {
     const api = `http://localhost:8080/publication/add`;
 
     try {
-      const response = await axios.post(api, formData, {
+      const token = localStorage.getItem('token');
+      axios.defaults.headers.common.Authorization = 'Bearer ' + token;
+      const response = await axios.post(api, {
+        withCredentials: true,
+      }, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

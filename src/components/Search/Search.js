@@ -15,8 +15,11 @@ function Search({onSearch}) {
   const handleSearch = () => {
     const api = `http://localhost:8080/publication/search?searchBox=` + searchField + `&searchType=` + searchType +
         `&searchByDateFrom=` + searchFromDate + `&searchByDateTo=` + searchToDate;
-
-    axios.get(api)
+    const token = localStorage.getItem('token');
+    axios.defaults.headers.common.Authorization = 'Bearer ' + token;
+    axios.get(api, {
+      withCredentials: true,
+    })
         .then((response) => {
           const result = response.data;
           onSearch(result.data);

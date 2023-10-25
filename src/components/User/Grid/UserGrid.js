@@ -15,7 +15,6 @@ import 'ag-grid-community/styles/ag-theme-alpine.css';
 
 // Check where we can add the add user button only for admin anyway.
 function UserGrid({setUserDetails, editUserAction, shouldRender}) {
-  const api = 'http://localhost:8080/user/list';
   const [userList, setUserList] = React.useState([]);
   const [renderGrid, setRenderGrid] = React.useState(false);
   const handleUserEdit = (props) => {
@@ -32,7 +31,12 @@ function UserGrid({setUserDetails, editUserAction, shouldRender}) {
   };
 
   useEffect(() => {
-    axios.get(api)
+    const api = 'http://localhost:8080/user/list';
+    const token = localStorage.getItem('token');
+    axios.defaults.headers.common.Authorization = 'Bearer ' + token;
+    axios.get(api, {
+      withCredentials: true,
+    })
         .then((response) => {
           const result = response.data;
           console.log(result);
@@ -50,7 +54,11 @@ function UserGrid({setUserDetails, editUserAction, shouldRender}) {
       'userId': props.node.data.userId,
     };
 
-    axios.post(api, data)
+    const token = localStorage.getItem('token');
+    axios.defaults.headers.common.Authorization = 'Bearer ' + token;
+    axios.post(api, {
+      withCredentials: true,
+    }, data)
         .then((response) => {
           setRenderGrid(!renderGrid);
         })

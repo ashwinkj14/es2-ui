@@ -15,7 +15,12 @@ function DataGrid({data, popupContent}) {
   const downloadPublication = async (publicationId) => {
     const api = `http://localhost:8080/publication/download?id=` + publicationId;
 
-    axios.get(api, {responseType: 'blob'})
+    const token = localStorage.getItem('token');
+    axios.defaults.headers.common.Authorization = 'Bearer ' + token;
+    axios.get(api, {
+      withCredentials: true,
+      responseType: 'blob',
+    })
         .then(async (response) => {
           if (response.status === 200) {
             const blob = new Blob([response.data]);
