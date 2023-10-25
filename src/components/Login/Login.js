@@ -1,5 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable require-jsdoc */
+import axios from 'axios';
 import logo from '../../es2-logo-final.jpg';
 import './Login.css';
 
@@ -29,42 +30,55 @@ function doLogin() {
     return false;
   }
 
-  const api = `login`;
+  const api = `http://localhost:8080/login`;
 
-  const options = {
+  const requestData = {
+    username: username,
+    password: password,
+    usertype: userType,
+  };
+
+  const errorMsg = 'Error occurred. Unable to login!';
+
+  axios.post(api, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-  };
-  const errorMsg = 'Error occurred. Unable to login!';
-  const data = invokeAPI(api, options, errorMsg);
-  if (data.result === 'success') {
-    window.location.href = '/publication';
-  }
-}
-
-function invokeAPI(api, options, errorMsg) {
-  fetch(api, options)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(errorMsg);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        if (data.result !== 'success') {
-          throw new Error(errorMsg);
-        }
-        return data;
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    body: JSON.stringify(requestData),
+  }).then((response) => {
+    if (response.status === 200) {
+      if (response.data.result === 'success') {
+        localStorage.setItem('token', response.data.token);
+        window.location.href = '/publication';
+      }
+    } else {
+      console.log(errorMsg);
+    }
+  });
 }
 
 
 function Login() {
+  const token = localStorage.getItem('token');
+  if (token !== undefined && token !== null) {
+    const api = `http://localhost:8080/login`;
+    const errorMsg = 'Error occurred. Unable to login!';
+
+    axios.defaults.headers.common.Authorization = 'Bearer ' + token;
+    axios.post(api, {
+      withCredentials: true,
+    })
+        .then((response) => {
+          if (response.status === 200) {
+            if (response.data.result === 'success') {
+              window.location.href = '/publication';
+            }
+          } else {
+            console.log(errorMsg);
+          }
+        });
+  }
   return (
     <div className='login-body'>
       <section className='banner'>
