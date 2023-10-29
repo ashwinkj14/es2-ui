@@ -77,11 +77,10 @@ function AddPublication() {
 
     try {
       const token = localStorage.getItem('token');
-      axios.defaults.headers.common.Authorization = 'Bearer ' + token;
-      const response = await axios.post(api, {
+      const response = await axios.post(api, formData, {
         withCredentials: true,
-      }, formData, {
         headers: {
+          'Authorization': 'Bearer ' + token,
           'Content-Type': 'multipart/form-data',
         },
       });

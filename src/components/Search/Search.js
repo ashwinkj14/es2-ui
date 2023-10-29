@@ -16,9 +16,12 @@ function Search({onSearch}) {
     const api = `http://localhost:8080/publication/search?searchBox=` + searchField + `&searchType=` + searchType +
         `&searchByDateFrom=` + searchFromDate + `&searchByDateTo=` + searchToDate;
     const token = localStorage.getItem('token');
-    axios.defaults.headers.common.Authorization = 'Bearer ' + token;
     axios.get(api, {
       withCredentials: true,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token,
+      },
     })
         .then((response) => {
           const result = response.data;
@@ -26,6 +29,10 @@ function Search({onSearch}) {
         })
         .catch((error) => {
           console.log('Error fetching data:', error);
+          if (error.response.status == 401) {
+            localStorage.removeItem('token');
+            window.location.href = '/';
+          }
         });
   };
 
