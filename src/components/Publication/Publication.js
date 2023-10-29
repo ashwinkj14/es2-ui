@@ -9,6 +9,7 @@ import Abstract from './SideBar/Abstract';
 import Footer from '../../containers/Footer/Footer';
 import Header from '../../containers/Header/Header';
 import AddPublication from './AddPublication/AddPublication';
+import ManagePublication from './ManagePublication/ManagePublication';
 
 import './Publication.css';
 
@@ -51,9 +52,7 @@ function Publication() {
     </section>
   </>;
 
-  const manage = <></>;
-
-  const toRender = (selectedTab == 'search')?publicationBody:(selectedTab == 'manage')?manage:<AddPublication/>;
+  const toRender = (selectedTab == 'search')?publicationBody:(selectedTab == 'manage')?<ManagePublication/>:<AddPublication/>;
 
   return (
     <div>
