@@ -1,0 +1,13 @@
+.back-btn-container{
+    width: 100%;
+    position: absolute;
+    margin-top: 20px;
+    margin-left: 100px;
+    top: 0;
+}
+
+.back-btn{
+    font-size: 20px;
+    display: flex;
+    cursor: pointer;
+}
