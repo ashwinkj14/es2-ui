@@ -21,6 +21,18 @@ function AddPublication() {
   const [authors, setAuthors] = useState([{firstName: '', middleName: '', lastName: ''}]);
   const [selectedFile, setSelectedFile] = useState(null);
 
+  const [titleError, setTitleError] = useState('');
+  const [typeError, setTypeError] = useState('');
+  const [statusError, setStatusError] = useState('');
+  const [modeError, setModeError] = useState('');
+  const [numberError, setNumberError] = useState('');
+  const [copyrightedError, setCopyrightedError] = useState('');
+  const [abstractError, setAbstractError] = useState('');
+  const [dateError, setDateError] = useState('');
+  const [keywordsError, setKeywordsError] = useState('');
+  const [authorsError, setAuthorsError] = useState('');
+  const [selectedFileError, setSelectedFileError] = useState('');
+
   const updateFirstName = (event, index) => {
     const updatedAuthor = [...authors];
     updatedAuthor[index].firstName = event.target.value;
@@ -54,9 +66,63 @@ function AddPublication() {
     setSelectedFile(event.target.files[0]);
   };
 
-  const addPublication = async () => {
+  const handleValidation = () => {
+    let errorExists = false;
+    if (!title) {
+      errorExists = true;
+      setTitleError('Title field is empty.');
+    }
+    if (!type) {
+      errorExists = true;
+      setTypeError('Type field is empty.');
+    }
+    if (!status) {
+      errorExists = true;
+      setStatusError('Status field is empty.');
+    }
+    if (!mode) {
+      errorExists = true;
+      setModeError('Mode field is empty.');
+    }
+    if (!number) {
+      errorExists = true;
+      setNumberError('Project Number field is empty.');
+    }
+    if (!copyrighted) {
+      errorExists = true;
+      setCopyrightedError('IsCopyrighted field is empty.');
+    }
+    if (!abstract) {
+      errorExists = true;
+      setAbstractError('Abstract field is empty.');
+    }
+    if (!date) {
+      errorExists = true;
+      setDateError('Date field is empty.');
+    }
+    if (!keywords) {
+      errorExists = true;
+      setKeywordsError('Keywords field is empty.');
+    }
+    if (!authors) {
+      errorExists = true;
+      setAuthorsError('Authors field is empty.');
+    }
     if (!selectedFile) {
-      alert('Missing publication file');
+      errorExists = true;
+      setSelectedFileError('Missing attachment.');
+    }
+    return errorExists;
+  };
+
+  const displayError = (Error) => {
+    return (
+      <section className='add-pub-error-container'>{Error}</section>
+    );
+  };
+
+  const addPublication = async () => {
+    if (handleValidation()) {
       return;
     }
 
@@ -114,86 +180,119 @@ function AddPublication() {
       <div className="add-pub-header">Add Publication</div>
       <div className="add-pub-form">
         <div className='row-container'>
-          <div className='add-pub-text-field-container'>
-            <label>Publication Title</label>
-            <input value={title} onChange={(event) => setTitle(event.target.value)} className="text-field" type="text"/>
-          </div>
-          <div className='add-pub-text-field-container'>
-            <label>Publication Type</label>
-            <select value={type} onChange={(event) => setType(event.target.value)} className="user-type-dropdown">
-              <option value="Paper">Paper</option>
-              <option value="Presentation">Presentation</option>
-              <option value="Report">Report</option>
-              <option value="Dissertation">Dissertation</option>
-              <option value="Brochure">Brochure</option>
-            </select>
-          </div>
-        </div>
-        <div className='row-container'>
-          <div className='add-pub-text-field-container'>
-            <label>Status</label>
-            <select value={status} onChange={(event) => setStatus(event.target.value)} className="user-type-dropdown">
-              <option value="Published">Published</option>
-              <option value="InReview">InReview</option>
-              <option value="Draft">Draft</option>
-            </select>
-          </div>
-          <div className='add-pub-text-field-container'>
-            <label>ES2 Project Number</label>
-            <input value={number} onChange={(event) => setNumber(event.target.value)} className="text-field" type="number"/>
-          </div>
-        </div>
-        <div className='row-container'>
-          <div className='add-pub-text-field-container'>
-            <label>Publication Mode</label>
-            <div className='add-pub-mode'>
-              <input value='public' onChange={(event) => setMode(event.target.value)} checked={mode === 'public'} className="text-field" type="radio"/>
-              <label>Public</label>
-              <input value='private' onChange={(event) => setMode(event.target.value)} checked={mode === 'private'} className="text-field" type="radio"/>
-              <label>Private</label>
+          <div className='add-pub-field-container'>
+            <div className='add-pub-text-field-container'>
+              <label>Publication Title</label>
+              <input value={title} onChange={(event) => setTitle(event.target.value)} className="text-field" type="text"/>
             </div>
+            {displayError(titleError)}
           </div>
-          <div className='add-pub-text-field-container'>
-            <label>Is Paper Copyrighted?</label>
-            <div className='add-pub-mode'>
-              <input value='yes' onChange={(event) => setCopyrighted(event.target.value)} checked={copyrighted === 'yes'} className="text-field" type="radio"/>
-              <label>Yes</label>
-              <input value='no' onChange={(event) => setCopyrighted(event.target.value)} checked={copyrighted === 'no'} className="text-field" type="radio"/>
-              <label>No</label>
+          <div className='add-pub-field-container'>
+            <div className='add-pub-text-field-container'>
+              <label>Publication Type</label>
+              <select value={type} onChange={(event) => setType(event.target.value)} className="user-type-dropdown">
+                <option value="Paper">Paper</option>
+                <option value="Presentation">Presentation</option>
+                <option value="Report">Report</option>
+                <option value="Dissertation">Dissertation</option>
+                <option value="Brochure">Brochure</option>
+              </select>
             </div>
+            {displayError(typeError)}
           </div>
         </div>
         <div className='row-container'>
-          <div className='add-pub-text-field-container'>
-            <label>Keywords</label>
-            <input value={keywords} onChange={(event) => setKeywords(event.target.value)} className="text-field" type="text"/>
+          <div className='add-pub-field-container'>
+            <div className='add-pub-text-field-container'>
+              <label>Status</label>
+              <select value={status} onChange={(event) => setStatus(event.target.value)} className="user-type-dropdown">
+                <option value="Published">Published</option>
+                <option value="InReview">InReview</option>
+                <option value="Draft">Draft</option>
+              </select>
+            </div>
+            {displayError(statusError)}
           </div>
-          <div className='add-pub-text-field-container'>
-            <label>Publication Date</label>
-            <input
-              id="search-from-date"
-              className="add-pub-box-date"
-              type="date"
-              value={date}
-              onChange={(event) => setDate(event.target.value)}/>
+          <div className='add-pub-field-container'>
+            <div className='add-pub-text-field-container'>
+              <label>ES2 Project Number</label>
+              <input value={number} onChange={(event) => setNumber(event.target.value)} className="text-field" type="number"/>
+            </div>
+            {displayError(numberError)}
           </div>
         </div>
-        <div className='add-pub-abstract-container'>
-          <label>Abstract</label>
-          <textarea value={abstract} onChange={(event) => setAbstract(event.target.value)} className="abstract-field" type="text"/>
+        <div className='row-container'>
+          <div className='add-pub-field-container'>
+            <div className='add-pub-text-field-container'>
+              <label>Publication Mode</label>
+              <div className='add-pub-mode'>
+                <input value='public' onChange={(event) => setMode(event.target.value)} checked={mode === 'public'} className="text-field" type="radio"/>
+                <label>Public</label>
+                <input value='private' onChange={(event) => setMode(event.target.value)} checked={mode === 'private'} className="text-field" type="radio"/>
+                <label>Private</label>
+              </div>
+            </div>
+            {displayError(modeError)}
+          </div>
+          <div className='add-pub-field-container'>
+            <div className='add-pub-text-field-container'>
+              <label>Is Paper Copyrighted?</label>
+              <div className='add-pub-mode'>
+                <input value='yes' onChange={(event) => setCopyrighted(event.target.value)} checked={copyrighted === 'yes'} className="text-field" type="radio"/>
+                <label>Yes</label>
+                <input value='no' onChange={(event) => setCopyrighted(event.target.value)} checked={copyrighted === 'no'} className="text-field" type="radio"/>
+                <label>No</label>
+              </div>
+            </div>
+            {displayError(copyrightedError)}
+          </div>
         </div>
-        <div className='add-pub-authors-container'>
-          <label className='add-pub-author-label'>Authors</label>
-          {renderAuthors()}
-          <div className='add-pub-add-author-btn' onClick={addAuthor}>
+        <div className='row-container'>
+          <div className='add-pub-field-container'>
+            <div className='add-pub-text-field-container'>
+              <label>Keywords</label>
+              <input value={keywords} onChange={(event) => setKeywords(event.target.value)} className="text-field" type="text"/>
+            </div>
+            {displayError(keywordsError)}
+          </div>
+          <div className='add-pub-field-container'>
+            <div className='add-pub-text-field-container'>
+              <label>Publication Date</label>
+              <input
+                id="search-from-date"
+                className="add-pub-box-date"
+                type="date"
+                value={date}
+                onChange={(event) => setDate(event.target.value)}/>
+            </div>
+            {displayError(dateError)}
+          </div>
+        </div>
+        <div className='add-pub-field-container'>
+          <div className='add-pub-abstract-container'>
+            <label>Abstract</label>
+            <textarea value={abstract} onChange={(event) => setAbstract(event.target.value)} className="abstract-field" type="text"/>
+          </div>
+          {displayError(abstractError)}
+        </div>
+        <div className='add-pub-field-container'>
+          <div className='add-pub-authors-container'>
+            <label className='add-pub-author-label'>Authors</label>
+            {renderAuthors()}
+            <div className='add-pub-add-author-btn' onClick={addAuthor}>
             Add Author
+            </div>
           </div>
+          {displayError(authorsError)}
         </div>
-        <div className='add-pub-upload-field-container'>
-          <label>Upload File (Max File size : 128MB)</label>
-          <div className='add-pub-upload-btn'>
-            <input type='file' onChange={(event) => handleFileSelect(event)} placeholder='Upload'/>
+        <div className='add-pub-field-container'>
+          <div className='add-pub-upload-field-container'>
+            <label>Upload File (Max File size : 128MB)</label>
+            <div className='add-pub-upload-btn'>
+              <input type='file' onChange={(event) => handleFileSelect(event)} placeholder='Upload'/>
+            </div>
           </div>
+          {displayError(selectedFileError)}
         </div>
       </div>
       <div className="add-pub-submit-btn-container">

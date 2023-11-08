@@ -40,6 +40,17 @@
     margin-top: 5px;
 }
 
+.add-pub-error-container{
+    margin-top: -5px;
+    margin-bottom: 20px;
+    color: red;
+}
+
+.add-pub-field-container{
+    display: flex;
+    flex-direction: column;
+}
+
 .add-pub-text-field-container{
     display: flex;
     flex-direction: column;
