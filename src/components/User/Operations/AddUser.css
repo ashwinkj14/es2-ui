@@ -20,6 +20,17 @@
     width: 300px;
 }
 
+.add-user-field-container{
+    display: flex;
+    flex-direction: column;
+}
+
+.add-user-error-container{
+    margin-top: -5px;
+    margin-bottom: 10px;
+    color: red;
+}
+
 .add-user-text-field-container{
     display: flex;
     flex-direction: column;
