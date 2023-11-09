@@ -1,6 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable require-jsdoc */
 import axios from 'axios';
+import {FAILURE, displayToast} from '../ToastUtil';
 import logo from '../../es2-logo-final.jpg';
 import './Login.css';
 
@@ -8,7 +9,6 @@ function doLogin() {
   const usernameElement = document.getElementById('login-username');
   const username = usernameElement.value;
   if (username === '') {
-    console.log('username is required');
     alert('username is required');
     usernameElement.focus();
     return false;
@@ -16,7 +16,6 @@ function doLogin() {
   const passwordElement = document.getElementById('login-password');
   const password = passwordElement.value;
   if (password === '') {
-    console.log('password is required');
     alert('password is required');
     passwordElement.focus();
     return false;
@@ -24,7 +23,6 @@ function doLogin() {
   const userTypeElement = document.getElementById('login-usertype');
   const userType = userTypeElement.value;
   if (userType === '') {
-    console.log('select usertype');
     alert('usertype is required');
     userTypeElement.focus();
     return false;
@@ -38,21 +36,18 @@ function doLogin() {
     usertype: userType,
   };
 
-  const errorMsg = 'Error occurred. Unable to login!';
-
-  const token = localStorage.getItem('token');
-  axios.defaults.headers.common.Authorization = 'Bearer ' + token;
   axios.post(api, {
-    withCredentials: true,
     body: JSON.stringify(requestData),
   }).then((response) => {
     if (response.status === 200) {
       if (response.data.result === 'success') {
         localStorage.setItem('token', response.data.token);
         window.location.href = '/publication';
+      } else {
+        displayToast('Incorrect username/password', FAILURE);
       }
     } else {
-      console.log(errorMsg);
+      displayToast('Incorrect username/password', FAILURE);
     }
   });
 }
@@ -62,19 +57,23 @@ function Login() {
   const token = localStorage.getItem('token');
   if (token !== undefined && token !== null) {
     const api = `http://localhost:8080/login`;
-    const errorMsg = 'Error occurred. Unable to login!';
 
-    axios.defaults.headers.common.Authorization = 'Bearer ' + token;
     axios.post(api, {
       withCredentials: true,
+      headers: {
+        'Authorization': 'Bearer ' + token,
+        'Content-Type': 'application/json',
+      },
     })
         .then((response) => {
           if (response.status === 200) {
             if (response.data.result === 'success') {
               window.location.href = '/publication';
+            } else {
+              localStorage.removeItem('token');
             }
           } else {
-            console.log(errorMsg);
+            localStorage.removeItem('token');
           }
         });
   }
