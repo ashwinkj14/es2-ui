@@ -14,6 +14,14 @@
     border-radius: 15px;
 }
 
+.ag-header-cell-menu-button:not(.ag-header-menu-always-show) {
+    opacity: 1;
+}
+
+.ag-header-icon {
+    color: white;
+}
+
 .user-action-container{
     display: flex;
     flex-direction: row;
