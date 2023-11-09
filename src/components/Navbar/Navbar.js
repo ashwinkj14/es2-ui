@@ -4,6 +4,10 @@ import ES2Logo from '../../es2-logo-final.jpg';
 import './Navbar.css';
 
 function NavBar() {
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    window.location.href = '/';
+  };
   return (
     <div className="navbar-container">
       <section className="navbar-logo-container">
@@ -16,8 +20,8 @@ function NavBar() {
         <section className='navbar-item'>
           <a href='/settings'>Settings</a>
         </section>
-        <section className="navbar-item">
-                    Account
+        <section onClick={handleLogout} className="navbar-item">
+                    Logout
         </section>
       </section>
     </div>
