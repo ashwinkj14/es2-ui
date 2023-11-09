@@ -1,3 +1,7 @@
+.abstract-container{
+    height: 100%;
+}
+
 .abstract-title{
     color: #252525;
     font-size: 50px;
@@ -5,7 +9,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 20px
+    margin: 20px;
+}
+
+.abstract-content-container{
+    height: 70%;
+    padding-bottom: 30px;
+    overflow-y: scroll;
 }
 
 .abstract-content{
