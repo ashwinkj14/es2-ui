@@ -5,6 +5,7 @@
 /* eslint-disable require-jsdoc */
 import {useState} from 'react';
 import axios from 'axios';
+import {SUCCESS, FAILURE, displayToast} from '../../ToastUtil';
 
 import './AddPublication.css';
 
@@ -68,6 +69,7 @@ function AddPublication() {
 
   const handleValidation = () => {
     let errorExists = false;
+
     if (!title) {
       errorExists = true;
       setTitleError('Title field is empty.');
@@ -152,9 +154,10 @@ function AddPublication() {
       });
 
       if (response.status === 200) {
-        console.log('File uploaded successfully.');
+        displayToast('Publication added successfully', SUCCESS);
       }
     } catch (error) {
+      displayToast('Unable to add the Publication record. Please try again.', FAILURE);
       console.error('Error:', error);
     }
   };
