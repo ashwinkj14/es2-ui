@@ -7,15 +7,15 @@ import './Abstract.css';
 
 function Abstract({abstract, action}) {
   const handleClose = () => action('');
+  const unescapedString = JSON.parse(`"${abstract}"`);
   const toRender = <div className='abstract-container'>
     <div className="abstract-title">
             Abstract
     </div>
     <div className='abstract-content-container'>
-      <p className='abstract-content'>{abstract}</p>
+      <p className='abstract-content'>{unescapedString}</p>
     </div>
   </div>;
-  console.log(abstract);
   return (
     <SideBar content={toRender} closeAction={handleClose}/>
   );
