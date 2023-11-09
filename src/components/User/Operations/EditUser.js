@@ -74,9 +74,12 @@ function EditUser({action, user}) {
     };
 
     const token = localStorage.getItem('token');
-    axios.defaults.headers.common.Authorization = 'Bearer ' + token;
     axios.post(api, {
       withCredentials: true,
+      headers: {
+        'Authorization': 'Bearer ' + token,
+        'Content-Type': 'application/json',
+      },
     }, data)
         .then((response) => {
           handleClose();
