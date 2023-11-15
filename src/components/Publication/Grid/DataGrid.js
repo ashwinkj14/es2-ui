@@ -10,11 +10,12 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import './Action.css';
 import './DataGrid.css';
+import {BASE_URL} from '../../../server-constants';
 
 function DataGrid({data, popupContent, selectedTab, setSelectedRecord}) {
   const [refresh, setRefresh] = useState(false);
   const downloadPublication = async (publicationId) => {
-    const api = `http://localhost:8080/publication/download?id=` + publicationId;
+    const api = BASE_URL+`/publication/download?id=` + publicationId;
 
     const token = localStorage.getItem('token');
     axios.get(api, {
@@ -69,7 +70,7 @@ function DataGrid({data, popupContent, selectedTab, setSelectedRecord}) {
   };
 
   const deletePublication = async (publicationId) => {
-    const api = `http://localhost:8080/publication/delete`;
+    const api = BASE_URL+`/publication/delete`;
     try {
       const requestData = {
         id: publicationId,

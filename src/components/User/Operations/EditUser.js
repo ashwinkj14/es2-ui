@@ -9,6 +9,7 @@ import SideBar from '../../SideBar/SideBar';
 
 import './EditUser.css';
 import './AddUser.css';
+import {BASE_URL} from '../../../server-constants';
 
 function EditUser({action, user}) {
   const handleClose = () => action();
@@ -62,7 +63,7 @@ function EditUser({action, user}) {
     if (handleValidation()) {
       return;
     }
-    const api = `http://localhost:8080/user/update`;
+    const api = BASE_URL+`/user/update`;
 
     const data = {
       'userId': user.userId,

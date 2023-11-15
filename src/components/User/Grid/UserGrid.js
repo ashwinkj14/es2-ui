@@ -10,6 +10,7 @@ import CustomCellRenderer from '../../Publication/Grid/CustomCellRenderer';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import '../../Publication/Grid/DataGrid.css';
+import {BASE_URL} from '../../../server-constants';
 
 // Add a information icon near organization name and on hover display that
 // "Organization Name" can be your company name or the university name.
@@ -32,7 +33,7 @@ function UserGrid({setUserDetails, editUserAction, shouldRender}) {
   };
 
   useEffect(() => {
-    const api = 'http://localhost:8080/user/list';
+    const api = BASE_URL+'/user/list';
     const token = localStorage.getItem('token');
     axios.get(api, {
       withCredentials: true,
@@ -52,7 +53,7 @@ function UserGrid({setUserDetails, editUserAction, shouldRender}) {
   }, [shouldRender, renderGrid]);
 
   const handleDelete = (props) => {
-    const api = `http://localhost:8080/user/delete`;
+    const api = BASE_URL+`/user/delete`;
 
     const data = {
       'userId': props.node.data.userId,

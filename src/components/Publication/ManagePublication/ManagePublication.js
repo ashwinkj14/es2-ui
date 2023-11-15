@@ -9,6 +9,7 @@ import Abstract from '../SideBar/Abstract';
 
 import './ManagePublication.css';
 import EditPublication from '../EditPublication/EditPublication';
+import {BASE_URL} from '../../../server-constants';
 
 function ManagePublication() {
   const [records, setRecords] = useState('');
@@ -23,7 +24,7 @@ function ManagePublication() {
   }
 
   useEffect(() => {
-    const api = `http://localhost:8080/publication/list`;
+    const api = BASE_URL+`/publication/list`;
     const token = localStorage.getItem('token');
 
     axios.get(api, {

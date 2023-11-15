@@ -4,6 +4,7 @@ import axios from 'axios';
 import {FAILURE, displayToast} from '../ToastUtil';
 import logo from '../../es2-logo-final.jpg';
 import './Login.css';
+import {BASE_URL} from '../../server-constants';
 
 function doLogin() {
   const usernameElement = document.getElementById('login-username');
@@ -28,7 +29,7 @@ function doLogin() {
     return false;
   }
 
-  const api = `http://localhost:8080/login`;
+  const api = BASE_URL+'/login';
 
   const requestData = {
     username: username,
@@ -36,18 +37,22 @@ function doLogin() {
     usertype: userType,
   };
 
-  axios.post(api, {
-    body: JSON.stringify(requestData),
-  }).then((response) => {
+  axios.post(api, requestData).then((response) => {
     if (response.status === 200) {
       if (response.data.result === 'success') {
         localStorage.setItem('token', response.data.token);
         window.location.href = '/publication';
       } else {
-        displayToast('Incorrect username/password', FAILURE);
+        const message = response.data.message;
+        if (message) {
+          displayToast(message, FAILURE);
+        } else {
+          const error = response.data.error;
+          displayToast(error, FAILURE);
+        }
       }
     } else {
-      displayToast('Incorrect username/password', FAILURE);
+      displayToast('Error occurred', FAILURE);
     }
   });
 }
@@ -56,7 +61,7 @@ function doLogin() {
 function Login() {
   const token = localStorage.getItem('token');
   if (token !== undefined && token !== null) {
-    const api = `http://localhost:8080/login`;
+    const api = BASE_URL+'/login';
 
     axios.post(api, {
       withCredentials: true,

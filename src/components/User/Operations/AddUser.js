@@ -8,6 +8,7 @@ import axios from 'axios';
 import SideBar from '../../SideBar/SideBar';
 
 import './AddUser.css';
+import {BASE_URL} from '../../../server-constants';
 
 function AddUser({action}) {
   const handleClose = () => action(false);
@@ -63,7 +64,7 @@ function AddUser({action}) {
     if (handleValidation()) {
       return;
     }
-    const api = `http://localhost:8080/user/add`;
+    const api = BASE_URL+`/user/add`;
 
     const data = {
       'userTypeId': selectedType,

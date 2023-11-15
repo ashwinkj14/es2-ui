@@ -8,6 +8,7 @@ import axios from 'axios';
 import {SUCCESS, FAILURE, displayToast} from '../../ToastUtil';
 
 import './AddPublication.css';
+import {BASE_URL} from '../../../server-constants';
 
 function AddPublication() {
   const [title, setTitle] = useState('');
@@ -141,7 +142,7 @@ function AddPublication() {
     formData.append('publication_date', date);
     formData.append('abstract', abstract);
 
-    const api = `http://localhost:8080/publication/add`;
+    const api = BASE_URL+'/publication/add';
 
     try {
       const token = localStorage.getItem('token');

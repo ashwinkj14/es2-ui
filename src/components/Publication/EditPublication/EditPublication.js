@@ -9,6 +9,7 @@ import axios from 'axios';
 
 import './EditPublication.css';
 import '../AddPublication/AddPublication.css';
+import {BASE_URL} from '../../../server-constants';
 
 function EditPublication({data, setSelectedRecord}) {
   const [title, setTitle] = useState(data.name);
@@ -77,7 +78,7 @@ function EditPublication({data, setSelectedRecord}) {
     formData.append('abstract', abstract);
     formData.append('publication_id', data.publicationId);
 
-    const api = `http://localhost:8080/publication/edit`;
+    const api = BASE_URL+'/publication/edit';
 
     try {
       const token = localStorage.getItem('token');
