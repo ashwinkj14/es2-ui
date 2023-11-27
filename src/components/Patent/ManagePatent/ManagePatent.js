@@ -8,15 +8,15 @@ import DataGrid from '../Grid/DataGrid';
 import Abstract from '../SideBar/Abstract';
 import {useNavigate} from 'react-router-dom';
 import {useGridStore} from '../../../store/es2Store';
-import {FAILURE, displayToast} from '../../ToastUtil';
 
-import './ManagePublication.css';
-import EditPublication from '../EditPublication/EditPublication';
+import './ManagePatent.css';
+import EditPatent from '../EditPatent/EditPatent';
 import {BASE_URL} from '../../../server-constants';
 
-function ManagePublication() {
+function ManagePatent() {
   const navigate = useNavigate();
   const gridRefresh = useGridStore((state) => state.gridRefresh);
+
   const [records, setRecords] = useState('');
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [popupContent, setPopupContent] = useState('');
@@ -29,7 +29,7 @@ function ManagePublication() {
   }
 
   useEffect(() => {
-    const api = BASE_URL+`/publication/list`;
+    const api = BASE_URL+`/patent/list`;
     const token = localStorage.getItem('token');
 
     axios.get(api, {
@@ -44,22 +44,24 @@ function ManagePublication() {
           setRecords(result.data);
         })
         .catch((error) => {
-          if (error.response.status == 401) {
+          if (error.code === 'ERR_NETWORK') {
+            console.log(error.message);
+          } else if (error.response.status == 401) {
             localStorage.removeItem('token');
             navigate('/');
           }
-          displayToast('Error occurred', FAILURE);
+          console.error('Error fetching data:', error);
         });
   }, [gridRefresh]);
 
   const data_page = <div className='manage-pub-container'>
-    <div className='manage-pub-header'>Manage Publications</div>
+    <div className='manage-pub-header'>Manage Patent</div>
     <section className="publication-data manage-pub-grid">
       <DataGrid data={records} popupContent={setPopupContent} selectedTab="manage" setSelectedRecord={setSelectedRecord}/>
     </section>
   </div>;
 
-  const to_render = (selectedRecord==null)?(records.length>0)?data_page:(<div className='no-data'>No data found</div>):<EditPublication data={selectedRecord} setSelectedRecord={setSelectedRecord}/>;
+  const to_render = (selectedRecord==null)?(records.length>0)?data_page:(<div className='no-data'>No data found</div>):<EditPatent data={selectedRecord} setSelectedRecord={setSelectedRecord}/>;
   return (
     <div>
       {to_render}
@@ -67,4 +69,4 @@ function ManagePublication() {
   );
 }
 
-export default ManagePublication;
+export default ManagePatent;

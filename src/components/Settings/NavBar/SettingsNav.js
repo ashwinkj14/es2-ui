@@ -1,11 +1,14 @@
+/* eslint-disable max-len */
 /* eslint-disable react/prop-types */
 /* eslint-disable require-jsdoc */
 /* eslint-disable react/react-in-jsx-scope */
 import React, {useState} from 'react';
+import {useUserStore} from '../../../store/es2Store';
 
 import '../../Publication/NavBar/PublicationNav.css';
 
 function SettingsNav({onSelect}) {
+  const userTypeId = useUserStore((state) => state.userTypeId);
   const [selectedTab, setSelectedTab] = useState('usermgmt');
 
   const handleTabClick = (tab) => {
@@ -21,9 +24,9 @@ function SettingsNav({onSelect}) {
             <div onClick={() => handleTabClick('usermgmt')} className=
               {`sideNav-element ${selectedTab == 'usermgmt'?'active':''}`}>
               User Settings</div>
-            <div onClick={() => handleTabClick('dbsettings')} className=
+            {(userTypeId != 1)?<></>:<div onClick={() => handleTabClick('dbsettings')} className=
               {`sideNav-element ${selectedTab == 'dbsettings'?'active':''}`}>
-              Database Settings</div>
+              Database Backup</div>}
           </section>
         </section>
       </section>

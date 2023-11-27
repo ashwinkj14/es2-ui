@@ -20,6 +20,7 @@ a{
     margin: 10px;
     height: 50px;
     width: 300px;
+    cursor: pointer;
 }
 
 .navbar-items{
@@ -30,7 +31,8 @@ a{
 }
 
 .navbar-item{
-    width: 100px;
+    width: fit-content;
+    margin-right: 20px;
 }
 
 .navbar-item:hover{

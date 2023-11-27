@@ -1,0 +1,77 @@
+.sideNav-container{
+    height: 35px;
+    width: 100%;
+    position: sticky;
+    background-color: #252525;
+    color: white;
+}
+
+.sideNav-elements-container{
+    display: flex;
+    flex-direction: row;
+    height: 35px;
+    justify-content: space-between;
+}
+
+.sideNav-elements{
+    display: flex;
+    flex-direction: row;
+    height: 35px;
+}
+
+.sideNav-element{
+    padding-top: 7px;
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+.sideNav-element:hover{
+    background-color: #3b3b3b;
+    cursor: pointer;
+}
+
+.add-pub-btn-container{
+    display: flex;
+    height: 35px;
+}
+
+.add-pub-btn{
+    background-color: #252525;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.add-pub-btn-content{
+    display: flex;
+    align-items: center;
+    padding-right: 25px;
+    padding-left: 25px;
+}
+
+.add-pub-btn:hover{
+    background-color: #3b3b3b;
+    cursor: pointer;
+}
+
+.add-pub-plus-symbol{
+    margin-right: 5px;
+}
+
+svg{
+    height: 25px;
+    width: 25px;
+    margin-right: 10px;
+}
+
+.add-pub-active{
+    stroke: white;
+}
+
+.active{
+    background-color: var(--green);
+}
+
+.active:hover{
+    background-color: #186f5b;
+}

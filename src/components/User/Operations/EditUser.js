@@ -4,6 +4,9 @@
 /* eslint-disable react/react-in-jsx-scope */
 import {useState} from 'react';
 import axios from 'axios';
+import {useNavigate} from 'react-router-dom';
+import {useUserStore} from '../../../store/es2Store';
+import {FAILURE, SUCCESS, displayToast} from '../../ToastUtil';
 
 import SideBar from '../../SideBar/SideBar';
 
@@ -12,6 +15,8 @@ import './AddUser.css';
 import {BASE_URL} from '../../../server-constants';
 
 function EditUser({action, user}) {
+  const userTypeId = useUserStore((state) => state.userTypeId);
+  const navigate = useNavigate();
   const handleClose = () => action();
   const [selectedType, setSelectedType] = useState(user.userTypeId);
   const handleTypeSelection = (event) => {
@@ -66,26 +71,45 @@ function EditUser({action, user}) {
     const api = BASE_URL+`/user/update`;
 
     const data = {
-      'userId': user.userId,
-      'userTypeId': selectedType,
-      'username': username,
-      'emailId': emailId,
-      'organization': organization,
-      'password': password,
+      userId: user.userId,
+      userTypeId: selectedType,
+      username: username,
+      emailId: emailId,
+      organization: organization,
+      password: password,
     };
 
     const token = localStorage.getItem('token');
-    axios.post(api, {
+    axios.post(api, data, {
       withCredentials: true,
       headers: {
         'Authorization': 'Bearer ' + token,
         'Content-Type': 'application/json',
       },
-    }, data)
+    })
         .then((response) => {
-          handleClose();
+          let status = FAILURE;
+          if (response.status === 200) {
+            if (response.data.result === 'success') {
+              status = SUCCESS;
+            }
+          }
+          const message = response.data.message;
+          if (message) {
+            displayToast(message, status);
+          } else {
+            const error = response.data.error;
+            displayToast(error, status);
+          }
+          if (status === SUCCESS) {
+            handleClose();
+          }
         })
         .catch((error) => {
+          if (error.response.status == 401) {
+            localStorage.removeItem('token');
+            navigate('/');
+          }
           console.log(error);
         });
   };
@@ -95,7 +119,7 @@ function EditUser({action, user}) {
     </div>
     <div className='add-user-body'>
       <div className="add-user-form">
-        <div className='add-user-text-field-container'>
+        {(userTypeId != 1)?<></>:<div className='add-user-text-field-container'>
           <label>User Type</label>
           <select className="user-type-dropdown" value={selectedType} onChange={handleTypeSelection}>
             <option value="1">Admin</option>
@@ -103,7 +127,7 @@ function EditUser({action, user}) {
             <option value="3">Member Company</option>
             <option value="4">Student</option>
           </select>
-        </div>
+        </div>}
         <div className='add-user-field-container'>
           <div className='add-user-text-field-container'>
             <label>User Name</label>

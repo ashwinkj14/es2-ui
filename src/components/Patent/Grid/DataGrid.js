@@ -1,12 +1,13 @@
 /* eslint-disable max-len */
 /* eslint-disable react/prop-types */
 /* eslint-disable require-jsdoc */
-import React, {useMemo, useState} from 'react';
+import React, {useMemo} from 'react';
 import axios from 'axios';
 import {AgGridReact} from 'ag-grid-react';
 import CustomCellRenderer from './CustomCellRenderer';
 import {useNavigate} from 'react-router-dom';
 import {FAILURE, SUCCESS, displayToast} from '../../ToastUtil';
+import {useGridStore} from '../../../store/es2Store';
 
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
@@ -16,70 +17,22 @@ import {BASE_URL} from '../../../server-constants';
 
 function DataGrid({data, popupContent, selectedTab, setSelectedRecord}) {
   const navigate = useNavigate();
-  const [refresh, setRefresh] = useState(false);
-  const downloadPublication = async (publicationId) => {
-    const api = BASE_URL+`/publication/download`;
-
-    const token = localStorage.getItem('token');
-    const requestData = {
-      id: publicationId,
-    };
-    axios.get(api, {
-      withCredentials: true,
-      headers: {
-        'Authorization': 'Bearer ' + token,
-        'Content-Type': 'application/json',
-      },
-      responseType: 'blob',
-      params: requestData,
-    })
-        .then(async (response) => {
-          if (response.status === 200) {
-            const blob = new Blob([response.data]);
-            const url = window.URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            const contentDisposition = response.headers.get('content-disposition');
-            link.download = publicationId + '.pdf';
-            if (contentDisposition != undefined) {
-              link.download = contentDisposition.split('filename=')[1];
-            }
-            document.body.appendChild(link);
-            link.click();
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(link);
-          } else {
-            displayToast('Unable to Download the file', FAILURE);
-          }
-        })
-        .catch((error) => {
-          if (error.response.status == 401) {
-            localStorage.removeItem('token');
-            navigate('/');
-          }
-          displayToast('Unable to Download the file', FAILURE);
-        });
-  };
+  const setGridRefresh = useGridStore((state) => state.setGridRefresh);
 
   const handleAbstractButtonClick = (props) => {
     const abstract = props.node.data.abstract;
     popupContent(abstract);
   };
 
-  const handleDownloadButtonClick = (props) => {
-    const publicationId = props.node.data.id;
-    downloadPublication(publicationId);
-  };
-
   const handleEdit = (props) => {
     setSelectedRecord(props.node.data);
   };
 
-  const deletePublication = async (publicationId) => {
-    const api = BASE_URL+`/publication/delete`;
+  const deletePublication = async (patentId) => {
+    const api = BASE_URL+`/patent/delete`;
     try {
       const requestData = {
-        id: publicationId,
+        patent_id: patentId,
       };
       const token = localStorage.getItem('token');
       const response = await axios.post(api, requestData, {
@@ -103,30 +56,26 @@ function DataGrid({data, popupContent, selectedTab, setSelectedRecord}) {
         displayToast(error, status);
       }
       if (status === SUCCESS) {
-        setRefresh(!refresh);
+        setGridRefresh();
       }
     } catch (error) {
       if (error.response.status == 401) {
         localStorage.removeItem('token');
         navigate('/');
       }
-      console.error(error);
       displayToast('Error occurred', FAILURE);
     }
   };
 
   const handleDelete = (props) => {
-    const publicationId = props.node.data.id;
-    deletePublication(publicationId);
+    const patentId = props.node.data.patent_id;
+    deletePublication(patentId);
   };
 
   const Action = (props) =>
-    <div className="download-pub-btn">
+    <div className="abstract-pub-btn">
       <div onClick={() => handleAbstractButtonClick(props)}>
         <svg className="view-abstract-btn-img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M6 10h12v1H6zM3 1h12.29L21 6.709V23H3zm12 6h5v-.2L15.2 2H15zM4 22h16V8h-6V2H4zm2-7h12v-1H6zm0 4h9v-1H6z"></path><path fill="none" d="M0 0h24v24H0z"></path></g></svg>
-      </div>
-      <div onClick={() => handleDownloadButtonClick(props)}>
-        <svg className="download-btn-img" fill="#000000" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M20,6.52797748 L20,19.5 C20,20.8807119 18.8807119,22 17.5,22 L6.5,22 C5.11928813,22 4,20.8807119 4,19.5 L4,4.5 C4,3.11928813 5.11928813,2 6.5,2 L15.4720225,2 C15.6047688,1.99158053 15.7429463,2.03583949 15.8535534,2.14644661 L19.8535534,6.14644661 C19.9641605,6.25705373 20.0084195,6.39523125 20,6.52797748 Z M15,3 L6.5,3 C5.67157288,3 5,3.67157288 5,4.5 L5,19.5 C5,20.3284271 5.67157288,21 6.5,21 L17.5,21 C18.3284271,21 19,20.3284271 19,19.5 L19,7 L15.5,7 C15.2238576,7 15,6.77614237 15,6.5 L15,3 Z M16,3.70710678 L16,6 L18.2928932,6 L16,3.70710678 Z M12,16.2928932 L14.1464466,14.1464466 C14.3417088,13.9511845 14.6582912,13.9511845 14.8535534,14.1464466 C15.0488155,14.3417088 15.0488155,14.6582912 14.8535534,14.8535534 L11.9198269,17.7872799 C11.8307203,17.9246987 11.6759769,18.0156098 11.5,18.0156098 C11.3240231,18.0156098 11.1692797,17.9246987 11.0801731,17.7872799 L8.14644661,14.8535534 C7.95118446,14.6582912 7.95118446,14.3417088 8.14644661,14.1464466 C8.34170876,13.9511845 8.65829124,13.9511845 8.85355339,14.1464466 L11,16.2928932 L11,9.5 C11,9.22385763 11.2238576,9 11.5,9 C11.7761424,9 12,9.22385763 12,9.5 L12,16.2928932 L12,16.2928932 Z"></path> </g></svg>
       </div>
     </div>;
 
@@ -146,17 +95,14 @@ h-11V9.1z M12.3,15.4c0-1,0.8-1.7,1.7-1.7h32c1,0,1.7,0.8,1.7,1.7v1.3H12.3V15.4z">
     </div>;
 
   const columnDefs = [
-    {field: 'publicationId', headerName: 'Publication ID', hide: true, width: 0},
+    {field: 'patent_id', headerName: 'Patent ID', hide: true, width: 0},
     {field: 'abstract', headerName: 'Abstract', hide: true, width: 0},
-    {field: 'es2_project_number', headerName: 'ES2 Project Number', hide: true, width: 0},
-    {field: 'isCopyrighted', headerName: 'Is Copyrighted', hide: true, width: 0},
-    {field: 'keywords', headerName: 'Keywords', hide: true, width: 0},
-    {field: 'authors_list', headerName: 'Authors List', hide: true, width: 0},
-    {field: 'name', headerName: 'Name', autoHeight: true, cellRenderer: CustomCellRenderer, minWidth: 500},
-    {field: 'type', headerName: 'Type', cellRenderer: CustomCellRenderer, minWidth: 100},
-    {field: 'status', headerName: 'Status', cellRenderer: CustomCellRenderer, minWidth: 100},
-    {field: 'date', headerName: 'Date', cellRenderer: CustomCellRenderer, minWidth: 150},
-    {field: 'authors', headerName: 'Author(s)', autoHeight: true, cellRenderer: CustomCellRenderer, minWidth: 300},
+    {field: 'inventors_list', headerName: 'Inventors List', hide: true, width: 0},
+    {field: 'patent_number', headerName: 'Patent No.', minWidth: 150},
+    {field: 'title', headerName: 'Title', autoHeight: true, cellRenderer: CustomCellRenderer, minWidth: 400},
+    {field: 'issue_date', headerName: 'Issue Date', cellRenderer: CustomCellRenderer, minWidth: 150},
+    {field: 'filing_date', headerName: 'Filing Date', cellRenderer: CustomCellRenderer, minWidth: 150},
+    {field: 'inventors', headerName: 'Inventor(s)', autoHeight: true, cellRenderer: CustomCellRenderer, minWidth: 300},
     {headerName: 'Action', cellRenderer: (selectedTab=='manage')?managePublicationAction:Action, minWidth: 120},
   ];
 

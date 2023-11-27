@@ -5,27 +5,24 @@
 import {useState} from 'react';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
-import {FAILURE, displayToast} from '../ToastUtil';
-
 import './Search.css';
-import {BASE_URL} from '../../server-constants';
+import {BASE_URL} from '../../../server-constants';
 
 function Search({onSearch}) {
   const navigate = useNavigate();
+
   const [searchField, setSearchField] = useState('');
   const [searchType, setSearchType] = useState('title');
-  const [searchFromDate, setSearchFromDate] = useState('');
-  const [searchToDate, setSearchToDate] = useState('');
 
   const handleSearch = () => {
-    const api = BASE_URL+`/publication/search`;
+    const api = BASE_URL+`/patent/search`;
+    const token = localStorage.getItem('token');
+
     const requestData = {
       search: searchField,
-      fromDate: searchFromDate,
-      toDate: searchToDate,
       type: searchType,
     };
-    const token = localStorage.getItem('token');
+
     axios.get(api, {
       withCredentials: true,
       headers: {
@@ -43,7 +40,7 @@ function Search({onSearch}) {
             localStorage.removeItem('token');
             navigate('/');
           }
-          displayToast('Error occurred', FAILURE);
+          console.log('Error fetching data:', error);
         });
   };
 
@@ -55,14 +52,14 @@ function Search({onSearch}) {
           className="pub-search-type"
           defaultValue={searchType}
           onChange={(e) => setSearchType(e.target.value)}>
-          <option value={'author'}>Author</option>
+          <option value={'inventor'}>Inventor</option>
           <option value={'title'} >Title</option>
-          <option value={'keyword'}>Keyword</option>
+          <option value={'number'}>Number</option>
         </select>
         <input
           id="search-box"
           className="pub-search-box"
-          placeholder="Search Publication"
+          placeholder="Search Patent"
           onChange={(e) => setSearchField(e.target.value)}/>
         <button className="pub-search-btn" onClick={handleSearch}>
           <div className="pub-search-btn-content">
@@ -70,24 +67,6 @@ function Search({onSearch}) {
             <section>Search</section>
           </div>
         </button>
-      </section>
-      <section className="pub-date-container">
-        <section className="pub-from-date">
-          <label className="pub-date-label">From:</label>
-          <input
-            id="search-from-date"
-            className="pub-search-box-date"
-            type="date"
-            onChange={(e) => setSearchFromDate(e.target.value)}/>
-        </section>
-        <section className="pub-to-date">
-          <label className="pub-date-label">To:</label>
-          <input
-            id="search-to-date"
-            className="pub-search-box-date"
-            type="date"
-            onChange={(e) => setSearchToDate(e.target.value)}/>
-        </section>
       </section>
     </div>
   );

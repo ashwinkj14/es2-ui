@@ -5,6 +5,7 @@
 import NavBar from '../../components/Navbar/Navbar';
 import SettingsNav from '../../components/Settings/NavBar/SettingsNav';
 import PublicationNav from '../../components/Publication/NavBar/PublicationNav';
+import PatentNav from '../../components/Patent/NavBar/PatentNav';
 import './Header.css';
 
 function Header({props, selectedTab, setSelectedTab}) {
@@ -24,6 +25,13 @@ function Header({props, selectedTab, setSelectedTab}) {
       <section className="header-container">
         <NavBar/>
         <PublicationNav selectedTab={selectedTab} setSelectedTab={setSelectedTab}/>
+      </section>
+    );
+  } else if (props.page === 'patent') {
+    return (
+      <section className="header-container">
+        <NavBar/>
+        <PatentNav selectedTab={selectedTab} setSelectedTab={setSelectedTab}/>
       </section>
     );
   }

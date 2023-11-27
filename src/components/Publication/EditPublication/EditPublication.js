@@ -6,12 +6,18 @@
 /* eslint-disable require-jsdoc */
 import {useState} from 'react';
 import axios from 'axios';
+import {useNavigate} from 'react-router-dom';
+import {useGridStore} from '../../../store/es2Store';
 
 import './EditPublication.css';
 import '../AddPublication/AddPublication.css';
 import {BASE_URL} from '../../../server-constants';
+import {SUCCESS, FAILURE, displayToast} from '../../ToastUtil';
 
 function EditPublication({data, setSelectedRecord}) {
+  const navigate = useNavigate();
+  const setGridRefresh = useGridStore((state) => state.setGridRefresh);
+
   const [title, setTitle] = useState(data.name);
   const [type, setType] = useState(data.type);
   const [status, setStatus] = useState(data.status);
@@ -59,6 +65,7 @@ function EditPublication({data, setSelectedRecord}) {
 
   const handleClickBack = () => {
     setSelectedRecord(null);
+    setGridRefresh();
   };
 
   const addPublication = async () => {
@@ -89,11 +96,25 @@ function EditPublication({data, setSelectedRecord}) {
         },
       });
 
+      let status = FAILURE;
       if (response.status === 200) {
-        console.log('File uploaded successfully.');
+        if (response.data.result === 'success') {
+          status = SUCCESS;
+        }
+      }
+      if (status === FAILURE) {
+        displayToast('Unable to update publication. Please try again.', status);
+      } else {
+        displayToast('Publication updated successfully.', status);
+        handleClickBack();
       }
     } catch (error) {
-      console.error('Error:', error);
+      if (error.response.status == 401) {
+        localStorage.removeItem('token');
+        navigate('/');
+      }
+      displayToast('Unable to update publication. Please try again.', FAILURE);
+      console.error(error);
     }
   };
 

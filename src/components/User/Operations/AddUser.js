@@ -4,6 +4,8 @@
 /* eslint-disable react/react-in-jsx-scope */
 import {useState} from 'react';
 import axios from 'axios';
+import {useNavigate} from 'react-router-dom';
+import {FAILURE, SUCCESS, displayToast} from '../../ToastUtil';
 
 import SideBar from '../../SideBar/SideBar';
 
@@ -11,6 +13,7 @@ import './AddUser.css';
 import {BASE_URL} from '../../../server-constants';
 
 function AddUser({action}) {
+  const navigate = useNavigate();
   const handleClose = () => action(false);
 
   const [selectedType, setSelectedType] = useState('1');
@@ -75,17 +78,36 @@ function AddUser({action}) {
     };
 
     const token = localStorage.getItem('token');
-    axios.post(api, {
+    axios.post(api, data, {
       withCredentials: true,
       headers: {
         'Authorization': 'Bearer ' + token,
         'Content-Type': 'application/json',
       },
-    }, data)
+    })
         .then((response) => {
-          handleClose();
+          let status = FAILURE;
+          if (response.status === 200) {
+            if (response.data.result === 'success') {
+              status = SUCCESS;
+            }
+          }
+          const message = response.data.message;
+          if (message) {
+            displayToast(message, status);
+          } else {
+            const error = response.data.error;
+            displayToast(error, status);
+          }
+          if (status === SUCCESS) {
+            handleClose();
+          }
         })
         .catch((error) => {
+          if (error.response.status == 401) {
+            localStorage.removeItem('token');
+            navigate('/');
+          }
           console.log(error);
         });
   };

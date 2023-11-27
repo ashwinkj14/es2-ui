@@ -3,6 +3,8 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable require-jsdoc */
 import React, {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import {useUserStore} from '../../store/es2Store';
 
 import UserMgmt from '../User/UserManagement';
 import AddUser from '../User/Operations/AddUser';
@@ -17,11 +19,10 @@ import './Settings.css';
 
 function Settings() {
   const token = localStorage.getItem('token');
+  const navigate = useNavigate();
+  const userTypeId = useUserStore((state) => state.userTypeId);
   if (token === undefined || token === null) {
-    window.location.href = '/';
-    return (
-      <div></div>
-    );
+    navigate('/');
   }
   const [selectedTab, setSelectedTab] = useState('usermgmt');
   const [userDetails, setUserDetails] = useState({});
@@ -56,9 +57,9 @@ function Settings() {
       <div className={`${selectedTab == 'usermgmt'?'usermgmt-container':'default-container'}`}>
         <UserMgmt setModalState={setIsModalOpen} setUserDetails={setUserDetails} editUserAction={setIsEditUserOpen} shouldRender={shouldRender}/>
       </div>
-      <div className={`${selectedTab == 'dbsettings'?'database-settings-container':'default-container'}`}>
+      {(userTypeId != 1)?<></>:<div className={`${selectedTab == 'dbsettings'?'database-settings-container':'default-container'}`}>
         <DatabaseSettings/>
-      </div>
+      </div>}
       <Footer/>
       {/* User and backup goes here */}
     </div>

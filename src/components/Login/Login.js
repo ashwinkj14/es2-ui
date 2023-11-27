@@ -1,69 +1,79 @@
+/* eslint-disable max-len */
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable require-jsdoc */
 import axios from 'axios';
+import {useNavigate} from 'react-router-dom';
+import {useUserStore} from '../../store/es2Store';
 import {FAILURE, displayToast} from '../ToastUtil';
-import logo from '../../es2-logo-final.jpg';
-import './Login.css';
+
 import {BASE_URL} from '../../server-constants';
+import logo from '../../es2-logo-final.jpg';
 
-function doLogin() {
-  const usernameElement = document.getElementById('login-username');
-  const username = usernameElement.value;
-  if (username === '') {
-    alert('username is required');
-    usernameElement.focus();
-    return false;
-  }
-  const passwordElement = document.getElementById('login-password');
-  const password = passwordElement.value;
-  if (password === '') {
-    alert('password is required');
-    passwordElement.focus();
-    return false;
-  }
-  const userTypeElement = document.getElementById('login-usertype');
-  const userType = userTypeElement.value;
-  if (userType === '') {
-    alert('usertype is required');
-    userTypeElement.focus();
-    return false;
-  }
-
-  const api = BASE_URL+'/login';
-
-  const requestData = {
-    username: username,
-    password: password,
-    usertype: userType,
-  };
-
-  axios.post(api, requestData).then((response) => {
-    if (response.status === 200) {
-      if (response.data.result === 'success') {
-        localStorage.setItem('token', response.data.token);
-        window.location.href = '/publication';
-      } else {
-        const message = response.data.message;
-        if (message) {
-          displayToast(message, FAILURE);
-        } else {
-          const error = response.data.error;
-          displayToast(error, FAILURE);
-        }
-      }
-    } else {
-      displayToast('Error occurred', FAILURE);
-    }
-  });
-}
-
+import './Login.css';
+import {useEffect} from 'react';
 
 function Login() {
-  const token = localStorage.getItem('token');
-  if (token !== undefined && token !== null) {
+  const navigate = useNavigate();
+  const setUserTypeId = useUserStore((state) => state.setUserTypeId);
+  const doLogin = () => {
+    const usernameElement = document.getElementById('login-username');
+    const username = usernameElement.value;
+    if (username === '') {
+      alert('username is required');
+      usernameElement.focus();
+      return false;
+    }
+    const passwordElement = document.getElementById('login-password');
+    const password = passwordElement.value;
+    if (password === '') {
+      alert('password is required');
+      passwordElement.focus();
+      return false;
+    }
+    const userTypeElement = document.getElementById('login-usertype');
+    const userType = userTypeElement.value;
+    if (userType === '') {
+      alert('usertype is required');
+      userTypeElement.focus();
+      return false;
+    }
+
     const api = BASE_URL+'/login';
 
-    axios.post(api, {
+    const requestData = {
+      username: username,
+      password: password,
+      usertype: userType,
+    };
+
+    axios.post(api, requestData).then((response) => {
+      if (response.status === 200) {
+        if (response.data.result === 'success') {
+          setUserTypeId(response.data.userTypeId);
+          localStorage.setItem('token', response.data.token);
+          navigate('/publication');
+        } else {
+          const message = response.data.message;
+          if (message) {
+            displayToast(message, FAILURE);
+          } else {
+            const error = response.data.error;
+            displayToast(error, FAILURE);
+          }
+        }
+      } else {
+        displayToast('Error occurred', FAILURE);
+      }
+    }).catch((error) => {
+      console.error(error);
+      displayToast('Error occurred', FAILURE);
+    });
+  };
+
+  const validateToken = (token) => {
+    const api = BASE_URL+'/login';
+
+    axios.post(api, {}, {
       withCredentials: true,
       headers: {
         'Authorization': 'Bearer ' + token,
@@ -73,7 +83,8 @@ function Login() {
         .then((response) => {
           if (response.status === 200) {
             if (response.data.result === 'success') {
-              window.location.href = '/publication';
+              setUserTypeId(response.data.userTypeId);
+              navigate('/publication');
             } else {
               localStorage.removeItem('token');
             }
@@ -81,7 +92,16 @@ function Login() {
             localStorage.removeItem('token');
           }
         });
-  }
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    console.log(`token: ${token}`);
+    if (token !== undefined && token !== null) {
+      validateToken(token);
+    }
+  }, []);
+
   return (
     <div className='login-body'>
       <section className='banner'>
@@ -107,7 +127,7 @@ function Login() {
               <option value="faculty">faculty</option>
             </select>
             <section className='login-btn-container'>
-              <button className='login-btn' onClick={doLogin}>Login</button>
+              <button className='login-btn' onClick={() => doLogin()}>Login</button>
             </section>
           </section>
         </div>

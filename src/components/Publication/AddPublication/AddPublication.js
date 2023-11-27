@@ -6,11 +6,16 @@
 import {useState} from 'react';
 import axios from 'axios';
 import {SUCCESS, FAILURE, displayToast} from '../../ToastUtil';
+import {useNavigate} from 'react-router-dom';
+import {usePublicationNavigation} from '../../../store/es2Store';
 
 import './AddPublication.css';
 import {BASE_URL} from '../../../server-constants';
 
 function AddPublication() {
+  const navigate = useNavigate();
+  const setSelectedTab = usePublicationNavigation((state) => state.setSelectedTab);
+
   const [title, setTitle] = useState('');
   const [type, setType] = useState('Paper');
   const [status, setStatus] = useState('Published');
@@ -154,12 +159,25 @@ function AddPublication() {
         },
       });
 
+      let status = FAILURE;
       if (response.status === 200) {
-        displayToast('Publication added successfully', SUCCESS);
+        if (response.data.result === 'success') {
+          status = SUCCESS;
+        }
+      }
+      if (status === FAILURE) {
+        displayToast('Unable to add the Publication record. Please try again.', status);
+      } else {
+        setSelectedTab('manage');
+        displayToast('Publication added successfully', status);
       }
     } catch (error) {
+      if (error.response.status == 401) {
+        localStorage.removeItem('token');
+        navigate('/');
+      }
       displayToast('Unable to add the Publication record. Please try again.', FAILURE);
-      console.error('Error:', error);
+      console.error(error);
     }
   };
 

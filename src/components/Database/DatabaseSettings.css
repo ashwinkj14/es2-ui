@@ -1,0 +1,143 @@
+.dbsettings-main-container{
+    width: 100%;
+    /* display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; */
+}
+
+.dbsettings-header-container{
+    width: 100%;
+}
+
+.dbsettings-header{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.dbsettings-header-content{
+    font-weight: 300;
+}
+
+.dbsettings-tab-container{
+    display: flex;
+    flex-direction: row;
+}
+
+.dbsettings-tab-header-container{
+    background-color: rgb(240, 240, 240);
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-right: 1px solid rgb(172, 172, 172);
+    cursor: pointer;
+    /* border-radius: 5px; */
+}
+
+.dbsettings-tab-header-container-active{
+    border-bottom: 2px solid var(--green);
+}
+
+.trigger-container{
+    margin-top: 40px;
+}
+
+.trigger-input-field-container{
+    display: flex;
+    flex-direction: row;
+    margin: 20px;
+}
+
+.trigger-input-field-label{
+    font-size: 20px;
+    font-weight: 300;
+    margin-right: 50px;
+}
+
+.trigger-input-field{
+    background-color: rgb(244, 241, 241);
+    border: none;
+    width: 250px;
+    outline-color: grey;
+}
+
+.backup-btn-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-top: 15px;
+    margin-left: 20px;
+}
+
+.backup-btn{
+    padding: 7px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--green);
+    color: white;
+    cursor: pointer;
+}
+
+.schedule-switch-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.restore-db-upload-field-container{
+    display: flex;
+    flex-direction: column;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.restore-db-upload-btn{
+    height: 100px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rgb(8, 90, 167);
+    border-style: dashed;
+    color: rgb(8, 90, 167);
+    cursor: pointer;
+}
+
+.restore-db-submit-btn-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-top: 15px;
+}
+
+.restore-db-submit-btn{
+    padding: 7px 20px;
+    min-width: 120px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--green);
+    color: white;
+    cursor: pointer;
+}
+
+.schedule-settings-container{
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+}
+
+.schedule-radio-btn-container{
+    margin-top: 20px;
+}
+
+.schedule-time-picker{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
