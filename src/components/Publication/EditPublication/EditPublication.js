@@ -100,13 +100,15 @@ function EditPublication({data, setSelectedRecord}) {
       if (response.status === 200) {
         if (response.data.result === 'success') {
           status = SUCCESS;
+          handleClickBack();
         }
       }
-      if (status === FAILURE) {
-        displayToast('Unable to update publication. Please try again.', status);
+      const message = response.data.message;
+      if (message) {
+        displayToast(message, status);
       } else {
-        displayToast('Publication updated successfully.', status);
-        handleClickBack();
+        const error = response.data.error;
+        displayToast(error, status);
       }
     } catch (error) {
       if (error.response.status == 401) {

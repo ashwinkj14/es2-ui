@@ -163,13 +163,15 @@ function AddPublication() {
       if (response.status === 200) {
         if (response.data.result === 'success') {
           status = SUCCESS;
+          setSelectedTab('manage');
         }
       }
-      if (status === FAILURE) {
-        displayToast('Unable to add the Publication record. Please try again.', status);
+      const message = response.data.message;
+      if (message) {
+        displayToast(message, status);
       } else {
-        setSelectedTab('manage');
-        displayToast('Publication added successfully', status);
+        const error = response.data.error;
+        displayToast(error, status);
       }
     } catch (error) {
       if (error.response.status == 401) {

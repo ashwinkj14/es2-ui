@@ -128,9 +128,19 @@ function EditPatent({data, setSelectedRecord}) {
         },
       });
 
+      let status = FAILURE;
       if (response.status === 200) {
-        displayToast('Patent updated successfully', SUCCESS);
-        handleClickBack();
+        if (response.data.result === 'success') {
+          status = SUCCESS;
+          handleClickBack();
+        }
+      }
+      const message = response.data.message;
+      if (message) {
+        displayToast(message, status);
+      } else {
+        const error = response.data.error;
+        displayToast(error, status);
       }
     } catch (error) {
       if (error.response.status == 401) {

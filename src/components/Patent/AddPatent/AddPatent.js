@@ -128,7 +128,13 @@ function AddPatent() {
         }
       }
       if (status === FAILURE) {
-        displayToast('Unable to add the Patent record. Please try again.', status);
+        const message = response.data.message;
+        if (message) {
+          displayToast(message, status);
+        } else {
+          const error = response.data.error;
+          displayToast(error, status);
+        }
       } else {
         setSelectedTab('manage');
         displayToast('Patent added successfully', status);
@@ -138,7 +144,7 @@ function AddPatent() {
         localStorage.removeItem('token');
         navigate('/');
       }
-      displayToast('Unable to add the Patent record. Please try again.', FAILURE);
+      displayToast('Unable to add the patent record. Please try again.', FAILURE);
       console.error(error);
     }
   };
