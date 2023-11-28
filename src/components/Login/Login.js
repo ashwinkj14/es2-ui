@@ -66,7 +66,11 @@ function Login() {
       }
     }).catch((error) => {
       console.error(error);
-      displayToast('Error occurred', FAILURE);
+      if (error.code === 'ERR_NETWORK') {
+        displayToast('Unable to connect to the server', FAILURE);
+      } else {
+        displayToast('Error occurred', FAILURE);
+      }
     });
   };
 
@@ -112,7 +116,7 @@ function Login() {
 
       <section className='login-section'>
         <div className='login-container'>
-          <div className='login-header'>Publication Repository</div>
+          <div className='login-header'>ES2 Repository</div>
           <section className='login-input-container'>
             <input id="login-username" className="login-input"
               placeholder='username'></input>
