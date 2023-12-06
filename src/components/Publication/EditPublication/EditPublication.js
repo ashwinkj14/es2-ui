@@ -7,7 +7,7 @@
 import {useState} from 'react';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
-import {useGridStore} from '../../../store/es2Store';
+import {usePublicationGridStore} from '../../../store/es2Store';
 
 import './EditPublication.css';
 import '../AddPublication/AddPublication.css';
@@ -16,7 +16,7 @@ import {SUCCESS, FAILURE, displayToast} from '../../ToastUtil';
 
 function EditPublication({data, setSelectedRecord}) {
   const navigate = useNavigate();
-  const setGridRefresh = useGridStore((state) => state.setGridRefresh);
+  const setGridRefresh = usePublicationGridStore((state) => state.setGridRefresh);
 
   const [title, setTitle] = useState(data.name);
   const [type, setType] = useState(data.type);

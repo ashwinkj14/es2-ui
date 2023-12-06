@@ -1,12 +1,13 @@
 /* eslint-disable max-len */
 /* eslint-disable react/prop-types */
 /* eslint-disable require-jsdoc */
-import React, {useMemo, useState} from 'react';
+import React, {useMemo} from 'react';
 import axios from 'axios';
 import {AgGridReact} from 'ag-grid-react';
 import CustomCellRenderer from './CustomCellRenderer';
 import {useNavigate} from 'react-router-dom';
 import {FAILURE, SUCCESS, displayToast} from '../../ToastUtil';
+import {usePublicationGridStore} from '../../../store/es2Store';
 
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
@@ -16,13 +17,13 @@ import {BASE_URL} from '../../../server-constants';
 
 function DataGrid({data, popupContent, selectedTab, setSelectedRecord}) {
   const navigate = useNavigate();
-  const [refresh, setRefresh] = useState(false);
+  const setGridRefresh = usePublicationGridStore((state) => state.setGridRefresh);
   const downloadPublication = async (publicationId) => {
     const api = BASE_URL+`/publication/download`;
 
     const token = localStorage.getItem('token');
     const requestData = {
-      id: publicationId,
+      publication_id: publicationId,
     };
     axios.get(api, {
       withCredentials: true,
@@ -79,7 +80,7 @@ function DataGrid({data, popupContent, selectedTab, setSelectedRecord}) {
     const api = BASE_URL+`/publication/delete`;
     try {
       const requestData = {
-        id: publicationId,
+        publication_id: publicationId,
       };
       const token = localStorage.getItem('token');
       const response = await axios.post(api, requestData, {
@@ -103,7 +104,7 @@ function DataGrid({data, popupContent, selectedTab, setSelectedRecord}) {
         displayToast(error, status);
       }
       if (status === SUCCESS) {
-        setRefresh(!refresh);
+        setGridRefresh();
       }
     } catch (error) {
       if (error.response.status == 401) {
@@ -116,7 +117,7 @@ function DataGrid({data, popupContent, selectedTab, setSelectedRecord}) {
   };
 
   const handleDelete = (props) => {
-    const publicationId = props.node.data.id;
+    const publicationId = props.node.data.publicationId;
     deletePublication(publicationId);
   };
 

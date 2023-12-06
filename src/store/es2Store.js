@@ -19,6 +19,15 @@ export const useGridStore = create()(
     })),
 );
 
+export const usePublicationGridStore = create()(
+    devtools((set) => ({
+      gridRefresh: false,
+      setGridRefresh: () => {
+        set((state) => ({gridRefresh: !state.gridRefresh}));
+      },
+    })),
+);
+
 
 export const usePatentNavigation = create()(
     devtools((set) => ({

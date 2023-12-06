@@ -7,7 +7,7 @@ import axios from 'axios';
 import DataGrid from '../Grid/DataGrid';
 import Abstract from '../SideBar/Abstract';
 import {useNavigate} from 'react-router-dom';
-import {useGridStore} from '../../../store/es2Store';
+import {usePublicationGridStore} from '../../../store/es2Store';
 import {FAILURE, displayToast} from '../../ToastUtil';
 
 import './ManagePublication.css';
@@ -16,7 +16,7 @@ import {BASE_URL} from '../../../server-constants';
 
 function ManagePublication() {
   const navigate = useNavigate();
-  const gridRefresh = useGridStore((state) => state.gridRefresh);
+  const gridRefresh = usePublicationGridStore((state) => state.gridRefresh);
   const [records, setRecords] = useState('');
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [popupContent, setPopupContent] = useState('');
