@@ -26,8 +26,14 @@ function Publication() {
   const userTypeId = useUserStore((state) => state.userTypeId);
   const [searchResult, setSearchResult] = useState('');
   const [popupContent, setPopupContent] = useState('');
+  const [renderNoData, setRenderNoData] = useState(<></>);
 
   const handleSearch = (data) => {
+    if (data.length==0) {
+      setRenderNoData(<div className='no-data'>No Data Found</div>);
+    } else {
+      setRenderNoData(<></>);
+    }
     setSearchResult(data);
   };
 
@@ -50,6 +56,7 @@ function Publication() {
       </section>
       <section className="publication-data">
         <DataGrid data={searchResult} popupContent={setPopupContent}/>
+        {renderNoData}
       </section>
     </section>
   </>;

@@ -48,3 +48,12 @@
     overflow: hidden;
   }
 
+  .no-data{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    font-size: 35px;
+    font-weight: 200;
+    color: black;
+}
