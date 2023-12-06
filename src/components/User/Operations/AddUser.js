@@ -60,6 +60,15 @@ function AddUser({action}) {
       errorExists = true;
       setConfirmPasswordError('Confirm Password is required');
     }
+    if (!/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])(.{8,})$/.test(password)) {
+      const message = 'Password must contain at least:\n• 8 characters\n• one uppercase character\n• one lowercase character\n• a number\n• a symbol !@#$%^&*';
+      displayToast(message, FAILURE);
+      errorExists = true;
+    }
+    if (password!=confirmPassword) {
+      displayToast('Password doesn\'t match.', FAILURE);
+      errorExists = true;
+    }
     return errorExists;
   };
 

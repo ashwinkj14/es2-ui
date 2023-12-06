@@ -3,5 +3,10 @@
   }
   
 .custom-toast-error{
+  white-space: pre-wrap;
     background: #e74c3c;
+}
+
+.Toastify__toast-body{
+  white-space: pre-wrap;
 }
