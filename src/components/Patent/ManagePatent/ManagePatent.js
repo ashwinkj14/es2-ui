@@ -58,10 +58,11 @@ function ManagePatent() {
     <div className='manage-pub-header'>Manage Patent</div>
     <section className="publication-data manage-pub-grid">
       <DataGrid data={records} popupContent={setPopupContent} selectedTab="manage" setSelectedRecord={setSelectedRecord}/>
+      {(records.length==0)?(<div className='no-data'>No Data Found</div>):<></>}
     </section>
   </div>;
 
-  const to_render = (selectedRecord==null)?(records.length>0)?data_page:(<div className='no-data'>No data found</div>):<EditPatent data={selectedRecord} setSelectedRecord={setSelectedRecord}/>;
+  const to_render = (selectedRecord==null)?data_page:<EditPatent data={selectedRecord} setSelectedRecord={setSelectedRecord}/>;
   return (
     <div>
       {to_render}

@@ -18,6 +18,7 @@ import {BASE_URL} from '../../../server-constants';
 function DataGrid({data, popupContent, selectedTab, setSelectedRecord}) {
   const navigate = useNavigate();
   const setGridRefresh = usePublicationGridStore((state) => state.setGridRefresh);
+
   const downloadPublication = async (publicationId) => {
     const api = BASE_URL+`/publication/download`;
 
@@ -153,6 +154,7 @@ h-11V9.1z M12.3,15.4c0-1,0.8-1.7,1.7-1.7h32c1,0,1.7,0.8,1.7,1.7v1.3H12.3V15.4z">
     {field: 'isCopyrighted', headerName: 'Is Copyrighted', hide: true, width: 0},
     {field: 'keywords', headerName: 'Keywords', hide: true, width: 0},
     {field: 'authors_list', headerName: 'Authors List', hide: true, width: 0},
+    {field: 'mode', headerName: 'Mode', hide: true, width: 0},
     {field: 'name', headerName: 'Name', autoHeight: true, cellRenderer: CustomCellRenderer, minWidth: 500},
     {field: 'type', headerName: 'Type', cellRenderer: CustomCellRenderer, minWidth: 100},
     {field: 'status', headerName: 'Status', cellRenderer: CustomCellRenderer, minWidth: 100},

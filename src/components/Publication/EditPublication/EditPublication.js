@@ -181,9 +181,9 @@ function EditPublication({data, setSelectedRecord}) {
           <div className='add-pub-text-field-container'>
             <label>Publication Mode</label>
             <div className='add-pub-mode'>
-              <input value='public' onChange={(event) => setMode(event.target.value)} checked={mode === 'public'} className="text-field" type="radio"/>
+              <input value='Public' onChange={(event) => setMode(event.target.value)} checked={mode === 'Public'} className="text-field" type="radio"/>
               <label>Public</label>
-              <input value='private' onChange={(event) => setMode(event.target.value)} checked={mode === 'private'} className="text-field" type="radio"/>
+              <input value='Private' onChange={(event) => setMode(event.target.value)} checked={mode === 'Private'} className="text-field" type="radio"/>
               <label>Private</label>
             </div>
           </div>
