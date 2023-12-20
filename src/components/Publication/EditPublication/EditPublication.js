@@ -82,10 +82,10 @@ function EditPublication({data, setSelectedRecord}) {
     formData.append('project_number', number);
     formData.append('isCopyrighted', copyrighted);
     formData.append('publication_date', date);
-    formData.append('abstract', abstract);
+    formData.append('publication_abstract', abstract);
     formData.append('publication_id', data.publicationId);
 
-    const api = BASE_URL+'/publication/edit';
+    const api = BASE_URL+'/publication/update';
 
     try {
       const token = localStorage.getItem('token');
@@ -181,9 +181,9 @@ function EditPublication({data, setSelectedRecord}) {
           <div className='add-pub-text-field-container'>
             <label>Publication Mode</label>
             <div className='add-pub-mode'>
-              <input value='Public' onChange={(event) => setMode(event.target.value)} checked={mode === 'Public'} className="text-field" type="radio"/>
+              <input value='Public' onChange={(event) => setMode(event.target.value)} checked={mode.toLowerCase() === 'public'} className="text-field" type="radio"/>
               <label>Public</label>
-              <input value='Private' onChange={(event) => setMode(event.target.value)} checked={mode === 'Private'} className="text-field" type="radio"/>
+              <input value='Private' onChange={(event) => setMode(event.target.value)} checked={mode.toLowerCase() === 'private'} className="text-field" type="radio"/>
               <label>Private</label>
             </div>
           </div>
