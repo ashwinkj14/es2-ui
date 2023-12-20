@@ -117,7 +117,7 @@ function EditPatent({data, setSelectedRecord}) {
       patent_id: data.patent_id,
     };
 
-    const api = BASE_URL+'/patent/edit';
+    const api = BASE_URL+'/patent/update';
 
     try {
       const token = localStorage.getItem('token');
