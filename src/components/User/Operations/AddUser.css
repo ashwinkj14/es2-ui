@@ -8,9 +8,16 @@
     margin: 20px
 }
 
+.add-user-body-container{
+    height: 100vh;
+}
+
 .add-user-body{
     margin: 30px;
     line-height: 1.5;
+    height: 60vh;
+    overflow-y: scroll;
+    padding-bottom: 30px;
 }
 
 .add-user-form{

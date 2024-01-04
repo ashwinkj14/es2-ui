@@ -125,57 +125,59 @@ function AddUser({action}) {
     <div className="add-user-title">
             Add User
     </div>
-    <div className='add-user-body'>
-      <div className="add-user-form">
-        <div className='add-user-field-container'>
-          <div className='add-user-text-field-container'>
-            <label>User Type</label>
-            <select value={selectedType} onChange={handleTypeSelection} className="user-type-dropdown">
-              <option value="1">Admin</option>
-              <option value="2">Faculty</option>
-              <option value="3">Member Company</option>
-              <option value="4">Student</option>
-            </select>
+    <div className='add-user-body-container'>
+      <div className='add-user-body'>
+        <div className="add-user-form">
+          <div className='add-user-field-container'>
+            <div className='add-user-text-field-container'>
+              <label>User Type</label>
+              <select value={selectedType} onChange={handleTypeSelection} className="user-type-dropdown">
+                <option value="1">Admin</option>
+                <option value="2">Faculty</option>
+                <option value="3">Member Company</option>
+                <option value="4">Student</option>
+              </select>
+            </div>
+          </div>
+          <div className='add-user-field-container'>
+            <div className='add-user-text-field-container'>
+              <label>User Name</label>
+              <input value={username} onChange={(event) => setUsername(event.target.value)} className="text-field" type="text"/>
+            </div>
+            {displayError(usernameError)}
+          </div>
+          <div className='add-user-field-container'>
+            <div className='add-user-text-field-container'>
+              <label>Email ID</label>
+              <input value={emailId} onChange={(event) => setEmailId(event.target.value)} className="text-field" type="text"/>
+            </div>
+            {displayError(emailIdError)}
+          </div>
+          <div className='add-user-field-container'>
+            <div className='add-user-text-field-container'>
+              <label>Organization</label>
+              <input value={organization} onChange={(event) => setOrganization(event.target.value)} className="text-field" type="text"/>
+            </div>
+            {displayError(organizationError)}
+          </div>
+          <div className='add-user-field-container'>
+            <div className='add-user-text-field-container'>
+              <label>Password</label>
+              <input value={password} onChange={(event) => setPassword(event.target.value)} className="text-field" type="password"/>
+            </div>
+            {displayError(passwordError)}
+          </div>
+          <div className='add-user-field-container'>
+            <div className='add-user-text-field-container'>
+              <label>Confirm Password</label>
+              <input value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} className="text-field" type="password"/>
+            </div>
+            {displayError(confirmPasswordError)}
           </div>
         </div>
-        <div className='add-user-field-container'>
-          <div className='add-user-text-field-container'>
-            <label>User Name</label>
-            <input value={username} onChange={(event) => setUsername(event.target.value)} className="text-field" type="text"/>
-          </div>
-          {displayError(usernameError)}
+        <div className="add-user-submit-btn-container">
+          <button className="add-user-submit-btn" onClick={handleAdd}>Submit</button>
         </div>
-        <div className='add-user-field-container'>
-          <div className='add-user-text-field-container'>
-            <label>Email ID</label>
-            <input value={emailId} onChange={(event) => setEmailId(event.target.value)} className="text-field" type="text"/>
-          </div>
-          {displayError(emailIdError)}
-        </div>
-        <div className='add-user-field-container'>
-          <div className='add-user-text-field-container'>
-            <label>Organization</label>
-            <input value={organization} onChange={(event) => setOrganization(event.target.value)} className="text-field" type="text"/>
-          </div>
-          {displayError(organizationError)}
-        </div>
-        <div className='add-user-field-container'>
-          <div className='add-user-text-field-container'>
-            <label>Password</label>
-            <input value={password} onChange={(event) => setPassword(event.target.value)} className="text-field" type="password"/>
-          </div>
-          {displayError(passwordError)}
-        </div>
-        <div className='add-user-field-container'>
-          <div className='add-user-text-field-container'>
-            <label>Confirm Password</label>
-            <input value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} className="text-field" type="password"/>
-          </div>
-          {displayError(confirmPasswordError)}
-        </div>
-      </div>
-      <div className="add-user-submit-btn-container">
-        <button className="add-user-submit-btn" onClick={handleAdd}>Submit</button>
       </div>
     </div>
   </div>;
