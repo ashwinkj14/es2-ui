@@ -6,6 +6,13 @@ import {useState} from 'react';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 import {FAILURE, SUCCESS, displayToast} from '../../ToastUtil';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import MenuItem from '@mui/material/MenuItem';
 
 import SideBar from '../../SideBar/SideBar';
 
@@ -13,6 +20,31 @@ import './AddUser.css';
 import {BASE_URL} from '../../../server-constants';
 
 function AddUser({action}) {
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+  const userTypeOptions = [
+    {
+      value: '1',
+      label: 'admin',
+    },
+    {
+      value: '2',
+      label: 'member company',
+    },
+    {
+      value: '3',
+      label: 'student',
+    },
+    {
+      value: '4',
+      label: 'faculty',
+    },
+  ];
+
   const navigate = useNavigate();
   const handleClose = () => action(false);
 
@@ -128,52 +160,192 @@ function AddUser({action}) {
     <div className='add-user-body-container'>
       <div className='add-user-body'>
         <div className="add-user-form">
-          <div className='add-user-field-container'>
-            <div className='add-user-text-field-container'>
-              <label>User Type</label>
-              <select value={selectedType} onChange={handleTypeSelection} className="user-type-dropdown">
-                <option value="1">Admin</option>
-                <option value="2">Faculty</option>
-                <option value="3">Member Company</option>
-                <option value="4">Student</option>
-              </select>
-            </div>
-          </div>
-          <div className='add-user-field-container'>
-            <div className='add-user-text-field-container'>
-              <label>User Name</label>
-              <input value={username} onChange={(event) => setUsername(event.target.value)} className="text-field" type="text"/>
-            </div>
+          <Box
+            component="form"
+            sx={{
+              '& > :not(style)': {m: 1, width: '32ch'},
+            }}
+            noValidate
+            autoComplete="off"
+          >
+            <TextField
+              id="outlined-usertype-select"
+              select
+              label="User Type"
+              defaultValue="1"
+              className="login-input"
+              size="small"
+              color='success'
+              onChange={(event) => handleTypeSelection(event)}
+              sx={{
+                mb: 1,
+                width: '30ch',
+                fontSize: '0.9rem',
+                fontWeight: 300,
+              }}
+              InputLabelProps={{
+                sx: {
+                  'fontSize': '0.9rem',
+                  'fontWeight': 400,
+                  '&.MuiOutlinedInput-notchedOutline': {fontSize: '0.9rem'},
+                },
+              }}
+            >
+              {userTypeOptions.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+            <TextField
+              id="outlined-username"
+              label="Username"
+              defaultValue=""
+              className="login-input"
+              size="small"
+              color='success'
+              sx={{
+                mb: 1,
+                width: '30ch',
+                fontSize: '0.9rem',
+                fontWeight: 300,
+              }}
+              value={username}
+              onChange={(event) => setUsername(event.target.value)}
+              InputLabelProps={{
+                sx: {
+                  'fontSize': '0.9rem',
+                  'fontWeight': 400,
+                  '&.MuiOutlinedInput-notchedOutline': {fontSize: '0.9rem'},
+                },
+              }}
+            ></TextField>
             {displayError(usernameError)}
-          </div>
-          <div className='add-user-field-container'>
-            <div className='add-user-text-field-container'>
-              <label>Email ID</label>
-              <input value={emailId} onChange={(event) => setEmailId(event.target.value)} className="text-field" type="text"/>
-            </div>
+            <TextField
+              id="outlined-username"
+              label="Email ID"
+              defaultValue=""
+              className="login-input"
+              size="small"
+              color='success'
+              sx={{
+                mb: 1,
+                width: '30ch',
+                fontSize: '0.9rem',
+                fontWeight: 300,
+              }}
+              value={emailId}
+              onChange={(event) => setEmailId(event.target.value)}
+              InputLabelProps={{
+                sx: {
+                  'fontSize': '0.9rem',
+                  'fontWeight': 400,
+                  '&.MuiOutlinedInput-notchedOutline': {fontSize: '0.9rem'},
+                },
+              }}
+            ></TextField>
             {displayError(emailIdError)}
-          </div>
-          <div className='add-user-field-container'>
-            <div className='add-user-text-field-container'>
-              <label>Organization</label>
-              <input value={organization} onChange={(event) => setOrganization(event.target.value)} className="text-field" type="text"/>
-            </div>
+            <TextField
+              id="outlined-username"
+              label="Organization"
+              defaultValue=""
+              className="login-input"
+              size="small"
+              color='success'
+              sx={{
+                mb: 1,
+                width: '30ch',
+                fontSize: '0.9rem',
+                fontWeight: 300,
+              }}
+              value={organization}
+              onChange={(event) => setOrganization(event.target.value)}
+              InputLabelProps={{
+                sx: {
+                  'fontSize': '0.9rem',
+                  'fontWeight': 400,
+                  '&.MuiOutlinedInput-notchedOutline': {fontSize: '0.9rem'},
+                },
+              }}
+            ></TextField>
             {displayError(organizationError)}
-          </div>
-          <div className='add-user-field-container'>
-            <div className='add-user-text-field-container'>
-              <label>Password</label>
-              <input value={password} onChange={(event) => setPassword(event.target.value)} className="text-field" type="password"/>
-            </div>
+            <TextField
+              id="outlined-password"
+              label="Password"
+              defaultValue="1"
+              size="small"
+              type={showPassword ? 'text' : 'password'}
+              sx={{
+                mb: 1,
+                width: '30ch',
+                fontSize: '0.9rem',
+                fontWeight: 300,
+              }}
+              color='success'
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              InputLabelProps={{
+                sx: {
+                  'fontSize': '0.9rem',
+                  'fontWeight': 400,
+                  '&.MuiOutlinedInput-notchedOutline': {fontSize: '0.9rem'},
+                },
+              }}
+              InputProps={{
+                endAdornment:
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>,
+              }}
+            >
+            </TextField>
             {displayError(passwordError)}
-          </div>
-          <div className='add-user-field-container'>
-            <div className='add-user-text-field-container'>
-              <label>Confirm Password</label>
-              <input value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} className="text-field" type="password"/>
-            </div>
+            <TextField
+              id="outlined-password"
+              label="Confirm Password"
+              defaultValue="1"
+              size="small"
+              type={showPassword ? 'text' : 'password'}
+              sx={{
+                mb: 1,
+                width: '30ch',
+                fontSize: '0.9rem',
+                fontWeight: 300,
+              }}
+              color='success'
+              value={confirmPassword}
+              onChange={(event) => setConfirmPassword(event.target.value)}
+              InputLabelProps={{
+                sx: {
+                  'fontSize': '0.9rem',
+                  'fontWeight': 400,
+                  '&.MuiOutlinedInput-notchedOutline': {fontSize: '0.9rem'},
+                },
+              }}
+              InputProps={{
+                endAdornment:
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>,
+              }}
+            >
+            </TextField>
             {displayError(confirmPasswordError)}
-          </div>
+          </Box>
         </div>
         <div className="add-user-submit-btn-container">
           <button className="add-user-submit-btn" onClick={handleAdd}>Submit</button>
