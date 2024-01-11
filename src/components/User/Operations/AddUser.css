@@ -67,4 +67,5 @@
     background-color: var(--green);
     color: white;
     cursor: pointer;
+    margin-left: 10px;
 }

@@ -24,6 +24,8 @@ import {BASE_URL} from '../../../server-constants';
 function EditUser({action, user}) {
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const handleClickShowConfirmPassword = () => setShowConfirmPassword((show) => !show);
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
@@ -298,11 +300,11 @@ function EditUser({action, user}) {
             </TextField>
             {displayError(passwordError)}
             <TextField
-              id="outlined-password"
+              id="outlined-confirm-password"
               label="Confirm Password"
               defaultValue="1"
               size="small"
-              type={showPassword ? 'text' : 'password'}
+              type={showConfirmPassword ? 'text' : 'password'}
               sx={{
                 mb: 1,
                 width: '30ch',
@@ -324,11 +326,11 @@ function EditUser({action, user}) {
                   <InputAdornment position="end">
                     <IconButton
                       aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
+                      onClick={handleClickShowConfirmPassword}
                       onMouseDown={handleMouseDownPassword}
                       edge="end"
                     >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>,
               }}
