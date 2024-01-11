@@ -16,6 +16,8 @@ function AddPatent() {
   const navigate = useNavigate();
   const setSelectedTab = usePatentNavigation((state) => state.setSelectedTab);
 
+  const today = new Date().toISOString().split('T')[0];
+
   const [title, setTitle] = useState('');
   const [patentNumber, setPatentNumber] = useState('');
   const [abstract, setAbstract] = useState('');
@@ -193,6 +195,7 @@ function AddPatent() {
                 id="search-from-date"
                 className="add-pub-box-date"
                 type="date"
+                max={today}
                 value={issueDate}
                 onChange={(event) => setIssueDate(event.target.value)}/>
             </div>
@@ -205,6 +208,7 @@ function AddPatent() {
                 id="search-from-date"
                 className="add-pub-box-date"
                 type="date"
+                max={today}
                 value={filingDate}
                 onChange={(event) => setFilingDate(event.target.value)}/>
             </div>

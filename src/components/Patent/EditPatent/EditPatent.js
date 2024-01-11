@@ -18,6 +18,8 @@ function EditPatent({data, setSelectedRecord}) {
   const navigate = useNavigate();
   const setGridRefresh = useGridStore((state) => state.setGridRefresh);
 
+  const today = new Date().toISOString().split('T')[0];
+
   const [title, setTitle] = useState(data.title);
   const [patentNumber, setPatentNumber] = useState(data.patent_number);
   const [issueDate, setIssueDate] = useState(data.issue_date);
@@ -202,6 +204,7 @@ function EditPatent({data, setSelectedRecord}) {
                 id="search-from-date"
                 className="add-pub-box-date"
                 type="date"
+                max={today}
                 value={issueDate}
                 onChange={(event) => setIssueDate(event.target.value)}/>
             </div>
@@ -214,6 +217,7 @@ function EditPatent({data, setSelectedRecord}) {
                 id="search-from-date"
                 className="add-pub-box-date"
                 type="date"
+                max={today}
                 value={filingDate}
                 onChange={(event) => setFilingDate(event.target.value)}/>
             </div>

@@ -18,6 +18,8 @@ function EditPublication({data, setSelectedRecord}) {
   const navigate = useNavigate();
   const setGridRefresh = usePublicationGridStore((state) => state.setGridRefresh);
 
+  const today = new Date().toISOString().split('T')[0];
+
   const [title, setTitle] = useState(data.name);
   const [type, setType] = useState(data.type);
   const [status, setStatus] = useState(data.status);
@@ -208,6 +210,7 @@ function EditPublication({data, setSelectedRecord}) {
               id="search-from-date"
               className="add-pub-box-date"
               type="date"
+              max={today}
               value={date}
               onChange={(event) => setDate(event.target.value)}/>
           </div>

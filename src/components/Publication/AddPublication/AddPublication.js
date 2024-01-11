@@ -3,7 +3,7 @@
 /* eslint-disable max-len */
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable require-jsdoc */
-import {useState} from 'react';
+import {useRef, useState} from 'react';
 import axios from 'axios';
 import {SUCCESS, FAILURE, displayToast} from '../../ToastUtil';
 import {useNavigate} from 'react-router-dom';
@@ -15,6 +15,9 @@ import {BASE_URL} from '../../../server-constants';
 function AddPublication() {
   const navigate = useNavigate();
   const setSelectedTab = usePublicationNavigation((state) => state.setSelectedTab);
+
+  const fileInput = useRef(null);
+  const today = new Date().toISOString().split('T')[0];
 
   const [title, setTitle] = useState('');
   const [type, setType] = useState('Paper');
@@ -71,6 +74,10 @@ function AddPublication() {
 
   const handleFileSelect = (event) => {
     setSelectedFile(event.target.files[0]);
+  };
+
+  const handleFileSelectClick = () => {
+    fileInput.current.click();
   };
 
   const handleValidation = () => {
@@ -286,6 +293,7 @@ function AddPublication() {
                 id="search-from-date"
                 className="add-pub-box-date"
                 type="date"
+                max={today}
                 value={date}
                 onChange={(event) => setDate(event.target.value)}/>
             </div>
@@ -312,8 +320,8 @@ function AddPublication() {
         <div className='add-pub-field-container'>
           <div className='add-pub-upload-field-container'>
             <label>Upload File (Max File size : 128MB)</label>
-            <div className='add-pub-upload-btn'>
-              <input type='file' onChange={(event) => handleFileSelect(event)} placeholder='Upload'/>
+            <div className='add-pub-upload-btn' onClick={handleFileSelectClick}>
+              <input type='file' ref={fileInput} onChange={(event) => handleFileSelect(event)} placeholder='Upload'/>
             </div>
           </div>
           {displayError(selectedFileError)}
