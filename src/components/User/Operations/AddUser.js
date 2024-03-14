@@ -35,15 +35,15 @@ function AddUser({action}) {
     },
     {
       value: '2',
-      label: 'faculty',
-    },
-    {
-      value: '3',
       label: 'member company',
     },
     {
-      value: '4',
+      value: '3',
       label: 'student',
+    },
+    {
+      value: '4',
+      label: 'faculty',
     },
   ];
 

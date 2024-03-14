@@ -36,15 +36,15 @@ function EditUser({action, user}) {
     },
     {
       value: '2',
-      label: 'faculty',
-    },
-    {
-      value: '3',
       label: 'member company',
     },
     {
-      value: '4',
+      value: '3',
       label: 'student',
+    },
+    {
+      value: '4',
+      label: 'faculty',
     },
   ];
   const userTypeId = useUserStore((state) => state.userTypeId);
