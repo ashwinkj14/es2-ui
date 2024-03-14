@@ -28,6 +28,9 @@ function NavBar() {
           <a onClick={() => handleNavigation('/patent')}>Patent</a>
         </section>
         <section className='navbar-item'>
+          <a onClick={() => handleNavigation('/project')}>Project</a>
+        </section>
+        <section className='navbar-item'>
           <a onClick={() => handleNavigation('/settings')}>Settings</a>
         </section>
         <section onClick={handleLogout} className="navbar-item">

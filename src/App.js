@@ -5,6 +5,7 @@ import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
 import Login from './components/Login/Login';
 import Publication from './components/Publication/Publication';
 import Patent from './components/Patent/Patent';
+import Project from './components/Project/Project';
 import Settings from './components/Settings/Settings';
 import NotFound from './components/404/NotFound';
 
@@ -18,6 +19,7 @@ function App() {
           <Route path="/" element={<Login/>}></Route>
           <Route path="/publication" element={<Publication/>}></Route>
           <Route path="/patent" element={<Patent/>}></Route>
+          <Route path="/project" element={<Project/>}></Route>
           <Route path="/settings" element={<Settings/>}></Route>
           <Route path="/404" element={<NotFound />} />
           <Route path="*" element={<Navigate to="/404" replace />} />

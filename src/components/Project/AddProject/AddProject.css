@@ -1,0 +1,200 @@
+.add-pub-container{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.add-pub-header{
+    color: #252525;
+    font-size: 50px;
+    font-weight: 400;
+    margin: 20px;
+}
+.add-pub-title{
+    color: #252525;
+    font-size: 30px;
+    font-weight: 400;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px
+}
+
+.add-pub-body{
+    margin: 30px;
+    line-height: 1.5;
+}
+
+.add-pub-form{
+    text-align: justify;
+    display: flex;
+    flex-direction: column;
+    width: 800px;
+}
+
+.row-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 5px;
+}
+
+.add-pub-error-container{
+    margin-top: -5px;
+    margin-bottom: 20px;
+    color: red;
+}
+
+.add-pub-field-container{
+    display: flex;
+    flex-direction: column;
+}
+
+.add-pub-text-field-container{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.user-type-dropdown{
+    height: 30px;
+}
+
+.text-field{
+    height: 25px;
+    border-radius: 3px;
+    border:1px solid #252525;
+}
+
+.text-field:focus{
+    outline-color: #017155;
+}
+
+.add-pub-mode{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.add-pub-box-date{
+    background-color: #ffffff;
+    height: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    border-bottom-color: #017155;
+}
+
+.add-pub-box-date:focus{
+    outline: 2px solid #017155;
+}
+
+.add-pub-abstract-container{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    width: 100%;
+    height: 200px;
+}
+
+.add-pub-authors-container{
+    display: flex;
+    flex-direction: column;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.add-pub-author-details-container{
+    margin-top: 5px;
+    display: flex;
+}
+
+.add-pub-author-label{
+    margin-bottom: 5px;
+}
+
+.abstract-field{
+    height: 100%;
+}
+
+.abstract-field:focus{
+    outline-color: #017155;
+}
+
+.author-field{
+    width: 240px;
+}
+
+.author-field:focus{
+    outline-color: #017155;
+}
+
+.field-margin{
+    margin-left: 15px;
+}
+
+.add-pub-author-delete-btn{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.add-pub-add-author-btn{
+    height: 30px;
+    /* margin-right: 25px; */
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rgb(8, 90, 167);
+    border-style: dashed;
+    color: rgb(8, 90, 167);
+    cursor: pointer;
+}
+
+.add-pub-upload-field-container{
+    display: flex;
+    flex-direction: column;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.add-pub-upload-btn{
+    height: 100px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rgb(8, 90, 167);
+    border-style: dashed;
+    color: rgb(8, 90, 167);
+    cursor: pointer;
+}
+
+.add-pub-submit-btn-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-top: 15px;
+}
+
+.add-pub-submit-btn{
+    padding: 7px 20px;
+    min-width: 120px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--green);
+    color: white;
+    cursor: pointer;
+}

@@ -47,3 +47,20 @@ export const usePublicationNavigation = create()(
     })),
 );
 
+export const useProjectNavigation = create()(
+    devtools((set) => ({
+      selectedTab: 'search',
+      setSelectedTab: (value) => {
+        set((state) => ({selectedTab: value}));
+      },
+    })),
+);
+
+export const usePresentationNavigation = create()(
+    devtools((set) => ({
+      selectedTab: 'search',
+      setSelectedTab: (value) => {
+        set((state) => ({selectedTab: value}));
+      },
+    })),
+);

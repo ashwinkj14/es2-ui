@@ -1,0 +1,87 @@
+.comment-bubble{
+    margin: 5px;
+    background-color: #dedede;
+    width: fit-content;
+    padding: 10px;
+    border-radius: 10px;
+    min-width: 100px;
+}
+
+.comment-reply{
+    margin-top: 5px;
+    font-weight: bold;
+    font-size: 10px;
+    display: flex;
+    justify-content: flex-end;
+    cursor: pointer;
+}
+
+.reply-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.reply-field{
+    height: 100%;
+    width: 100%;
+}
+
+.reply-text-area-container{
+    margin-top: 10px;
+    margin-left: 40px;
+    height: 80px;
+    width: 400px;
+}
+
+.add-reply-btn{
+    background-color: var(--green);
+    font-size: 15px;
+    padding: 10px 20px 10px 20px;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    width: fit-content;
+    margin-left: 10px;
+    margin-top: 5px;
+    min-width: 50px;
+    text-align: center;
+}
+
+.bubble-content{
+    white-space: pre-wrap;
+    margin-top: 5px;
+}
+
+.comment-card{
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-bottom: 10px;
+    min-height: 40px;
+    width: 90%;
+    box-shadow: 0px 0px 13px 0px rgba(0,0,0,0.2);
+    border-radius: 15px;
+}
+
+.comment-created-at{
+    margin-left: 10px;
+    font-weight: 400;
+    font-size: 13px;
+}
+
+.comment-username-field{
+    margin-left: 0px;
+}
+
+.add-reply-btn-container{
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+.comment-meta-field{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}

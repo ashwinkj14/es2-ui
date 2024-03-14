@@ -1,0 +1,55 @@
+.abstract-container{
+    height: 100%;
+}
+
+.abstract-title{
+    color: #252525;
+    font-size: 50px;
+    font-weight: 400;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+}
+
+.abstract-content-container{
+    padding-bottom: 30px;
+    overflow-y: scroll;
+}
+
+.abstract-content{
+    margin: 30px;
+    line-height: 1.5;
+    text-align: justify;
+}
+
+.comment-text-area-container{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    margin-left: 40px;
+    width: 90%;
+    height: 90px;
+}
+
+.comment-field{
+    height: 100%;
+}
+
+.add-comment-btn-container{
+    margin-top: 10px;
+    margin-left: 40px;
+}
+
+.add-comment-btn{
+    background-color: var(--green);
+    padding: 10px 20px 10px 20px;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    width: fit-content;
+}
+
+.add-comment-container{
+    margin-bottom: 5px;
+}
