@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 /* eslint-disable require-jsdoc */
-import {useState, React} from 'react';
+import {useState, useEffect, React} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useUserStore} from '../../store/es2Store';
 import {usePublicationNavigation} from '../../store/es2Store';
@@ -62,8 +62,10 @@ function Publication() {
   </>;
 
   const toRender = (selectedTab == 'search')?publicationBody:(selectedTab == 'manage')?
-  (userTypeId == 3)?<></>:<ManagePublication/>:
-  (userTypeId == 3)?<></>:<AddPublication/>;
+  (userTypeId == 2)?<></>:<ManagePublication/>:
+  (userTypeId == 2)?<></>:<AddPublication/>;
+
+  useEffect(() => {}, [selectedTab]);
 
   return (
     <div>

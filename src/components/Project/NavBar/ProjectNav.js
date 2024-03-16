@@ -3,10 +3,8 @@
 /* eslint-disable require-jsdoc */
 /* eslint-disable react/react-in-jsx-scope */
 import './ProjectNav.css';
-import {useUserStore} from '../../../store/es2Store';
 
 function ProjectNav({selectedTab, setSelectedTab}) {
-  const userTypeId = useUserStore((state) => state.userTypeId);
   const handleTabClick = (value) => {
     setSelectedTab(value);
   };
@@ -20,12 +18,12 @@ function ProjectNav({selectedTab, setSelectedTab}) {
               {`sideNav-element ${selectedTab == 'search'?'active':''}`}>
               View
             </div>
-            {(userTypeId == 3)?<></>:<div onClick={() => handleTabClick('manage')} className=
+            {<div onClick={() => handleTabClick('manage')} className=
               {`sideNav-element ${selectedTab == 'manage'?'active':''}`}>
               Manage</div>}
           </section>
           <section className="add-pub-btn-container">
-            {(userTypeId == 3)?<></>:<div onClick={() => handleTabClick('addPublication')} className=
+            {<div onClick={() => handleTabClick('addPublication')} className=
               {`add-pub-btn ${selectedTab == 'addPublication'?'active':''}`}>
               <div className="add-pub-btn-content">
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier">

@@ -3,7 +3,6 @@
 /* eslint-disable require-jsdoc */
 import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {useProjectNavigation} from '../../store/es2Store';
 
 import Footer from '../../containers/Footer/Footer';
 import Header from '../../containers/Header/Header';
@@ -15,7 +14,7 @@ import ViewProject from './ViewProject/ViewProject';
 
 function Project() {
   const navigate = useNavigate();
-  const {selectedTab, setSelectedTab} = useProjectNavigation((state) => state);
+  const [selectedTab, setSelectedTab] = useState('search');
   const [popupContent, setPopupContent] = useState('');
   const token = localStorage.getItem('token');
   if (token === undefined || token === null) {
@@ -29,7 +28,10 @@ function Project() {
     document.body.classList.add('modal-open');
   }
 
-  const toRender = (selectedTab == 'search')?<ViewProject setPopupContent={setPopupContent}/>:(selectedTab == 'manage')?<ManageProject setPopupContent={setPopupContent}/>:<AddProject/>;
+  const toRender = (selectedTab == 'search')?<ViewProject setPopupContent={setPopupContent}/>:
+  (selectedTab == 'manage')?<ManageProject setPopupContent={setPopupContent} setSelectedTab={setSelectedTab}/>:
+  <AddProject setSelectedTab={setSelectedTab}/>;
+
   return (
     <div>
       <Header props={{page: 'project'}} selectedTab={selectedTab} setSelectedTab={setSelectedTab}/>

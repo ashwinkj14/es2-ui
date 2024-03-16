@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-tabs */
 /* eslint-disable react/jsx-key */
 /* eslint-disable max-len */
@@ -6,16 +7,11 @@
 import {useState} from 'react';
 import axios from 'axios';
 import {SUCCESS, FAILURE, displayToast} from '../../ToastUtil';
-import {useNavigate} from 'react-router-dom';
-import {useProjectNavigation} from '../../../store/es2Store';
 
 import './AddProject.css';
 import {BASE_URL} from '../../../server-constants';
 
-function AddProject() {
-  const navigate = useNavigate();
-  const setSelectedTab = useProjectNavigation((state) => state.setSelectedTab);
-
+function AddProject({setSelectedTab}) {
   const [title, setTitle] = useState('');
   const [inventors, setInventors] = useState([{firstName: '', middleName: '', lastName: ''}]);
 
@@ -96,6 +92,7 @@ function AddProject() {
       let status = FAILURE;
       if (response.status === 200) {
         if (response.data.result === 'success') {
+          setSelectedTab('manage');
           status = SUCCESS;
         }
       }
@@ -108,14 +105,9 @@ function AddProject() {
           displayToast(error, status);
         }
       } else {
-        setSelectedTab('manage');
         displayToast('Project added successfully', status);
       }
     } catch (error) {
-      if (error.response.status == 401) {
-        localStorage.removeItem('token');
-        navigate('/');
-      }
       displayToast('Unable to add the project record. Please try again.', FAILURE);
       console.error(error);
     }

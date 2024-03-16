@@ -6,7 +6,7 @@ import axios from 'axios';
 import {AgGridReact} from 'ag-grid-react';
 import {useNavigate} from 'react-router-dom';
 import {FAILURE, SUCCESS, displayToast} from '../../ToastUtil';
-import {useGridStore} from '../../../store/es2Store';
+import {usePresentationGridStore} from '../../../store/es2Store';
 
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
@@ -16,7 +16,7 @@ import {BASE_URL} from '../../../server-constants';
 
 function DataGrid({data, selectedTab, setSelectedRecord, popupContent}) {
   const navigate = useNavigate();
-  const setGridRefresh = useGridStore((state) => state.setGridRefresh);
+  const setGridRefresh = usePresentationGridStore((state) => state.setGridRefresh);
 
   const handleEdit = (props) => {
     setSelectedRecord(props.node.data);

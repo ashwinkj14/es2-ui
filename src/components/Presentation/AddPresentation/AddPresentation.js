@@ -7,15 +7,11 @@
 import {useRef, useState} from 'react';
 import axios from 'axios';
 import {SUCCESS, FAILURE, displayToast} from '../../ToastUtil';
-import {useNavigate} from 'react-router-dom';
-import {usePresentationNavigation} from '../../../store/es2Store';
 
 import './AddPresentation.css';
 import {BASE_URL} from '../../../server-constants';
 
-function AddPresentation({setIsAddPresentation, presentationRequest}) {
-  const navigate = useNavigate();
-  const setSelectedTab = usePresentationNavigation((state) => state.setSelectedTab);
+function AddPresentation({setIsAddPresentation, presentationRequest, setSelectedTab}) {
   const fileInput = useRef(null);
 
   const [link, setLink] = useState('');
@@ -93,10 +89,6 @@ function AddPresentation({setIsAddPresentation, presentationRequest}) {
         displayToast('Presentation added successfully', status);
       }
     } catch (error) {
-      if (error.response.status == 401) {
-        localStorage.removeItem('token');
-        navigate('/');
-      }
       displayToast('Unable to add the presentation record. Please try again.', FAILURE);
       console.error(error);
     }

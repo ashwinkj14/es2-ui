@@ -164,7 +164,7 @@ function EditUser({action, user}) {
               id="outlined-usertype-select"
               select
               label="User Type"
-              defaultValue="1"
+              defaultValue={selectedType}
               className="login-input"
               size="small"
               color='success'

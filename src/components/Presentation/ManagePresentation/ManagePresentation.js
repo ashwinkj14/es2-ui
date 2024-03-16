@@ -9,6 +9,7 @@ import {useNavigate} from 'react-router-dom';
 
 import DataGrid from '../../Presentation/Grid/DataGrid';
 import {BASE_URL} from '../../../server-constants';
+import {usePresentationGridStore} from '../../../store/es2Store';
 
 import EditPresentation from '../../Presentation/EditPresentation/EditPresentation';
 import './ManagePresentation.css';
@@ -18,6 +19,7 @@ function ManagePresentation({presentationRequest, setPresentationRequest, setPop
   const [projectList, setProjectList] = useState('');
   const [renderNoData, setRenderNoData] = useState(<></>);
   const [selectedRecord, setSelectedRecord] = useState(null);
+  const gridRefresh = usePresentationGridStore((state) => state.gridRefresh);
 
   const onLoad = () => {
     const api = BASE_URL+`/project/presentation/list`;
@@ -59,7 +61,7 @@ function ManagePresentation({presentationRequest, setPresentationRequest, setPop
 
   useEffect(() => {
     onLoad();
-  }, []);
+  }, [gridRefresh]);
 
   const handleClickBack = () => {
     setPresentationRequest(null);
@@ -88,7 +90,7 @@ back
 
   return (
     <div>
-      {(selectedRecord == null)?managePage:<EditPresentation selectedRecord={selectedRecord} setSelectedRecord={setSelectedRecord}/>}
+      {(selectedRecord == null)?managePage:<EditPresentation selectedRecord={selectedRecord} setSelectedRecord={setSelectedRecord} presentationRequest={presentationRequest}/>}
     </div>
   );
 }

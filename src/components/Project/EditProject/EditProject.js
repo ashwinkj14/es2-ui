@@ -6,7 +6,6 @@
 /* eslint-disable require-jsdoc */
 import {useState} from 'react';
 import axios from 'axios';
-import {useNavigate} from 'react-router-dom';
 import {useGridStore} from '../../../store/es2Store';
 import {SUCCESS, FAILURE, displayToast} from '../../ToastUtil';
 
@@ -15,7 +14,6 @@ import '../AddProject/AddProject.css';
 import {BASE_URL} from '../../../server-constants';
 
 function EditProject({data, setSelectedRecord}) {
-  const navigate = useNavigate();
   const setGridRefresh = useGridStore((state) => state.setGridRefresh);
 
   const [title, setTitle] = useState(data.project_title);
@@ -115,10 +113,6 @@ function EditProject({data, setSelectedRecord}) {
         displayToast(error, status);
       }
     } catch (error) {
-      if (error.response.status == 401) {
-        localStorage.removeItem('token');
-        navigate('/');
-      }
       displayToast('Unable to update the project record. Please try again.', FAILURE);
       console.error(error);
     }

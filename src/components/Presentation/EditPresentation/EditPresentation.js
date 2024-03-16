@@ -8,6 +8,7 @@ import {useRef, useState} from 'react';
 import axios from 'axios';
 import {SUCCESS, FAILURE, displayToast} from '../../ToastUtil';
 import {useNavigate} from 'react-router-dom';
+import {usePresentationGridStore} from '../../../store/es2Store';
 
 import './EditPresentation.css';
 import {BASE_URL} from '../../../server-constants';
@@ -22,7 +23,8 @@ function EditPresentation({selectedRecord, setSelectedRecord, presentationReques
 
   const [linkError, setLinkError] = useState('');
   const [typeError, setTypeError] = useState('');
-  const [selectedFileError, setSelectedFileError] = useState('');
+
+  const {gridRefresh, setGridRefresh} = usePresentationGridStore((state) => state);
 
   const handleValidation = () => {
     let errorExists = false;
@@ -34,10 +36,6 @@ function EditPresentation({selectedRecord, setSelectedRecord, presentationReques
     if (!presentationType) {
       errorExists = true;
       setTypeError('Presentation Type field is empty.');
-    }
-    if (!selectedFile) {
-      errorExists = true;
-      setSelectedFileError('Missing attachment.');
     }
     return errorExists;
   };
@@ -54,7 +52,9 @@ function EditPresentation({selectedRecord, setSelectedRecord, presentationReques
     }
 
     const formData = new FormData();
-    formData.append('file', selectedFile);
+    if (selectedFile!=null) {
+      formData.append('file', selectedFile);
+    }
     formData.append('presentationName', link);
     formData.append('projectId', presentationRequest.project_id);
     formData.append('presentationId', selectedRecord.presentation_id);
@@ -88,6 +88,7 @@ function EditPresentation({selectedRecord, setSelectedRecord, presentationReques
         }
       } else {
         setSelectedRecord(null);
+        setGridRefresh(!gridRefresh);
         displayToast('Presentation updated successfully', status);
       }
     } catch (error) {
@@ -148,7 +149,6 @@ function EditPresentation({selectedRecord, setSelectedRecord, presentationReques
               <input type='file' ref={fileInput} onChange={(event) => handleFileSelect(event)} placeholder='Upload'/>
             </div>
           </div>
-          {displayError(selectedFileError)}
         </div>
       </div>
       <div className="add-pub-submit-btn-container">

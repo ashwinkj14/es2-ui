@@ -15,7 +15,7 @@ import {BASE_URL} from '../../../server-constants';
 import ManagePresentation from '../../Presentation/ManagePresentation/ManagePresentation';
 import AddPresentation from '../../Presentation/AddPresentation/AddPresentation';
 
-function ManageProject({setPopupContent}) {
+function ManageProject({setPopupContent, setSelectedTab}) {
   const navigate = useNavigate();
   const gridRefresh = useGridStore((state) => state.gridRefresh);
 
@@ -62,7 +62,7 @@ function ManageProject({setPopupContent}) {
   </div>;
 
   const to_render = (selectedRecord==null)?(presentationRequest == null)?data_page:
-  (isAddPresentation == true)?<AddPresentation setIsAddPresentation={setIsAddPresentation} presentationRequest={presentationRequest}/>:
+  (isAddPresentation == true)?<AddPresentation setIsAddPresentation={setIsAddPresentation} presentationRequest={presentationRequest} setSelectedTab={setSelectedTab}/>:
   <ManagePresentation presentationRequest={presentationRequest} setPresentationRequest={setPresentationRequest} setPopupContent={setPopupContent}
     setIsAddPresentation={setIsAddPresentation}/>:
   <EditProject data={selectedRecord} setSelectedRecord={setSelectedRecord}/>;

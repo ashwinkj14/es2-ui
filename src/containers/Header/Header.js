@@ -7,7 +7,7 @@ import SettingsNav from '../../components/Settings/NavBar/SettingsNav';
 import PublicationNav from '../../components/Publication/NavBar/PublicationNav';
 import PatentNav from '../../components/Patent/NavBar/PatentNav';
 import './Header.css';
-import ProjectNav from '../../components/Project/NavBar/PatentNav';
+import ProjectNav from '../../components/Project/NavBar/ProjectNav';
 
 function Header({props, selectedTab, setSelectedTab}) {
   if (props.page === 'settings') {

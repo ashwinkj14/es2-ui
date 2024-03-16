@@ -28,6 +28,15 @@ export const usePublicationGridStore = create()(
     })),
 );
 
+export const usePresentationGridStore = create()(
+    devtools((set) => ({
+      gridRefresh: false,
+      setGridRefresh: () => {
+        set((state) => ({gridRefresh: !state.gridRefresh}));
+      },
+    })),
+);
+
 
 export const usePatentNavigation = create()(
     devtools((set) => ({
@@ -47,20 +56,20 @@ export const usePublicationNavigation = create()(
     })),
 );
 
-export const useProjectNavigation = create()(
-    devtools((set) => ({
-      selectedTab: 'search',
-      setSelectedTab: (value) => {
-        set((state) => ({selectedTab: value}));
-      },
-    })),
-);
+// export const useProjectNavigation = create()(
+//     devtools((set) => ({
+//       selectedTab: 'search',
+//       setSelectedTab: (value) => {
+//         set((state) => ({selectedTab: value}));
+//       },
+//     })),
+// );
 
-export const usePresentationNavigation = create()(
-    devtools((set) => ({
-      selectedTab: 'search',
-      setSelectedTab: (value) => {
-        set((state) => ({selectedTab: value}));
-      },
-    })),
-);
+// export const usePresentationNavigation = create()(
+//     devtools((set) => ({
+//       selectedTab: 'search',
+//       setSelectedTab: (value) => {
+//         set((state) => ({selectedTab: value}));
+//       },
+//     })),
+// );

@@ -88,8 +88,8 @@ function Comments({projectId, action}) {
     <div className="abstract-title">
             Comments
     </div>
-    {(userTypeId == 0)?addComment:<></>}
-    <div style={{height: (userTypeId == 0)?'50%':'70%'}}
+    {(userTypeId == 3)?<></>:addComment}
+    <div style={{height: (userTypeId == 3)?'70%':'50%'}}
       className='abstract-content-container'>
       {comments.map((comment) => (
         <Comment key={comment.id} comment={comment} level={1} addComment={handleAddComment}/>

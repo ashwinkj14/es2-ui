@@ -22,7 +22,7 @@ function AddPublication() {
   const [title, setTitle] = useState('');
   const [type, setType] = useState('Paper');
   const [status, setStatus] = useState('Published');
-  const [mode, setMode] = useState('public');
+  const [mode, setMode] = useState('Public');
   const [number, setNumber] = useState('');
   const [copyrighted, setCopyrighted] = useState('yes');
   const [abstract, setAbstract] = useState('');
