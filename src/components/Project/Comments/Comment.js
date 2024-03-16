@@ -8,7 +8,6 @@ const Comment = ({comment, level, addComment}) => {
   const [showReplyBox, setShowReplyBox] = useState(false);
 
   const unescapedString = JSON.parse(`"${comment.content}"`);
-  console.log(unescapedString);
 
   const clickReply = () => {
     setShowReplyBox(true);

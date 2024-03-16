@@ -123,7 +123,6 @@ function EditPublication({data, setSelectedRecord}) {
   };
 
   const renderAuthors = () => {
-    console.log(authors);
     return authors.map((author, index) =>
       <div className='add-pub-author-details-container'>
         <input value={author.firstName} onChange={(event) => updateFirstName(event, index)} placeholder='First Name' className="text-field author-field" type="text"/>

@@ -26,7 +26,6 @@ function Comments({projectId, action}) {
     handleAddComment(null, val);
   };
   const handleAddComment = (parentId, content) => {
-    console.log(content);
     if (content == '' || !/[a-zA-Z]/.test(content)) {
       return;
     }
@@ -46,7 +45,6 @@ function Comments({projectId, action}) {
       },
     })
         .then((response) => {
-          console.log(response);
           let status = FAILURE;
           if (response.status === 200) {
             if (response.data.result === 'success') {
@@ -115,7 +113,6 @@ function Comments({projectId, action}) {
         .then((response) => {
           const result = response.data;
           setComments(result.comments);
-          console.log(result);
         })
         .catch((error) => {
           if (error.response.status == 401) {

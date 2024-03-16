@@ -127,7 +127,6 @@ function Login() {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    console.log(`token: ${token}`);
     if (token !== undefined && token !== null) {
       validateToken(token);
     }
