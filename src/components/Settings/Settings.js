@@ -58,7 +58,7 @@ function Settings() {
         <UserMgmt setModalState={setIsModalOpen} setUserDetails={setUserDetails} editUserAction={setIsEditUserOpen} shouldRender={shouldRender}/>
       </div>
       {(userTypeId != 1)?<></>:<div className={`${selectedTab == 'dbsettings'?'database-settings-container':'default-container'}`}>
-        <DatabaseSettings/>
+        {(selectedTab == 'dbsettings')?<DatabaseSettings/>:<></>}
       </div>}
       <Footer/>
       {/* User and backup goes here */}

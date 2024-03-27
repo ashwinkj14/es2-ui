@@ -7,6 +7,11 @@
     background: #e74c3c;
 }
 
+.custom-toast-inProgress{
+  white-space: pre-wrap;
+    background: #f5be18;
+}
+
 .Toastify__toast-body{
   white-space: pre-wrap;
 }
