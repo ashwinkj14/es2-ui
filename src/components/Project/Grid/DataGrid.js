@@ -111,11 +111,13 @@ h-11V9.1z M12.3,15.4c0-1,0.8-1.7,1.7-1.7h32c1,0,1.7,0.8,1.7,1.7v1.3H12.3V15.4z">
 
   const columnDefs = [
     {field: 'project_id', headerName: 'Project ID', hide: true, width: 0},
-    {field: 'members_list', headerName: 'Members List', hide: true, width: 0},
-    {field: 'project_title', headerName: 'Title', autoHeight: true, minWidth: 400},
-    {field: 'members', headerName: 'Member(s)', autoHeight: true, minWidth: 200},
+    {field: 'pi_students_list', headerName: 'Students List', hide: true, width: 0},
+    {field: 'iab_mentors_list', headerName: 'Mentors List', hide: true, width: 0},
+    {field: 'project_title', headerName: 'Title', autoHeight: true, minWidth: 350},
+    {field: 'pi_students', headerName: 'PI Student(s)', autoHeight: true, minWidth: 200},
+    {field: 'iab_mentors', headerName: 'IAB Mentor(s)', autoHeight: true, minWidth: 200},
     {headerName: 'Presentations', cellRenderer: presentationAction, minWidth: 20},
-    {headerName: 'Comments/Response', cellRenderer: commentsAction, minWidth: 20},
+    (selectedTab=='manage')?{hide: true}:{headerName: 'Comments/Response', cellRenderer: commentsAction, minWidth: 20},
     (selectedTab=='manage')?{headerName: 'Action', cellRenderer: manageProjectAction, minWidth: 50}:{hide: true},
   ];
 
