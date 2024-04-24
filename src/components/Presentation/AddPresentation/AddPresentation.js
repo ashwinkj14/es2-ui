@@ -16,10 +16,12 @@ function AddPresentation({setIsAddPresentation, presentationRequest, setSelected
 
   const [link, setLink] = useState('');
   const [presentationType, setPresentationType] = useState('Regular');
+  const [presentationDate, setPresentationDate] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
 
   const [linkError, setLinkError] = useState('');
   const [typeError, setTypeError] = useState('');
+  const [dateError, setDateError] = useState('');
   const [selectedFileError, setSelectedFileError] = useState('');
 
   const handleValidation = () => {
@@ -32,6 +34,10 @@ function AddPresentation({setIsAddPresentation, presentationRequest, setSelected
     if (!presentationType) {
       errorExists = true;
       setTypeError('Presentation Type field is empty.');
+    }
+    if (!presentationDate) {
+      errorExists = true;
+      setDateError('Presentation Date field is empty.');
     }
     if (!selectedFile) {
       errorExists = true;
@@ -56,6 +62,7 @@ function AddPresentation({setIsAddPresentation, presentationRequest, setSelected
     formData.append('presentationName', link);
     formData.append('projectId', presentationRequest.project_id);
     formData.append('presentationType', presentationType);
+    formData.append('presentationDate', presentationDate);
 
     const api = BASE_URL+'/project/presentation/add';
 
@@ -133,6 +140,15 @@ function AddPresentation({setIsAddPresentation, presentationRequest, setSelected
               </select>
             </div>
             {displayError(typeError)}
+          </div>
+        </div>
+        <div className='row-container'>
+          <div className='add-pub-field-container'>
+            <div className='add-pub-text-field-container'>
+              <label>Presentation Date</label>
+              <input value={presentationDate} onChange={(event) => setPresentationDate(event.target.value)} className="text-field" type="date"/>
+            </div>
+            {displayError(dateError)}
           </div>
         </div>
         <div className='add-pub-field-container'>

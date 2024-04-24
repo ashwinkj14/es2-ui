@@ -19,10 +19,12 @@ function EditPresentation({selectedRecord, setSelectedRecord, presentationReques
 
   const [link, setLink] = useState(selectedRecord.presentation_name);
   const [presentationType, setPresentationType] = useState(selectedRecord.presentation_type);
+  const [presentationDate, setPresentationDate] = useState(selectedRecord.presentation_date);
   const [selectedFile, setSelectedFile] = useState(null);
 
   const [linkError, setLinkError] = useState('');
   const [typeError, setTypeError] = useState('');
+  const [dateError, setDateError] = useState('');
 
   const {gridRefresh, setGridRefresh} = usePresentationGridStore((state) => state);
 
@@ -36,6 +38,10 @@ function EditPresentation({selectedRecord, setSelectedRecord, presentationReques
     if (!presentationType) {
       errorExists = true;
       setTypeError('Presentation Type field is empty.');
+    }
+    if (!presentationDate) {
+      errorExists = true;
+      setDateError('Presentation Date field is empty.');
     }
     return errorExists;
   };
@@ -59,6 +65,7 @@ function EditPresentation({selectedRecord, setSelectedRecord, presentationReques
     formData.append('projectId', presentationRequest.project_id);
     formData.append('presentationId', selectedRecord.presentation_id);
     formData.append('presentationType', presentationType);
+    formData.append('presentationDate', presentationDate);
 
     const api = BASE_URL+'/project/presentation/update';
 
@@ -140,6 +147,15 @@ function EditPresentation({selectedRecord, setSelectedRecord, presentationReques
               </select>
             </div>
             {displayError(typeError)}
+          </div>
+        </div>
+        <div className='row-container'>
+          <div className='add-pub-field-container'>
+            <div className='add-pub-text-field-container'>
+              <label>Presentation Date</label>
+              <input value={presentationDate} onChange={(event) => setPresentationDate(event.target.value)} className="text-field" type="date"/>
+            </div>
+            {displayError(dateError)}
           </div>
         </div>
         <div className='add-pub-field-container'>

@@ -128,10 +128,10 @@ function DataGrid({data, selectedTab, setSelectedRecord, popupContent}) {
     </div>;
   };
 
-  const lastUpdatedTimeRender = (props) => {
-    const lastUpdatedTime = props.node.data.last_updated_time;
+  const presentationDateRender = (props) => {
+    const presentationDate = props.node.data.presentation_date;
     return <div className='presentation-link-container'>
-      {lastUpdatedTime}
+      {presentationDate}
     </div>;
   };
 
@@ -155,7 +155,7 @@ h-11V9.1z M12.3,15.4c0-1,0.8-1.7,1.7-1.7h32c1,0,1.7,0.8,1.7,1.7v1.3H12.3V15.4z">
     {field: 'presentation_type', headerName: 'Presentation Type', hide: true, width: 0},
     {headerName: 'Presentation Name', cellRenderer: presentationLinkRender, autoHeight: true, minWidth: 400},
     {headerName: 'Download', cellRenderer: downloadAction, minWidth: 20},
-    {headerName: 'Last Updated Time', cellRenderer: lastUpdatedTimeRender, autoHeight: true, minWidth: 200},
+    {headerName: 'Presentation Date', cellRenderer: presentationDateRender, autoHeight: true, minWidth: 200},
     (selectedTab=='manage')?{headerName: 'Action', cellRenderer: manageProjectAction, minWidth: 50}:{hide: true},
   ];
 
