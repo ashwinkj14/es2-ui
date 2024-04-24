@@ -119,7 +119,9 @@ function DataGrid({data, popupContent, selectedTab, setSelectedRecord}) {
 
   const handleDelete = (props) => {
     const publicationId = props.node.data.publicationId;
-    deletePublication(publicationId);
+    if (window.confirm('Are you sure you want to delete this publication record?')) {
+      deletePublication(publicationId);
+    }
   };
 
   const Action = (props) =>

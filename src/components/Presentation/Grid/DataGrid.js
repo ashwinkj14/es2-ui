@@ -63,7 +63,9 @@ function DataGrid({data, selectedTab, setSelectedRecord, popupContent}) {
 
   const handleDelete = (props) => {
     const presentationId = props.node.data.presentation_id;
-    deletePresentation(presentationId);
+    if (window.confirm('Are you sure you want to delete this presentation?')) {
+      deletePresentation(presentationId);
+    }
   };
 
   const downloadPresentation = async (presentationId) => {

@@ -64,7 +64,9 @@ function DataGrid({data, selectedTab, setSelectedRecord, setPresentationRequest,
 
   const handleDelete = (props) => {
     const projectId = props.node.data.project_id;
-    deleteProject(projectId);
+    if (window.confirm('Are you sure you want to delete this project?')) {
+      deleteProject(projectId);
+    }
   };
 
   const handleCommentsButtonClick = (props) => {

@@ -62,6 +62,9 @@ function UserGrid({setUserDetails, editUserAction, shouldRender}) {
   }, [shouldRender, renderGrid]);
 
   const handleDelete = (props) => {
+    if (!window.confirm('Are you sure you want to delete this user?')) {
+      return;
+    }
     const api = BASE_URL+`/user/delete`;
 
     const data = {

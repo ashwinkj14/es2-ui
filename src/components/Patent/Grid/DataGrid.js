@@ -69,7 +69,9 @@ function DataGrid({data, popupContent, selectedTab, setSelectedRecord}) {
 
   const handleDelete = (props) => {
     const patentId = props.node.data.patent_id;
-    deletePublication(patentId);
+    if (window.confirm('Are you sure you want to delete this patent record?')) {
+      deletePublication(patentId);
+    }
   };
 
   const Action = (props) =>
