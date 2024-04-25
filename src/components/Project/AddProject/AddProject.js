@@ -10,8 +10,11 @@ import {SUCCESS, FAILURE, displayToast} from '../../ToastUtil';
 
 import './AddProject.css';
 import {BASE_URL} from '../../../server-constants';
+import {useProjectGridStore} from '../../../store/es2Store';
 
-function AddProject({setSelectedTab}) {
+function AddProject() {
+  const setSelectedTab = useProjectGridStore((state) => state.setSelectedTab);
+
   const [title, setTitle] = useState('');
   const [students, setStudents] = useState([{firstName: '', middleName: '', lastName: ''}]);
   const [mentors, setMentors] = useState([{firstName: '', middleName: '', lastName: ''}]);

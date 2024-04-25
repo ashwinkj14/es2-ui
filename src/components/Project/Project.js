@@ -44,8 +44,8 @@ function Project() {
 
 
   const toRender = (selectedTab == 'search')?<ViewProject/>:
-  (selectedTab == 'manage')?<ManageProject/>:
-  <AddProject setSelectedTab={setSelectedTab}/>;
+                      (selectedTab == 'manage')?<ManageProject/>:
+                  <AddProject/>;
 
   return (
     <div>
