@@ -4,10 +4,10 @@
 import React, {useMemo} from 'react';
 import axios from 'axios';
 import {AgGridReact} from 'ag-grid-react';
-// import CustomCellRenderer from './CustomCellRenderer';
+
 import {useNavigate} from 'react-router-dom';
 import {FAILURE, SUCCESS, displayToast} from '../../ToastUtil';
-import {useGridStore} from '../../../store/es2Store';
+import {useGridStore, usePresentationGridStore, useProjectGridStore} from '../../../store/es2Store';
 
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
@@ -15,9 +15,17 @@ import './Action.css';
 import './DataGrid.css';
 import {BASE_URL} from '../../../server-constants';
 
-function DataGrid({data, selectedTab, setSelectedRecord, setPresentationRequest, popupContent}) {
+function DataGrid() {
   const navigate = useNavigate();
+
+  const selectedTab = useProjectGridStore((state) => state.selectedTab);
+  const setSelectedRecord = useProjectGridStore((state) => state.setSelectedRecord);
+  const projectList = useProjectGridStore((state) => state.projectList);
+  const setCommentsProjectId = useProjectGridStore((state) => state.setCommentsProjectId);
+
   const setGridRefresh = useGridStore((state) => state.setGridRefresh);
+
+  const setPresentationRequest = usePresentationGridStore((state) => state.setPresentationRequest);
 
   const handleEdit = (props) => {
     setSelectedRecord(props.node.data);
@@ -71,7 +79,7 @@ function DataGrid({data, selectedTab, setSelectedRecord, setPresentationRequest,
 
   const handleCommentsButtonClick = (props) => {
     const projectId = props.node.data.project_id;
-    popupContent(projectId);
+    setCommentsProjectId(projectId);
   };
 
   const commentsAction = (props) =>
@@ -136,7 +144,7 @@ h-11V9.1z M12.3,15.4c0-1,0.8-1.7,1.7-1.7h32c1,0,1.7,0.8,1.7,1.7v1.3H12.3V15.4z">
     };
   }, []);
 
-  if (data.length === 0) {
+  if (projectList.length === 0) {
     return (
       <div></div>
     );
@@ -148,7 +156,7 @@ h-11V9.1z M12.3,15.4c0-1,0.8-1.7,1.7-1.7h32c1,0,1.7,0.8,1.7,1.7v1.3H12.3V15.4z">
   return (
     <div className="ag-theme-alpine" style={{width: '95%', height: '100'}}>
       <AgGridReact
-        rowData={data}
+        rowData={projectList}
         columnDefs={columnDefs}
         defaultColDef={defaultColDef}
         pagination={pagination}

@@ -3,11 +3,11 @@
 /* eslint-disable max-len */
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable require-jsdoc */
-import {useEffect, useState} from 'react';
+import {useEffect} from 'react';
 import axios from 'axios';
 import DataGrid from '../Grid/DataGrid';
 import {useNavigate} from 'react-router-dom';
-import {useGridStore} from '../../../store/es2Store';
+import {useGridStore, usePresentationGridStore, useProjectGridStore} from '../../../store/es2Store';
 
 import './ManageProject.css';
 import EditProject from '../EditProject/EditProject';
@@ -15,14 +15,17 @@ import {BASE_URL} from '../../../server-constants';
 import ManagePresentation from '../../Presentation/ManagePresentation/ManagePresentation';
 import AddPresentation from '../../Presentation/AddPresentation/AddPresentation';
 
-function ManageProject({setPopupContent, setSelectedTab}) {
+function ManageProject() {
   const navigate = useNavigate();
   const gridRefresh = useGridStore((state) => state.gridRefresh);
 
-  const [projectList, setProjectList] = useState('');
-  const [presentationRequest, setPresentationRequest] = useState(null);
-  const [selectedRecord, setSelectedRecord] = useState(null);
-  const [isAddPresentation, setIsAddPresentation] = useState(false);
+  const projectList = useProjectGridStore((state) => state.projectList);
+  const setProjectList = useProjectGridStore((state) => state.setProjectList);
+  const selectedRecord = useProjectGridStore((state) => state.selectedRecord);
+
+  const presentationRequest = usePresentationGridStore((state) => state.presentationRequest);
+  const isAddPresentation = usePresentationGridStore((state) => state.isAddPresentation);
+
 
   const onLoad = () => {
     const api = BASE_URL+`/project/manage`;
@@ -56,16 +59,16 @@ function ManageProject({setPopupContent, setSelectedTab}) {
   const data_page = <div className='manage-pub-container'>
     <div className='manage-pub-header'>Manage Project</div>
     <section className="publication-data manage-pub-grid">
-      <DataGrid data={projectList} selectedTab="manage" setSelectedRecord={setSelectedRecord} setPresentationRequest={setPresentationRequest} popupContent={setPopupContent}/>
+      <DataGrid/>
       {(projectList.length==0)?(<div className='no-data'>No Data Found</div>):<></>}
     </section>
   </div>;
 
-  const to_render = (selectedRecord==null)?(presentationRequest == null)?data_page:
-  (isAddPresentation == true)?<AddPresentation setIsAddPresentation={setIsAddPresentation} presentationRequest={presentationRequest} setSelectedTab={setSelectedTab}/>:
-  <ManagePresentation presentationRequest={presentationRequest} setPresentationRequest={setPresentationRequest} setPopupContent={setPopupContent}
-    setIsAddPresentation={setIsAddPresentation}/>:
-  <EditProject data={selectedRecord} setSelectedRecord={setSelectedRecord}/>;
+  const to_render = (selectedRecord==null)?
+                        (presentationRequest == null)?data_page:
+                              (isAddPresentation == true)?<AddPresentation/>:
+                        <ManagePresentation/>:
+                    <EditProject/>;
 
   return (
     <div>

@@ -13,9 +13,13 @@ import {usePresentationGridStore} from '../../../store/es2Store';
 import './EditPresentation.css';
 import {BASE_URL} from '../../../server-constants';
 
-function EditPresentation({selectedRecord, setSelectedRecord, presentationRequest}) {
+function EditPresentation() {
   const navigate = useNavigate();
   const fileInput = useRef(null);
+
+  const selectedRecord = usePresentationGridStore((state) => state.selectedRecord);
+  const setSelectedRecord = usePresentationGridStore((state) => state.setSelectedRecord);
+  const presentationRequest = usePresentationGridStore((state) => state.presentationRequest);
 
   const [link, setLink] = useState(selectedRecord.presentation_name);
   const [presentationType, setPresentationType] = useState(selectedRecord.presentation_type);
@@ -142,8 +146,8 @@ function EditPresentation({selectedRecord, setSelectedRecord, presentationReques
             <div className='add-pub-text-field-container'>
               <label>Presentation Type</label>
               <select value={presentationType} onChange={(event) => setPresentationType(event.target.value)} className="user-type-dropdown">
-                <option value="Regular">Regular</option>
-                <option value="IAB">IAB</option>
+                <option value="Regular">Monthly Mentor Meeting</option>
+                <option value="IAB">IAB Meeting</option>
               </select>
             </div>
             {displayError(typeError)}

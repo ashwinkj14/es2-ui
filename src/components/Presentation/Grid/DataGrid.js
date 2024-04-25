@@ -6,7 +6,7 @@ import axios from 'axios';
 import {AgGridReact} from 'ag-grid-react';
 import {useNavigate} from 'react-router-dom';
 import {FAILURE, SUCCESS, displayToast} from '../../ToastUtil';
-import {usePresentationGridStore} from '../../../store/es2Store';
+import {usePresentationGridStore, useProjectGridStore} from '../../../store/es2Store';
 
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
@@ -14,9 +14,14 @@ import './Action.css';
 import './DataGrid.css';
 import {BASE_URL} from '../../../server-constants';
 
-function DataGrid({data, selectedTab, setSelectedRecord, popupContent}) {
+function DataGrid() {
   const navigate = useNavigate();
+
   const setGridRefresh = usePresentationGridStore((state) => state.setGridRefresh);
+  const presentationList = usePresentationGridStore((state) => state.presentationList);
+  const setSelectedRecord = usePresentationGridStore((state) => state.setSelectedRecord);
+
+  const selectedTab = useProjectGridStore((state) => state.selectedTab);
 
   const handleEdit = (props) => {
     setSelectedRecord(props.node.data);
@@ -174,7 +179,7 @@ h-11V9.1z M12.3,15.4c0-1,0.8-1.7,1.7-1.7h32c1,0,1.7,0.8,1.7,1.7v1.3H12.3V15.4z">
     };
   }, []);
 
-  if (data.length === 0) {
+  if (presentationList.length === 0) {
     return (
       <div></div>
     );
@@ -196,7 +201,7 @@ h-11V9.1z M12.3,15.4c0-1,0.8-1.7,1.7-1.7h32c1,0,1.7,0.8,1.7,1.7v1.3H12.3V15.4z">
   return (
     <div className="ag-theme-alpine" style={{width: '95%', height: '100'}}>
       <AgGridReact
-        rowData={data}
+        rowData={presentationList}
         columnDefs={columnDefs}
         defaultColDef={defaultColDef}
         pagination={pagination}

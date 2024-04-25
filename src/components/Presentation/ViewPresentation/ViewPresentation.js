@@ -6,14 +6,18 @@ import {useState, useEffect} from 'react';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 
+import {usePresentationGridStore} from '../../../store/es2Store';
 import DataGrid from '../../Presentation/Grid/DataGrid';
 import {BASE_URL} from '../../../server-constants';
 
 import './ViewPresentation.css';
 
-function ViewPresentation({presentationRequest, setPresentationRequest, setPopupContent}) {
+function ViewPresentation() {
   const navigate = useNavigate();
-  const [projectList, setProjectList] = useState('');
+  const setPresentationList = usePresentationGridStore((state) => state.setPresentationList);
+  const presentationRequest = usePresentationGridStore((state) => state.presentationRequest);
+  const setPresentationRequest = usePresentationGridStore((state) => state.setPresentationRequest);
+
   const [renderNoData, setRenderNoData] = useState(<></>);
 
   const onLoad = () => {
@@ -40,7 +44,7 @@ function ViewPresentation({presentationRequest, setPresentationRequest, setPopup
           } else {
             setRenderNoData(<></>);
           }
-          setProjectList(data);
+          setPresentationList(data);
         })
         .catch((error) => {
           if (error.code === 'ERR_NETWORK') {
@@ -71,7 +75,7 @@ function ViewPresentation({presentationRequest, setPresentationRequest, setPopup
       </div>
       <div className='view-project-header'>Presentations</div>
       <section className="project-data">
-        <DataGrid data={projectList} popupContent={setPopupContent}/>
+        <DataGrid/>
         {renderNoData}
       </section>
     </div>

@@ -5,6 +5,14 @@
     border-radius: 15px;
 }
 
+.ag-row:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+.ag-row:nth-child(even) {
+    background-color: #fff;
+}
+
 .ag-header-cell-label{
     justify-content: center;
 }

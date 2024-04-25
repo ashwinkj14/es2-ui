@@ -34,6 +34,18 @@ export const usePresentationGridStore = create()(
       setGridRefresh: () => {
         set((state) => ({gridRefresh: !state.gridRefresh}));
       },
+
+      selectedRecord: null,
+      setSelectedRecord: (value) => set((state) => ({selectedRecord: value})),
+
+      presentationList: '',
+      setPresentationList: (value) => set({presentationList: value}),
+
+      presentationRequest: null,
+      setPresentationRequest: (value) => set({presentationRequest: value}),
+
+      isAddPresentation: false,
+      setIsAddPresentation: (value) => set({isAddPresentation: value}),
     })),
 );
 
@@ -73,3 +85,21 @@ export const usePublicationNavigation = create()(
 //       },
 //     })),
 // );
+
+export const useProjectGridStore = create()(
+    devtools((set) => ({
+      selectedTab: 'search',
+      setSelectedTab: (value) => set((state) => ({selectedTab: value})),
+
+      selectedRecord: null,
+      setSelectedRecord: (value) => set((state) => ({selectedRecord: value})),
+
+      projectList: '',
+      setProjectList: (value) => set({projectList: value}),
+
+      commentsProjectId: '',
+      setCommentsProjectId: (value) => set({commentsProjectId: value}),
+    })),
+);
+
+

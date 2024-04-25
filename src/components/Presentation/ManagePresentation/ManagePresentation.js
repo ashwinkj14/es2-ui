@@ -14,11 +14,16 @@ import {usePresentationGridStore} from '../../../store/es2Store';
 import EditPresentation from '../../Presentation/EditPresentation/EditPresentation';
 import './ManagePresentation.css';
 
-function ManagePresentation({presentationRequest, setPresentationRequest, setPopupContent, setIsAddPresentation}) {
+function ManagePresentation() {
   const navigate = useNavigate();
-  const [projectList, setProjectList] = useState('');
+
+  const setPresentationList = usePresentationGridStore((state) => state.setPresentationList);
+  const presentationRequest = usePresentationGridStore((state) => state.presentationRequest);
+  const setPresentationRequest = usePresentationGridStore((state) => state.setPresentationRequest);
+  const setIsAddPresentation = usePresentationGridStore((state) => state.setIsAddPresentation);
+  const selectedRecord = usePresentationGridStore((state) => state.selectedRecord);
+
   const [renderNoData, setRenderNoData] = useState(<></>);
-  const [selectedRecord, setSelectedRecord] = useState(null);
   const gridRefresh = usePresentationGridStore((state) => state.gridRefresh);
 
   const onLoad = () => {
@@ -46,7 +51,7 @@ function ManagePresentation({presentationRequest, setPresentationRequest, setPop
           } else {
             setRenderNoData(<></>);
           }
-          setProjectList(data);
+          setPresentationList(data);
         })
         .catch((error) => {
           if (error.code === 'ERR_NETWORK') {
@@ -83,14 +88,14 @@ back
       <div className='add-presentation-btn' onClick={handleAddPresentation}>Add Presentation</div>
     </div>
     <section className="project-data">
-      <DataGrid data={projectList} selectedTab="manage" setSelectedRecord={setSelectedRecord} popupContent={setPopupContent}/>
+      <DataGrid/>
       {renderNoData}
     </section>
   </div>;
 
   return (
     <div>
-      {(selectedRecord == null)?managePage:<EditPresentation selectedRecord={selectedRecord} setSelectedRecord={setSelectedRecord} presentationRequest={presentationRequest}/>}
+      {(selectedRecord == null)?managePage:<EditPresentation/>}
     </div>
   );
 }

@@ -6,19 +6,22 @@
 /* eslint-disable require-jsdoc */
 import {useState} from 'react';
 import axios from 'axios';
-import {useGridStore} from '../../../store/es2Store';
+import {useGridStore, useProjectGridStore} from '../../../store/es2Store';
 import {SUCCESS, FAILURE, displayToast} from '../../ToastUtil';
 
 import './EditProject.css';
 import '../AddProject/AddProject.css';
 import {BASE_URL} from '../../../server-constants';
 
-function EditProject({data, setSelectedRecord}) {
+function EditProject() {
   const setGridRefresh = useGridStore((state) => state.setGridRefresh);
 
-  const [title, setTitle] = useState(data.project_title);
-  const [students, setStudents] = useState(data.pi_students_list);
-  const [mentors, setMentors] = useState(data.iab_mentors_list);
+  const selectedRecord = useProjectGridStore((state) => state.selectedRecord);
+  const setSelectedRecord = useProjectGridStore((state) => state.setSelectedRecord);
+
+  const [title, setTitle] = useState(selectedRecord.project_title);
+  const [students, setStudents] = useState(selectedRecord.pi_students_list);
+  const [mentors, setMentors] = useState(selectedRecord.mentors_list);
 
   const [titleError, setTitleError] = useState('');
   const [studentsError, setStudentsError] = useState('');
@@ -122,7 +125,7 @@ function EditProject({data, setSelectedRecord}) {
       title: title,
       pi_students: JSON.stringify(students),
       iab_mentors: JSON.stringify(mentors),
-      projectId: data.project_id,
+      projectId: selectedRecord.project_id,
     };
 
     const api = BASE_URL+'/project/update';

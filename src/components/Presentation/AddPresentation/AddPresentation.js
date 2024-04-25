@@ -10,9 +10,15 @@ import {SUCCESS, FAILURE, displayToast} from '../../ToastUtil';
 
 import './AddPresentation.css';
 import {BASE_URL} from '../../../server-constants';
+import {usePresentationGridStore, useProjectGridStore} from '../../../store/es2Store';
 
-function AddPresentation({setIsAddPresentation, presentationRequest, setSelectedTab}) {
+function AddPresentation() {
   const fileInput = useRef(null);
+
+  const setSelectedTab = useProjectGridStore((state) => state.setSelectedTab);
+
+  const setIsAddPresentation = usePresentationGridStore((state) => state.setIsAddPresentation);
+  const presentationRequest = usePresentationGridStore((state) => state.presentationRequest);
 
   const [link, setLink] = useState('');
   const [presentationType, setPresentationType] = useState('Regular');
@@ -135,8 +141,8 @@ function AddPresentation({setIsAddPresentation, presentationRequest, setSelected
             <div className='add-pub-text-field-container'>
               <label>Presentation Type</label>
               <select value={presentationType} onChange={(event) => setPresentationType(event.target.value)} className="user-type-dropdown">
-                <option value="Regular">Regular</option>
-                <option value="IAB">IAB</option>
+                <option value="Regular">Monthly Mentor Meeting</option>
+                <option value="IAB">IAB Meeting</option>
               </select>
             </div>
             {displayError(typeError)}

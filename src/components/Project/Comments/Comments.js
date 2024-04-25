@@ -5,7 +5,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 import {useState, useEffect} from 'react';
 import axios from 'axios';
-import {useUserStore} from '../../../store/es2Store';
+import {useUserStore, useProjectGridStore} from '../../../store/es2Store';
 import {FAILURE, SUCCESS, displayToast} from '../../ToastUtil';
 import CustomSideBar from '../CustomSideBar/CustomSideBar';
 import Comment from './Comment';
@@ -13,12 +13,14 @@ import Comment from './Comment';
 import './Comments.css';
 import {BASE_URL} from '../../../server-constants';
 
-function Comments({projectId, action}) {
+function Comments() {
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState('');
   const [commentRefresh, setCommentRefresh] = useState(false);
   const userTypeId = useUserStore((state) => state.userTypeId);
-  const handleClose = () => action('');
+  const commentsProjectId = useProjectGridStore((state) => state.commentsProjectId);
+  const setCommentsProjectId = useProjectGridStore((state) => state.setCommentsProjectId);
+  const handleClose = () => setCommentsProjectId('');
 
   const handleBtnClick = (event) => {
     event.preventDefault();
@@ -32,7 +34,7 @@ function Comments({projectId, action}) {
     const api = BASE_URL+`/project/comments/add`;
 
     const requestData = {
-      projectId: projectId,
+      projectId: commentsProjectId,
       parentId: parentId,
       content: content,
     };
@@ -99,7 +101,7 @@ function Comments({projectId, action}) {
     const api = BASE_URL+`/project/comments/list`;
 
     const requestData = {
-      projectId: projectId,
+      projectId: commentsProjectId,
     };
     const token = localStorage.getItem('token');
     axios.get(api, {

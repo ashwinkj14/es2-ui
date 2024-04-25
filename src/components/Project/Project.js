@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable require-jsdoc */
-import {useState} from 'react';
+import {useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 
 import Footer from '../../containers/Footer/Footer';
@@ -11,25 +11,40 @@ import Comments from './Comments/Comments';
 import AddProject from './AddProject/AddProject';
 import ManageProject from './ManageProject/ManageProject';
 import ViewProject from './ViewProject/ViewProject';
+import {useProjectGridStore} from '../../store/es2Store';
 
 function Project() {
   const navigate = useNavigate();
-  const [selectedTab, setSelectedTab] = useState('search');
-  const [popupContent, setPopupContent] = useState('');
+  const commentsProjectId = useProjectGridStore((state) => state.commentsProjectId);
+  const selectedTab = useProjectGridStore((state) => state.selectedTab);
+  const setSelectedTab = useProjectGridStore((state) => state.setSelectedTab);
+
   const token = localStorage.getItem('token');
-  if (token === undefined || token === null) {
-    navigate('/');
-  }
 
-  const popup = (popupContent=='')?'':<Comments projectId={popupContent} action={setPopupContent}/>;
-  if (popup == '') {
-    document.body.classList.remove('modal-open');
-  } else {
-    document.body.classList.add('modal-open');
-  }
+  useEffect(() => {
+    if (!token) {
+      navigate('/');
+    }
+  }, [token, navigate]);
 
-  const toRender = (selectedTab == 'search')?<ViewProject setPopupContent={setPopupContent}/>:
-  (selectedTab == 'manage')?<ManageProject setPopupContent={setPopupContent} setSelectedTab={setSelectedTab}/>:
+
+  const popup = (commentsProjectId=='')?'':<Comments/>;
+
+  useEffect(() => {
+    if (commentsProjectId === '') {
+      document.body.classList.remove('modal-open');
+    } else {
+      document.body.classList.add('modal-open');
+    }
+
+    return () => {
+      document.body.classList.remove('modal-open');
+    };
+  }, [commentsProjectId]);
+
+
+  const toRender = (selectedTab == 'search')?<ViewProject/>:
+  (selectedTab == 'manage')?<ManageProject/>:
   <AddProject setSelectedTab={setSelectedTab}/>;
 
   return (

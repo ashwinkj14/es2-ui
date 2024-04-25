@@ -7,15 +7,16 @@ import {useState, useEffect} from 'react';
 import axios from 'axios';
 
 import DataGrid from '../Grid/DataGrid';
+import {usePresentationGridStore, useProjectGridStore} from '../../../store/es2Store';
 import {BASE_URL} from '../../../server-constants';
 
 import './ViewProject.css';
 import ViewPresentation from '../../Presentation/ViewPresentation/ViewPresentation';
 
-function ViewProject({setPopupContent}) {
-  const [projectList, setProjectList] = useState('');
+function ViewProject() {
+  const setProjectList = useProjectGridStore((state) => state.setProjectList);
+  const presentationRequest = usePresentationGridStore((state) => state.presentationRequest);
   const [renderNoData, setRenderNoData] = useState(<></>);
-  const [presentationRequest, setPresentationRequest] = useState(null);
 
   const onLoad = () => {
     const api = BASE_URL+`/project/list`;
@@ -54,13 +55,13 @@ function ViewProject({setPopupContent}) {
   const view_project_page = <div className='view-project-container'>
     <div className='view-project-header'>Project Repository</div>
     <section className="project-data">
-      <DataGrid data={projectList} setPresentationRequest={setPresentationRequest} popupContent={setPopupContent}/>
+      <DataGrid/>
       {renderNoData}
     </section>
   </div>;
 
   const to_render = (presentationRequest == null)?view_project_page:
-  <ViewPresentation presentationRequest={presentationRequest} setPresentationRequest={setPresentationRequest} setPopupContent={setPopupContent}/>;
+  <ViewPresentation/>;
 
   return (
     <div>
