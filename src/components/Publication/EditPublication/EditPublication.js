@@ -1,10 +1,11 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-tabs */
 /* eslint-disable react/jsx-key */
 /* eslint-disable max-len */
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable require-jsdoc */
-import {useState} from 'react';
+import {useState, useCallback, useRef} from 'react';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 import {usePublicationGridStore} from '../../../store/es2Store';
@@ -17,6 +18,8 @@ import {SUCCESS, FAILURE, displayToast} from '../../ToastUtil';
 function EditPublication({data, setSelectedRecord}) {
   const navigate = useNavigate();
   const setGridRefresh = usePublicationGridStore((state) => state.setGridRefresh);
+
+  const fileInput = useRef(null);
 
   const today = new Date().toISOString().split('T')[0];
 
@@ -31,6 +34,7 @@ function EditPublication({data, setSelectedRecord}) {
   const [keywords, setKeywords] = useState(data.keywords);
   const [authors, setAuthors] = useState(data.authors_list);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [fileName, setFileName] = useState('');
 
   const updateFirstName = (event, index) => {
     const updatedAuthor = [...authors];
@@ -62,8 +66,27 @@ function EditPublication({data, setSelectedRecord}) {
   };
 
   const handleFileSelect = (event) => {
-    setSelectedFile(event.target.files[0]);
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+      setFileName(file.name);
+    }
   };
+
+  const handleFileSelectClick = () => {
+    fileInput.current.click();
+  };
+
+  const onDrop = useCallback((event) => {
+    event.preventDefault();
+    const files = event.dataTransfer.files;
+    setSelectedFile(files[0]);
+    setFileName(files[0].name);
+  }, []);
+
+  const onDragOver = useCallback((event) => {
+    event.preventDefault();
+  }, []);
 
   const handleClickBack = () => {
     setSelectedRecord(null);
@@ -227,8 +250,10 @@ function EditPublication({data, setSelectedRecord}) {
         </div>
         <div className='add-pub-upload-field-container'>
           <label>Upload File (Max File size : 128MB)</label>
-          <div className='add-pub-upload-btn'>
-            <input type='file' onChange={(event) => handleFileSelect(event)} placeholder='Upload'/>
+          <div onDrop={onDrop} onDragOver={onDragOver} className='add-pub-upload-btn' onClick={handleFileSelectClick}>
+            <span>Drag 'n' drop or click to select file</span>
+            <span style={{color: 'rgb(164 25 25)'}}>{fileName}</span>
+            <input type='file' style={{display: 'none'}} ref={fileInput} onChange={(event) => handleFileSelect(event)} placeholder='Upload'/>
           </div>
         </div>
       </div>

@@ -1,10 +1,11 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-tabs */
 /* eslint-disable react/jsx-key */
 /* eslint-disable max-len */
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable require-jsdoc */
-import {useRef, useState} from 'react';
+import {useRef, useState, useCallback} from 'react';
 import axios from 'axios';
 import {SUCCESS, FAILURE, displayToast} from '../../ToastUtil';
 
@@ -24,6 +25,7 @@ function AddPresentation() {
   const [presentationType, setPresentationType] = useState('Regular');
   const [presentationDate, setPresentationDate] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
+  const [fileName, setFileName] = useState('');
 
   const [linkError, setLinkError] = useState('');
   const [typeError, setTypeError] = useState('');
@@ -108,7 +110,11 @@ function AddPresentation() {
   };
 
   const handleFileSelect = (event) => {
-    setSelectedFile(event.target.files[0]);
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+      setFileName(file.name);
+    }
   };
 
   const handleFileSelectClick = () => {
@@ -118,6 +124,18 @@ function AddPresentation() {
   const handleClickBack = () => {
     setIsAddPresentation(false);
   };
+
+  const onDrop = useCallback((event) => {
+    event.preventDefault();
+    const files = event.dataTransfer.files;
+    setSelectedFile(files[0]);
+    setFileName(files[0].name);
+  }, []);
+
+  const onDragOver = useCallback((event) => {
+    event.preventDefault();
+  }, []);
+
 
   return (
     <div className="add-pub-container">
@@ -160,8 +178,10 @@ function AddPresentation() {
         <div className='add-pub-field-container'>
           <div className='add-pub-upload-field-container'>
             <label>Upload File (Max File size : 128MB)</label>
-            <div className='add-pub-upload-btn' onClick={handleFileSelectClick}>
-              <input type='file' ref={fileInput} onChange={(event) => handleFileSelect(event)} placeholder='Upload'/>
+            <div onDrop={onDrop} onDragOver={onDragOver} className='add-pub-upload-btn' onClick={handleFileSelectClick}>
+              <span>Drag 'n' drop or click to select file</span>
+              <span style={{color: 'rgb(164 25 25)'}}>{fileName}</span>
+              <input type='file' style={{display: 'none'}} ref={fileInput} onChange={(event) => handleFileSelect(event)} placeholder='Upload'/>
             </div>
           </div>
           {displayError(selectedFileError)}

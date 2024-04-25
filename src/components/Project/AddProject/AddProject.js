@@ -92,7 +92,7 @@ function AddProject() {
     }
     if (!students) {
       errorExists = true;
-      setStudentsError('PI Students field is empty.');
+      setStudentsError('PI and Students field is empty.');
     }
     if (!mentors) {
       errorExists = true;
@@ -199,7 +199,7 @@ function AddProject() {
         </div>
         <div className='add-pub-field-container'>
           <div className='add-pub-authors-container'>
-            <label className='add-pub-author-label'>PI Students</label>
+            <label className='add-pub-author-label'>PI and Students</label>
             {renderPIStudents()}
             <div className='add-pub-add-author-btn' onClick={addStudent}>
             Add Members

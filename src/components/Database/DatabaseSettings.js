@@ -1,9 +1,10 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable max-len */
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable require-jsdoc */
 import axios from 'axios';
 import dayjs from 'dayjs';
-import {useState, useMemo, useRef} from 'react';
+import {useState, useMemo, useRef, useCallback} from 'react';
 import {Switch} from '@mui/material';
 import {TimePicker} from '@mui/x-date-pickers/TimePicker';
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
@@ -31,6 +32,7 @@ function DatabaseSettings() {
   const [activeTab, setActiveTab] = useState('configuration');
   const [checked, setChecked] = useState(false);
   const [selectedFile, setSelectedFile] =useState(null);
+  const [fileName, setFileName] = useState('');
   const [time, setTime] = useState(dayjs('2022-04-17T23:30'));
   const [period, setPeriod] = useState('Weekly');
 
@@ -200,8 +202,23 @@ function DatabaseSettings() {
   };
 
   const handleFileSelect = (event) => {
-    setSelectedFile(event.target.files[0]);
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+      setFileName(file.name);
+    }
   };
+
+  const onDrop = useCallback((event) => {
+    event.preventDefault();
+    const files = event.dataTransfer.files;
+    setSelectedFile(files[0]);
+    setFileName(files[0].name);
+  }, []);
+
+  const onDragOver = useCallback((event) => {
+    event.preventDefault();
+  }, []);
 
   const handlePeriodChange = (event) => {
     setPeriod(event.target.value);
@@ -352,8 +369,10 @@ function DatabaseSettings() {
   const restoreTab = (<>
     <div className='restore-db-upload-field-container'>
       <label>Upload File (Max File size : 4GB)</label>
-      <div className='restore-db-upload-btn' onClick={handleFileSelectClick}>
-        <input type='file' ref={fileInput} onChange={(event) => handleFileSelect(event)} placeholder='Upload'/>
+      <div onDrop={onDrop} onDragOver={onDragOver} className='restore-db-upload-btn' onClick={handleFileSelectClick}>
+        <span>Drag 'n' drop or click to select file</span>
+        <span style={{color: 'rgb(164 25 25)'}}>{fileName}</span>
+        <input type='file' style={{display: 'none'}} ref={fileInput} onChange={(event) => handleFileSelect(event)} placeholder='Upload'/>
       </div>
     </div>
     <div className="restore-db-submit-btn-container">

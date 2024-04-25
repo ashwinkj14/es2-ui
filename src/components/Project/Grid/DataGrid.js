@@ -124,7 +124,7 @@ h-11V9.1z M12.3,15.4c0-1,0.8-1.7,1.7-1.7h32c1,0,1.7,0.8,1.7,1.7v1.3H12.3V15.4z">
     {field: 'pi_students_list', headerName: 'Students List', hide: true, width: 0},
     {field: 'iab_mentors_list', headerName: 'Mentors List', hide: true, width: 0},
     {field: 'project_title', headerName: 'Title', autoHeight: true, minWidth: 350},
-    {field: 'pi_students', headerName: 'PI Student(s)', autoHeight: true, minWidth: 200},
+    {field: 'pi_students', headerName: 'PI and Student(s)', autoHeight: true, minWidth: 200},
     {field: 'iab_mentors', headerName: 'IAB Mentor(s)', autoHeight: true, minWidth: 200},
     {headerName: 'Presentations', cellRenderer: presentationAction, minWidth: 20},
     (selectedTab=='manage')?{hide: true}:{headerName: 'Comments/Response', cellRenderer: commentsAction, minWidth: 20},
