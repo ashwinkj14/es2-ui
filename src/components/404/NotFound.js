@@ -13,7 +13,13 @@ function NotFound() {
         </div>
       </section>
       <section className='login-section'>
-        <div className='login-header'>The page you’re looking for can’t be found.</div>
+        <div className='login-header'>
+          <div style={{width: '500px', display: 'flex', justifyContent: 'center'}}>
+            <span style={{fontSize: '100px'}}>404</span>
+          </div>
+          <br></br>
+          <span>Page Not Found</span>
+        </div>
       </section>
     </div>
   );
