@@ -224,3 +224,109 @@ export const usePublicationStore = create()(
     })),
 );
 
+
+export const usePatentStore = create()(
+    devtools((set, get) => ({
+      searchField: '',
+      setSearchField: (field) => set({searchField: field}),
+
+      searchType: 'title',
+      setSearchType: (type) => set({searchType: type}),
+
+      searchResults: {},
+      setSearchResults: (results) => set({searchResults: results}),
+
+      pageSize: 10,
+      setPageSize: (size) => set({pageSize: size}),
+
+      currentPage: 1,
+      setCurrentPage: (page) => set({currentPage: page}),
+
+      renderNoData: <></>,
+      setRenderNoData: (value) => set({renderNoData: value}),
+
+      handleSearch: async () => {
+        const {searchField, searchType,
+          setSearchResults, setRenderNoData, pageSize, currentPage} = get();
+        const api = BASE_URL+`/patent/search`;
+
+        const requestData = {
+          search: searchField,
+          type: searchType,
+          page: currentPage,
+          pageSize: pageSize,
+        };
+
+        const token = localStorage.getItem('token');
+        try {
+          const response = await axios.get(api, {
+            withCredentials: true,
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + token,
+            },
+            params: requestData,
+          });
+          const result = response.data;
+          if (result.data.length == 0) {
+            setRenderNoData(<div className='no-data'>No Data Found</div>);
+          } else {
+            setRenderNoData(<></>);
+          }
+          setSearchResults(result);
+        } catch (error) {
+          if (error.response && error.response.status == 401) {
+            localStorage.removeItem('token');
+            useNavigate('/');
+          }
+          displayToast('Error occurred', FAILURE);
+        }
+      },
+
+      listPatents: async () => {
+        const {setSearchResults, setRenderNoData, currentPage, pageSize} = get();
+        const api = BASE_URL+`/patent/list`;
+        const token = localStorage.getItem('token');
+
+        try {
+          const requestData = {
+            page: currentPage,
+            pageSize: pageSize,
+          };
+          const response = await axios.get(api, {
+            withCredentials: true,
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + token,
+            },
+            params: requestData,
+          });
+          const result = response.data;
+          if (result.data.length == 0) {
+            setRenderNoData(<div className='no-data'>No Data Found</div>);
+          } else {
+            setRenderNoData(<></>);
+          }
+          setSearchResults(result);
+        } catch (error) {
+          if (error.response && error.response.status == 401) {
+            localStorage.removeItem('token');
+            navigate('/');
+          }
+          displayToast('Error occurred', FAILURE);
+        };
+      },
+
+      resetPatentStore: () => {
+        const {setSearchField, setSearchType,
+          setSearchResults, setRenderNoData, setPageSize, setCurrentPage} = get();
+        setSearchField('');
+        setSearchType('title');
+        setSearchResults({});
+        setRenderNoData(<></>);
+        setPageSize(10);
+        setCurrentPage(1);
+      },
+
+    })),
+);

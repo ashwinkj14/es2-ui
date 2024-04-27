@@ -4,10 +4,11 @@
 import React, {useMemo} from 'react';
 import axios from 'axios';
 import {AgGridReact} from 'ag-grid-react';
+import TablePagination from '@mui/material/TablePagination';
 import CustomCellRenderer from './CustomCellRenderer';
 import {useNavigate} from 'react-router-dom';
 import {FAILURE, SUCCESS, displayToast} from '../../ToastUtil';
-import {useGridStore} from '../../../store/es2Store';
+import {useGridStore, usePatentStore} from '../../../store/es2Store';
 
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
@@ -18,6 +19,13 @@ import {BASE_URL} from '../../../server-constants';
 function DataGrid({data, popupContent, selectedTab, setSelectedRecord}) {
   const navigate = useNavigate();
   const setGridRefresh = useGridStore((state) => state.setGridRefresh);
+  const searchResults = usePatentStore((state) => state.searchResults);
+  const pageSize = usePatentStore((state) => state.pageSize);
+  const setPageSize = usePatentStore((state) => state.setPageSize);
+  const currentPage = usePatentStore((state) => state.currentPage);
+  const setCurrentPage = usePatentStore((state) => state.setCurrentPage);
+  const handleSearch = usePatentStore((state) => state.handleSearch);
+  const listPatents = usePatentStore((state) => state.listPatents);
 
   const handleAbstractButtonClick = (props) => {
     const abstract = props.node.data.abstract;
@@ -77,7 +85,7 @@ function DataGrid({data, popupContent, selectedTab, setSelectedRecord}) {
   const Action = (props) =>
     <div className="abstract-pub-btn">
       <div onClick={() => handleAbstractButtonClick(props)}>
-        <svg className="view-abstract-btn-img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M6 10h12v1H6zM3 1h12.29L21 6.709V23H3zm12 6h5v-.2L15.2 2H15zM4 22h16V8h-6V2H4zm2-7h12v-1H6zm0 4h9v-1H6z"></path><path fill="none" d="M0 0h24v24H0z"></path></g></svg>
+        <svg className="patent-view-abstract-btn-img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M6 10h12v1H6zM3 1h12.29L21 6.709V23H3zm12 6h5v-.2L15.2 2H15zM4 22h16V8h-6V2H4zm2-7h12v-1H6zm0 4h9v-1H6z"></path><path fill="none" d="M0 0h24v24H0z"></path></g></svg>
       </div>
     </div>;
 
@@ -121,25 +129,54 @@ h-11V9.1z M12.3,15.4c0-1,0.8-1.7,1.7-1.7h32c1,0,1.7,0.8,1.7,1.7v1.3H12.3V15.4z">
     };
   }, []);
 
-  if (data.length === 0) {
+  if (Object.keys(searchResults).length === 0 || searchResults.data.length === 0) {
     return (
       <div></div>
     );
   }
 
-  const pagination = true;
-  const paginationPageSize = 10;
+  const pagination = false;
+  const rowCount = (searchResults.totalRecords)?searchResults.totalRecords:0;
+
+  const handleChangePage = (event, newPage) => {
+    setCurrentPage(newPage+1);
+    if (selectedTab=='search') {
+      handleSearch();
+    } else {
+      listPatents();
+    }
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setPageSize(parseInt(event.target.value, 10));
+    setCurrentPage(1);
+    if (selectedTab=='search') {
+      handleSearch();
+    } else {
+      listPatents();
+    }
+  };
 
   return (
     <div className="ag-theme-alpine" style={{width: '95%', height: '100'}}>
       <AgGridReact
-        rowData={data}
+        rowData={searchResults.data}
         columnDefs={columnDefs}
         defaultColDef={defaultColDef}
         pagination={pagination}
-        paginationPageSize={paginationPageSize}
+        paginationPageSize={pageSize}
         rowHeight="auto"
         domLayout='autoHeight'
+      />
+      <TablePagination
+        component="div"
+        count={rowCount}
+        page={currentPage-1}
+        onPageChange={handleChangePage}
+        rowsPerPage={pageSize}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        showFirstButton={true}
+        showLastButton={true}
       />
     </div>
   );

@@ -2,47 +2,14 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable require-jsdoc */
 /* eslint-disable react/react-in-jsx-scope */
-import {useState} from 'react';
-import axios from 'axios';
-import {useNavigate} from 'react-router-dom';
+import {usePatentStore} from '../../../store/es2Store';
 import './Search.css';
-import {BASE_URL} from '../../../server-constants';
 
-function Search({onSearch}) {
-  const navigate = useNavigate();
-
-  const [searchField, setSearchField] = useState('');
-  const [searchType, setSearchType] = useState('title');
-
-  const handleSearch = () => {
-    const api = BASE_URL+`/patent/search`;
-    const token = localStorage.getItem('token');
-
-    const requestData = {
-      search: searchField,
-      type: searchType,
-    };
-
-    axios.get(api, {
-      withCredentials: true,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token,
-      },
-      params: requestData,
-    })
-        .then((response) => {
-          const result = response.data;
-          onSearch(result.data);
-        })
-        .catch((error) => {
-          if (error.response.status == 401) {
-            localStorage.removeItem('token');
-            navigate('/');
-          }
-          console.log('Error fetching data:', error);
-        });
-  };
+function Search() {
+  const setSearchField = usePatentStore((state) => state.setSearchField);
+  const searchType = usePatentStore((state) => state.searchType);
+  const setSearchType = usePatentStore((state) => state.setSearchType);
+  const handleSearch = usePatentStore((state) => state.handleSearch);
 
   return (
     <div>

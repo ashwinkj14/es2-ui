@@ -1,8 +1,8 @@
 /* eslint-disable max-len */
 /* eslint-disable require-jsdoc */
-import {useState, React} from 'react';
+import {useState, useEffect, React} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {usePatentNavigation} from '../../store/es2Store';
+import {usePatentNavigation, usePatentStore} from '../../store/es2Store';
 
 import Search from './Search/Search';
 import DataGrid from './Grid/DataGrid';
@@ -22,18 +22,19 @@ function Patent() {
   if (token === undefined || token === null) {
     navigate('/');
   }
-  const [searchResult, setSearchResult] = useState('');
-  const [popupContent, setPopupContent] = useState('');
-  const [renderNoData, setRenderNoData] = useState(<></>);
 
-  const handleSearch = (data) => {
-    if (data.length==0) {
-      setRenderNoData(<div className='no-data'>No Data Found</div>);
-    } else {
+  const [popupContent, setPopupContent] = useState('');
+
+  const setSearchResults = usePatentStore((state) => state.setSearchResults);
+  const renderNoData = usePatentStore((state) => state.renderNoData);
+  const setRenderNoData = usePatentStore((state) => state.setRenderNoData);
+
+  useEffect(() => {
+    return () => {
+      setSearchResults('');
       setRenderNoData(<></>);
-    }
-    setSearchResult(data);
-  };
+    };
+  }, [setRenderNoData, setSearchResults]);
 
   const popup = (popupContent=='')?'':<Abstract abstract={popupContent} action={setPopupContent}/>;
   if (popup == '') {
@@ -50,10 +51,10 @@ function Patent() {
         <div className="publication-title">Patent Repository</div>
       </section>
       <section className="patent-search-container">
-        <Search onSearch={handleSearch}/>
+        <Search/>
       </section>
       <section className="publication-data">
-        <DataGrid data={searchResult} popupContent={setPopupContent}/>
+        <DataGrid popupContent={setPopupContent}/>
         {renderNoData}
       </section>
     </section>

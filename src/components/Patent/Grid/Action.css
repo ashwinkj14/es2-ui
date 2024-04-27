@@ -11,10 +11,11 @@
     stroke: #24b492;
 }
 
-.view-abstract-btn-img{
+.patent-view-abstract-btn-img{
     height: 25px;
     width: 25px;
     cursor: pointer;
+    margin-top: 10px;
 }
 
 .download-btn-img{
