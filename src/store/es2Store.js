@@ -35,7 +35,7 @@ export const usePublicationGridStore = create()(
 );
 
 export const usePresentationGridStore = create()(
-    devtools((set) => ({
+    devtools((set, get) => ({
       gridRefresh: false,
       setGridRefresh: () => {
         set((state) => ({gridRefresh: !state.gridRefresh}));
@@ -44,7 +44,7 @@ export const usePresentationGridStore = create()(
       selectedRecord: null,
       setSelectedRecord: (value) => set((state) => ({selectedRecord: value})),
 
-      presentationList: '',
+      presentationList: {},
       setPresentationList: (value) => set({presentationList: value}),
 
       presentationRequest: null,
@@ -52,9 +52,97 @@ export const usePresentationGridStore = create()(
 
       isAddPresentation: false,
       setIsAddPresentation: (value) => set({isAddPresentation: value}),
+
+      pageSize: 10,
+      setPageSize: (size) => set({pageSize: size}),
+
+      currentPage: 1,
+      setCurrentPage: (page) => set({currentPage: page}),
+
+      renderNoData: <></>,
+      setRenderNoData: (value) => set({renderNoData: value}),
+
+      getPresentationList: async () => {
+        const {setPresentationList, presentationRequest, setRenderNoData, currentPage, pageSize} = get();
+        const api = BASE_URL+`/project/presentation/list`;
+        const token = localStorage.getItem('token');
+
+        try {
+          const requestData = {
+            projectId: presentationRequest.project_id,
+            page: currentPage,
+            pageSize: pageSize,
+          };
+          const response = await axios.get(api, {
+            withCredentials: true,
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + token,
+            },
+            params: requestData,
+          });
+          const result = response.data;
+          if (result.data.length == 0) {
+            setRenderNoData(<div className='no-data'>No Data Found</div>);
+          } else {
+            setRenderNoData(<></>);
+          }
+          setPresentationList(result);
+        } catch (error) {
+          if (error.response && error.response.status == 401) {
+            localStorage.removeItem('token');
+            navigate('/');
+          }
+          displayToast('Error occurred', FAILURE);
+        };
+      },
+
+      getUserPresentations: async () => {
+        const {setPresentationList, presentationRequest, setRenderNoData, currentPage, pageSize} = get();
+        const api = BASE_URL+`/project/presentation/manage`;
+        const token = localStorage.getItem('token');
+
+        try {
+          const requestData = {
+            projectId: presentationRequest.project_id,
+            page: currentPage,
+            pageSize: pageSize,
+          };
+          const response = await axios.get(api, {
+            withCredentials: true,
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + token,
+            },
+            params: requestData,
+          });
+          const result = response.data;
+          if (result.data.length == 0) {
+            setRenderNoData(<div className='no-data'>No Data Found</div>);
+          } else {
+            setRenderNoData(<></>);
+          }
+          setPresentationList(result);
+        } catch (error) {
+          if (error.response && error.response.status == 401) {
+            localStorage.removeItem('token');
+            navigate('/');
+          }
+          displayToast('Error occurred', FAILURE);
+        };
+      },
+
+      resetPresentationStore: () => {
+        const {setPresentationList, setSelectedRecord, setRenderNoData, setCurrentPage, setPageSize} = get();
+        setPresentationList({});
+        setSelectedRecord(null);
+        setRenderNoData(<></>);
+        setCurrentPage(1);
+        setPageSize(10);
+      },
+
     })),
 );
-
 
 export const usePatentNavigation = create()(
     devtools((set) => ({
@@ -95,7 +183,11 @@ export const usePublicationNavigation = create()(
 export const useProjectGridStore = create()(
     devtools((set, get) => ({
       selectedTab: 'search',
-      setSelectedTab: (value) => set((state) => ({selectedTab: value})),
+      setSelectedTab: (value) => {
+        set((state) => ({selectedTab: value}));
+        const resetPresentationRequest = usePresentationGridStore.getState().setPresentationRequest;
+        resetPresentationRequest(null);
+      },
 
       selectedRecord: null,
       setSelectedRecord: (value) => set((state) => ({selectedRecord: value})),

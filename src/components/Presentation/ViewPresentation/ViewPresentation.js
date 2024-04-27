@@ -2,63 +2,23 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable require-jsdoc */
-import {useState, useEffect} from 'react';
-import axios from 'axios';
-import {useNavigate} from 'react-router-dom';
-
+import {useEffect} from 'react';
 import {usePresentationGridStore} from '../../../store/es2Store';
 import DataGrid from '../../Presentation/Grid/DataGrid';
-import {BASE_URL} from '../../../server-constants';
 
 import './ViewPresentation.css';
 
 function ViewPresentation() {
-  const navigate = useNavigate();
-  const setPresentationList = usePresentationGridStore((state) => state.setPresentationList);
-  const presentationRequest = usePresentationGridStore((state) => state.presentationRequest);
+  const getPresentationList = usePresentationGridStore((state) => state.getPresentationList);
   const setPresentationRequest = usePresentationGridStore((state) => state.setPresentationRequest);
-
-  const [renderNoData, setRenderNoData] = useState(<></>);
-
-  const onLoad = () => {
-    const api = BASE_URL+`/project/presentation/list`;
-    const token = localStorage.getItem('token');
-
-    const requestParams = {
-      projectId: presentationRequest.project_id,
-    };
-
-    axios.get(api, {
-      withCredentials: true,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token,
-      },
-      params: requestParams,
-    })
-        .then((response) => {
-          const result = response.data;
-          const data = result.data;
-          if (data.length==0) {
-            setRenderNoData(<div className='no-data'>No Data Found</div>);
-          } else {
-            setRenderNoData(<></>);
-          }
-          setPresentationList(data);
-        })
-        .catch((error) => {
-          if (error.code === 'ERR_NETWORK') {
-            setRenderNoData(<div className='no-data'>No Data Found</div>);
-          } else if (error.response.status == 401) {
-            localStorage.removeItem('token');
-            navigate('/');
-          }
-          console.log('Error fetching data:', error);
-        });
-  };
+  const renderNoData = usePresentationGridStore((state) => state.renderNoData);
+  const resetPresentationStore = usePresentationGridStore((state) => state.resetPresentationStore);
 
   useEffect(() => {
-    onLoad();
+    getPresentationList();
+    return () => {
+      resetPresentationStore();
+    };
   }, []);
 
   const handleClickBack = () => {
