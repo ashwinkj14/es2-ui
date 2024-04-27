@@ -18,6 +18,7 @@ function Project() {
   const commentsProjectId = useProjectGridStore((state) => state.commentsProjectId);
   const selectedTab = useProjectGridStore((state) => state.selectedTab);
   const setSelectedTab = useProjectGridStore((state) => state.setSelectedTab);
+  const resetProjectStore = useProjectGridStore((state) => state.resetProjectStore);
 
   const token = localStorage.getItem('token');
 
@@ -25,6 +26,9 @@ function Project() {
     if (!token) {
       navigate('/');
     }
+    return () => {
+      resetProjectStore();
+    };
   }, [token, navigate]);
 
 

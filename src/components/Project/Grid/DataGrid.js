@@ -4,6 +4,7 @@
 import React, {useMemo} from 'react';
 import axios from 'axios';
 import {AgGridReact} from 'ag-grid-react';
+import TablePagination from '@mui/material/TablePagination';
 
 import {useNavigate} from 'react-router-dom';
 import {FAILURE, SUCCESS, displayToast} from '../../ToastUtil';
@@ -20,7 +21,13 @@ function DataGrid() {
 
   const selectedTab = useProjectGridStore((state) => state.selectedTab);
   const setSelectedRecord = useProjectGridStore((state) => state.setSelectedRecord);
+  const currentPage = useProjectGridStore((state) => state.currentPage);
+  const setCurrentPage = useProjectGridStore((state) => state.setCurrentPage);
+  const pageSize = useProjectGridStore((state) => state.pageSize);
+  const setPageSize = useProjectGridStore((state) => state.setPageSize);
   const projectList = useProjectGridStore((state) => state.projectList);
+  const getProjectList = useProjectGridStore((state) => state.getProjectList);
+  const getUserProjects = useProjectGridStore((state) => state.getUserProjects);
   const setCommentsProjectId = useProjectGridStore((state) => state.setCommentsProjectId);
 
   const setGridRefresh = useGridStore((state) => state.setGridRefresh);
@@ -144,25 +151,54 @@ h-11V9.1z M12.3,15.4c0-1,0.8-1.7,1.7-1.7h32c1,0,1.7,0.8,1.7,1.7v1.3H12.3V15.4z">
     };
   }, []);
 
-  if (projectList.length === 0) {
+  if (Object.keys(projectList).length === 0 || projectList.data.length === 0) {
     return (
       <div></div>
     );
   }
 
-  const pagination = true;
-  const paginationPageSize = 10;
+  const pagination = false;
+  const rowCount = (projectList.totalRecords)?projectList.totalRecords:0;
+
+  const handleChangePage = (event, newPage) => {
+    setCurrentPage(newPage+1);
+    if (selectedTab=='search') {
+      getProjectList();
+    } else {
+      getUserProjects();
+    }
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setPageSize(parseInt(event.target.value, 10));
+    setCurrentPage(1);
+    if (selectedTab=='search') {
+      getProjectList();
+    } else {
+      getUserProjects();
+    }
+  };
 
   return (
     <div className="ag-theme-alpine" style={{width: '95%', height: '100'}}>
       <AgGridReact
-        rowData={projectList}
+        rowData={projectList.data}
         columnDefs={columnDefs}
         defaultColDef={defaultColDef}
         pagination={pagination}
-        paginationPageSize={paginationPageSize}
+        paginationPageSize={pageSize}
         rowHeight="auto"
         domLayout='autoHeight'
+      />
+      <TablePagination
+        component="div"
+        count={rowCount}
+        page={currentPage-1}
+        onPageChange={handleChangePage}
+        rowsPerPage={pageSize}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        showFirstButton={true}
+        showLastButton={true}
       />
     </div>
   );

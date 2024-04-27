@@ -3,53 +3,25 @@
 /* eslint-disable max-len */
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable require-jsdoc */
-import {useState, useEffect} from 'react';
-import axios from 'axios';
+import {useEffect} from 'react';
 
 import DataGrid from '../Grid/DataGrid';
 import {usePresentationGridStore, useProjectGridStore} from '../../../store/es2Store';
-import {BASE_URL} from '../../../server-constants';
 
 import './ViewProject.css';
 import ViewPresentation from '../../Presentation/ViewPresentation/ViewPresentation';
 
 function ViewProject() {
-  const setProjectList = useProjectGridStore((state) => state.setProjectList);
   const presentationRequest = usePresentationGridStore((state) => state.presentationRequest);
-  const [renderNoData, setRenderNoData] = useState(<></>);
-
-  const onLoad = () => {
-    const api = BASE_URL+`/project/list`;
-    const token = localStorage.getItem('token');
-
-    axios.get(api, {
-      withCredentials: true,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token,
-      },
-    })
-        .then((response) => {
-          const result = response.data;
-          const data = result.data;
-          if (data.length==0) {
-            setRenderNoData(<div className='no-data'>No Data Found</div>);
-          } else {
-            setRenderNoData(<></>);
-          }
-          setProjectList(data);
-        })
-        .catch((error) => {
-          if (error.response.status == 401) {
-            localStorage.removeItem('token');
-            navigate('/');
-          }
-          console.log('Error fetching data:', error);
-        });
-  };
+  const getProjectList = useProjectGridStore((state) => state.getProjectList);
+  const renderNoData = useProjectGridStore((state) => state.renderNoData);
+  const resetProjectStore = useProjectGridStore((state) => state.resetProjectStore);
 
   useEffect(() => {
-    onLoad();
+    getProjectList();
+    return () => {
+      resetProjectStore();
+    };
   }, []);
 
   const view_project_page = <div className='view-project-container'>

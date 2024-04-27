@@ -93,18 +93,106 @@ export const usePublicationNavigation = create()(
 // );
 
 export const useProjectGridStore = create()(
-    devtools((set) => ({
+    devtools((set, get) => ({
       selectedTab: 'search',
       setSelectedTab: (value) => set((state) => ({selectedTab: value})),
 
       selectedRecord: null,
       setSelectedRecord: (value) => set((state) => ({selectedRecord: value})),
 
-      projectList: '',
-      setProjectList: (value) => set({projectList: value}),
-
       commentsProjectId: '',
       setCommentsProjectId: (value) => set({commentsProjectId: value}),
+
+      projectList: {},
+      setProjectList: (results) => set({projectList: results}),
+
+      pageSize: 10,
+      setPageSize: (size) => set({pageSize: size}),
+
+      currentPage: 1,
+      setCurrentPage: (page) => set({currentPage: page}),
+
+      renderNoData: <></>,
+      setRenderNoData: (value) => set({renderNoData: value}),
+
+      getProjectList: async () => {
+        const {setProjectList, setRenderNoData, currentPage, pageSize} = get();
+        const api = BASE_URL+`/project/list`;
+        const token = localStorage.getItem('token');
+
+        try {
+          const requestData = {
+            page: currentPage,
+            pageSize: pageSize,
+          };
+          const response = await axios.get(api, {
+            withCredentials: true,
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + token,
+            },
+            params: requestData,
+          });
+          console.log(response);
+          const result = response.data;
+          if (result.data.length == 0) {
+            setRenderNoData(<div className='no-data'>No Data Found</div>);
+          } else {
+            setRenderNoData(<></>);
+          }
+          setProjectList(result);
+        } catch (error) {
+          if (error.response && error.response.status == 401) {
+            localStorage.removeItem('token');
+            navigate('/');
+          }
+          displayToast('Error occurred', FAILURE);
+        };
+      },
+
+      getUserProjects: async () => {
+        const {setProjectList, setRenderNoData, currentPage, pageSize} = get();
+        const api = BASE_URL+`/project/manage`;
+        const token = localStorage.getItem('token');
+
+        try {
+          const requestData = {
+            page: currentPage,
+            pageSize: pageSize,
+          };
+          const response = await axios.get(api, {
+            withCredentials: true,
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + token,
+            },
+            params: requestData,
+          });
+          const result = response.data;
+          if (result.data.length == 0) {
+            setRenderNoData(<div className='no-data'>No Data Found</div>);
+          } else {
+            setRenderNoData(<></>);
+          }
+          setProjectList(result);
+        } catch (error) {
+          if (error.response && error.response.status == 401) {
+            localStorage.removeItem('token');
+            navigate('/');
+          }
+          displayToast('Error occurred', FAILURE);
+        };
+      },
+
+      resetProjectStore: () => {
+        const {setProjectList, setCommentsProjectId, setSelectedRecord, setRenderNoData, setCurrentPage, setPageSize} = get();
+        setProjectList({});
+        setCommentsProjectId('');
+        setSelectedRecord(null);
+        setRenderNoData(<></>);
+        setCurrentPage(1);
+        setPageSize(10);
+      },
     })),
 );
 
