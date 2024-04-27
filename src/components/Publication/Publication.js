@@ -2,7 +2,7 @@
 /* eslint-disable require-jsdoc */
 import {useState, useEffect, React} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {useSearchStore, useUserStore} from '../../store/es2Store';
+import {usePublicationStore, useUserStore} from '../../store/es2Store';
 import {usePublicationNavigation} from '../../store/es2Store';
 
 import Search from '../Search/Search';
@@ -26,9 +26,9 @@ function Publication() {
   const userTypeId = useUserStore((state) => state.userTypeId);
   const [popupContent, setPopupContent] = useState('');
 
-  const setSearchResults = useSearchStore((state) => state.setSearchResults);
-  const renderNoData = useSearchStore((state) => state.renderNoData);
-  const setRenderNoData = useSearchStore((state) => state.setRenderNoData);
+  const setSearchResults = usePublicationStore((state) => state.setSearchResults);
+  const renderNoData = usePublicationStore((state) => state.renderNoData);
+  const setRenderNoData = usePublicationStore((state) => state.setRenderNoData);
 
   useEffect(() => {
     return () => {

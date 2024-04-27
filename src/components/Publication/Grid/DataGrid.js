@@ -8,7 +8,7 @@ import TablePagination from '@mui/material/TablePagination';
 import CustomCellRenderer from './CustomCellRenderer';
 import {useNavigate} from 'react-router-dom';
 import {FAILURE, SUCCESS, displayToast} from '../../ToastUtil';
-import {usePublicationGridStore, useSearchStore} from '../../../store/es2Store';
+import {usePublicationGridStore, usePublicationNavigation, usePublicationStore} from '../../../store/es2Store';
 
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
@@ -16,15 +16,17 @@ import './Action.css';
 import './DataGrid.css';
 import {BASE_URL} from '../../../server-constants';
 
-function DataGrid({popupContent, selectedTab, setSelectedRecord}) {
+function DataGrid({popupContent, setSelectedRecord}) {
   const navigate = useNavigate();
+  const selectedTab = usePublicationNavigation((state) => state.selectedTab);
   const setGridRefresh = usePublicationGridStore((state) => state.setGridRefresh);
-  const searchResults = useSearchStore((state) => state.searchResults);
-  const pageSize = useSearchStore((state) => state.pageSize);
-  const setPageSize = useSearchStore((state) => state.setPageSize);
-  const currentPage = useSearchStore((state) => state.currentPage);
-  const setCurrentPage = useSearchStore((state) => state.setCurrentPage);
-  const handleSearch = useSearchStore((state) => state.handleSearch);
+  const searchResults = usePublicationStore((state) => state.searchResults);
+  const pageSize = usePublicationStore((state) => state.pageSize);
+  const setPageSize = usePublicationStore((state) => state.setPageSize);
+  const currentPage = usePublicationStore((state) => state.currentPage);
+  const setCurrentPage = usePublicationStore((state) => state.setCurrentPage);
+  const handleSearch = usePublicationStore((state) => state.handleSearch);
+  const listPublications = usePublicationStore((state) => state.listPublications);
 
   const downloadPublication = async (publicationId) => {
     const api = BASE_URL+`/publication/download`;
@@ -185,24 +187,31 @@ h-11V9.1z M12.3,15.4c0-1,0.8-1.7,1.7-1.7h32c1,0,1.7,0.8,1.7,1.7v1.3H12.3V15.4z">
     };
   }, []);
 
-  if (!searchResults) {
+  if (Object.keys(searchResults).length === 0 || searchResults.data.length === 0) {
     return (
       <div></div>
     );
   }
-
   const pagination = false;
-  const rowCount = searchResults.totalRecords;
+  const rowCount = (searchResults.totalRecords)?searchResults.totalRecords:0;
 
   const handleChangePage = (event, newPage) => {
     setCurrentPage(newPage+1);
-    handleSearch();
+    if (selectedTab=='search') {
+      handleSearch();
+    } else {
+      listPublications();
+    }
   };
 
   const handleChangeRowsPerPage = (event) => {
     setPageSize(parseInt(event.target.value, 10));
     setCurrentPage(1);
-    handleSearch();
+    if (selectedTab=='search') {
+      handleSearch();
+    } else {
+      listPublications();
+    }
   };
 
   return (

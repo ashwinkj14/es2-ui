@@ -108,7 +108,7 @@ export const useProjectGridStore = create()(
     })),
 );
 
-export const useSearchStore = create()(
+export const usePublicationStore = create()(
     devtools((set, get) => ({
       searchField: '',
       setSearchField: (field) => set({searchField: field}),
@@ -172,6 +172,53 @@ export const useSearchStore = create()(
           }
           displayToast('Error occurred', FAILURE);
         }
+      },
+
+      listPublications: async () => {
+        const {setSearchResults, setRenderNoData, currentPage, pageSize} = get();
+        const api = BASE_URL+`/publication/list`;
+        const token = localStorage.getItem('token');
+
+        try {
+          const requestData = {
+            page: currentPage,
+            pageSize: pageSize,
+          };
+          const response = await axios.get(api, {
+            withCredentials: true,
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + token,
+            },
+            params: requestData,
+          });
+          const result = response.data;
+          if (result.data.length == 0) {
+            setRenderNoData(<div className='no-data'>No Data Found</div>);
+          } else {
+            setRenderNoData(<></>);
+          }
+          setSearchResults(result);
+        } catch (error) {
+          if (error.response && error.response.status == 401) {
+            localStorage.removeItem('token');
+            navigate('/');
+          }
+          displayToast('Error occurred', FAILURE);
+        };
+      },
+
+      resetPublicationStore: () => {
+        const {setSearchField, setSearchFromDate, setSearchToDate, setSearchType,
+          setSearchResults, setRenderNoData, setPageSize, setCurrentPage} = get();
+        setSearchField('');
+        setSearchFromDate('');
+        setSearchToDate('');
+        setSearchType('title');
+        setSearchResults({});
+        setRenderNoData(<></>);
+        setPageSize(10);
+        setCurrentPage(1);
       },
 
     })),

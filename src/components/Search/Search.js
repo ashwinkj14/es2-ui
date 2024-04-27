@@ -4,30 +4,28 @@
 /* eslint-disable react/react-in-jsx-scope */
 import './Search.css';
 import {useEffect} from 'react';
-import {useSearchStore} from '../../store/es2Store';
+import {usePublicationStore} from '../../store/es2Store';
 
 function Search() {
   const {
     setSearchField, setSearchFromDate,
     setSearchToDate, searchType,
-    setSearchType, handleSearch,
-  } = useSearchStore((state) => ({
+    setSearchType, handleSearch, resetPublicationStore,
+  } = usePublicationStore((state) => ({
     setSearchField: state.setSearchField,
     setSearchFromDate: state.setSearchFromDate,
     setSearchToDate: state.setSearchToDate,
     searchType: state.searchType,
     setSearchType: state.setSearchType,
     handleSearch: state.handleSearch,
+    resetPublicationStore: state.resetPublicationStore,
   }));
 
   useEffect(() => {
     return () => {
-      setSearchField('');
-      setSearchFromDate('');
-      setSearchToDate('');
-      setSearchType('title');
+      resetPublicationStore();
     };
-  }, [setSearchField, setSearchFromDate, setSearchToDate, setSearchType]);
+  }, [resetPublicationStore]);
 
 
   return (
