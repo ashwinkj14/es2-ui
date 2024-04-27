@@ -2,7 +2,7 @@
 /* eslint-disable require-jsdoc */
 import {useState, useEffect, React} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {useUserStore} from '../../store/es2Store';
+import {useSearchStore, useUserStore} from '../../store/es2Store';
 import {usePublicationNavigation} from '../../store/es2Store';
 
 import Search from '../Search/Search';
@@ -24,18 +24,18 @@ function Publication() {
     navigate('/');
   }
   const userTypeId = useUserStore((state) => state.userTypeId);
-  const [searchResult, setSearchResult] = useState('');
   const [popupContent, setPopupContent] = useState('');
-  const [renderNoData, setRenderNoData] = useState(<></>);
 
-  const handleSearch = (data) => {
-    if (data.length==0) {
-      setRenderNoData(<div className='no-data'>No Data Found</div>);
-    } else {
+  const setSearchResults = useSearchStore((state) => state.setSearchResults);
+  const renderNoData = useSearchStore((state) => state.renderNoData);
+  const setRenderNoData = useSearchStore((state) => state.setRenderNoData);
+
+  useEffect(() => {
+    return () => {
+      setSearchResults('');
       setRenderNoData(<></>);
-    }
-    setSearchResult(data);
-  };
+    };
+  }, [setRenderNoData, setSearchResults]);
 
   const popup = (popupContent=='')?'':<Abstract abstract={popupContent} action={setPopupContent}/>;
   if (popup == '') {
@@ -52,10 +52,10 @@ function Publication() {
         <div className="publication-title">Research Paper Repository</div>
       </section>
       <section className="publication-search-container">
-        <Search onSearch={handleSearch}/>
+        <Search/>
       </section>
       <section className="publication-data">
-        <DataGrid data={searchResult} popupContent={setPopupContent}/>
+        <DataGrid popupContent={setPopupContent}/>
         {renderNoData}
       </section>
     </section>

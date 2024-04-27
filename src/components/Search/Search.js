@@ -2,50 +2,33 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable require-jsdoc */
 /* eslint-disable react/react-in-jsx-scope */
-import {useState} from 'react';
-import axios from 'axios';
-import {useNavigate} from 'react-router-dom';
-import {FAILURE, displayToast} from '../ToastUtil';
-
 import './Search.css';
-import {BASE_URL} from '../../server-constants';
+import {useEffect} from 'react';
+import {useSearchStore} from '../../store/es2Store';
 
-function Search({onSearch}) {
-  const navigate = useNavigate();
-  const [searchField, setSearchField] = useState('');
-  const [searchType, setSearchType] = useState('title');
-  const [searchFromDate, setSearchFromDate] = useState('');
-  const [searchToDate, setSearchToDate] = useState('');
+function Search() {
+  const {
+    setSearchField, setSearchFromDate,
+    setSearchToDate, searchType,
+    setSearchType, handleSearch,
+  } = useSearchStore((state) => ({
+    setSearchField: state.setSearchField,
+    setSearchFromDate: state.setSearchFromDate,
+    setSearchToDate: state.setSearchToDate,
+    searchType: state.searchType,
+    setSearchType: state.setSearchType,
+    handleSearch: state.handleSearch,
+  }));
 
-  const handleSearch = () => {
-    const api = BASE_URL+`/publication/search`;
-    const requestData = {
-      search: searchField,
-      fromDate: searchFromDate,
-      toDate: searchToDate,
-      type: searchType,
+  useEffect(() => {
+    return () => {
+      setSearchField('');
+      setSearchFromDate('');
+      setSearchToDate('');
+      setSearchType('title');
     };
-    const token = localStorage.getItem('token');
-    axios.get(api, {
-      withCredentials: true,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token,
-      },
-      params: requestData,
-    })
-        .then((response) => {
-          const result = response.data;
-          onSearch(result.data);
-        })
-        .catch((error) => {
-          if (error.response.status == 401) {
-            localStorage.removeItem('token');
-            navigate('/');
-          }
-          displayToast('Error occurred', FAILURE);
-        });
-  };
+  }, [setSearchField, setSearchFromDate, setSearchToDate, setSearchType]);
+
 
   return (
     <div>

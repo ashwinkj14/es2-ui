@@ -4,10 +4,11 @@
 import React, {useMemo} from 'react';
 import axios from 'axios';
 import {AgGridReact} from 'ag-grid-react';
+import TablePagination from '@mui/material/TablePagination';
 import CustomCellRenderer from './CustomCellRenderer';
 import {useNavigate} from 'react-router-dom';
 import {FAILURE, SUCCESS, displayToast} from '../../ToastUtil';
-import {usePublicationGridStore} from '../../../store/es2Store';
+import {usePublicationGridStore, useSearchStore} from '../../../store/es2Store';
 
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
@@ -15,9 +16,15 @@ import './Action.css';
 import './DataGrid.css';
 import {BASE_URL} from '../../../server-constants';
 
-function DataGrid({data, popupContent, selectedTab, setSelectedRecord}) {
+function DataGrid({popupContent, selectedTab, setSelectedRecord}) {
   const navigate = useNavigate();
   const setGridRefresh = usePublicationGridStore((state) => state.setGridRefresh);
+  const searchResults = useSearchStore((state) => state.searchResults);
+  const pageSize = useSearchStore((state) => state.pageSize);
+  const setPageSize = useSearchStore((state) => state.setPageSize);
+  const currentPage = useSearchStore((state) => state.currentPage);
+  const setCurrentPage = useSearchStore((state) => state.setCurrentPage);
+  const handleSearch = useSearchStore((state) => state.handleSearch);
 
   const downloadPublication = async (publicationId) => {
     const api = BASE_URL+`/publication/download`;
@@ -178,25 +185,46 @@ h-11V9.1z M12.3,15.4c0-1,0.8-1.7,1.7-1.7h32c1,0,1.7,0.8,1.7,1.7v1.3H12.3V15.4z">
     };
   }, []);
 
-  if (data.length === 0) {
+  if (!searchResults) {
     return (
       <div></div>
     );
   }
 
-  const pagination = true;
-  const paginationPageSize = 10;
+  const pagination = false;
+  const rowCount = searchResults.totalRecords;
+
+  const handleChangePage = (event, newPage) => {
+    setCurrentPage(newPage+1);
+    handleSearch();
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setPageSize(parseInt(event.target.value, 10));
+    setCurrentPage(1);
+    handleSearch();
+  };
 
   return (
     <div className="ag-theme-alpine" style={{width: '95%', height: '100'}}>
       <AgGridReact
-        rowData={data}
+        rowData={searchResults.data}
         columnDefs={columnDefs}
         defaultColDef={defaultColDef}
         pagination={pagination}
-        paginationPageSize={paginationPageSize}
+        paginationPageSize={pageSize}
         rowHeight="auto"
         domLayout='autoHeight'
+      />
+      <TablePagination
+        component="div"
+        count={rowCount}
+        page={currentPage-1}
+        onPageChange={handleChangePage}
+        rowsPerPage={pageSize}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        showFirstButton={true}
+        showLastButton={true}
       />
     </div>
   );

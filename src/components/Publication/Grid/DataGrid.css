@@ -49,3 +49,7 @@
 .delete-user-btn{
     cursor: pointer;
 }
+
+.MuiTablePagination-selectIcon{
+    left: 20px;
+}

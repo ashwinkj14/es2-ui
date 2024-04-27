@@ -1,5 +1,11 @@
+/* eslint-disable max-len */
+/* eslint-disable react/react-in-jsx-scope */
+import axios from 'axios';
 import {create} from 'zustand';
 import {devtools} from 'zustand/middleware';
+import {useNavigate} from 'react-router-dom';
+import {FAILURE, displayToast} from '../components/ToastUtil';
+import {BASE_URL} from '../server-constants';
 
 export const useUserStore = create()(
     devtools((set) => ({
@@ -102,4 +108,72 @@ export const useProjectGridStore = create()(
     })),
 );
 
+export const useSearchStore = create()(
+    devtools((set, get) => ({
+      searchField: '',
+      setSearchField: (field) => set({searchField: field}),
+
+      searchFromDate: '',
+      setSearchFromDate: (date) => set({searchFromDate: date}),
+
+      searchToDate: '',
+      setSearchToDate: (date) => set({searchToDate: date}),
+
+      searchType: 'title',
+      setSearchType: (type) => set({searchType: type}),
+
+      searchResults: {},
+      setSearchResults: (results) => set({searchResults: results}),
+
+      pageSize: 10,
+      setPageSize: (size) => set({pageSize: size}),
+
+      currentPage: 1,
+      setCurrentPage: (page) => set({currentPage: page}),
+
+      renderNoData: <></>,
+      setRenderNoData: (value) => set({renderNoData: value}),
+
+      handleSearch: async () => {
+        const {searchField, searchFromDate, searchToDate, searchType,
+          setSearchResults, setRenderNoData, pageSize, currentPage} = get();
+        const api = BASE_URL+`/publication/search`;
+
+        const requestData = {
+          search: searchField,
+          fromDate: searchFromDate,
+          toDate: searchToDate,
+          type: searchType,
+          page: currentPage,
+          pageSize: pageSize,
+        };
+
+        const token = localStorage.getItem('token');
+        try {
+          const response = await axios.get(api, {
+            withCredentials: true,
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + token,
+            },
+            params: requestData,
+          });
+          const result = response.data;
+          if (result.data.length == 0) {
+            setRenderNoData(<div className='no-data'>No Data Found</div>);
+          } else {
+            setRenderNoData(<></>);
+          }
+          setSearchResults(result);
+        } catch (error) {
+          if (error.response && error.response.status == 401) {
+            localStorage.removeItem('token');
+            useNavigate('/');
+          }
+          displayToast('Error occurred', FAILURE);
+        }
+      },
+
+    })),
+);
 
