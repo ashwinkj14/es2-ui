@@ -2,11 +2,12 @@
 /* eslint-disable max-len */
 /* eslint-disable require-jsdoc */
 /* eslint-disable react/react-in-jsx-scope */
-import {useUserStore} from '../../../store/es2Store';
+import {usePublicationNavigation, useUserStore} from '../../../store/es2Store';
 
 import './PublicationNav.css';
 
-function PublicationNav({selectedTab, setSelectedTab}) {
+function PublicationNav() {
+  const {selectedTab, setSelectedTab} = usePublicationNavigation((state) => state);
   const userTypeId = useUserStore((state) => state.userTypeId);
   const handleTabClick = (value) => {
     setSelectedTab(value);

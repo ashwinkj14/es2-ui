@@ -4,15 +4,13 @@
 /* eslint-disable require-jsdoc */
 import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {useUserStore} from '../../store/es2Store';
+import {useSettingsStore, useUserStore} from '../../store/es2Store';
 
 import UserMgmt from '../User/UserManagement';
 import AddUser from '../User/Operations/AddUser';
 import EditUser from '../User/Operations/EditUser';
 
 import DatabaseSettings from '../Database/DatabaseSettings';
-
-import Header from '../../containers/Header/Header';
 import Footer from '../../containers/Footer/Footer';
 
 import './Settings.css';
@@ -24,13 +22,9 @@ function Settings() {
   if (token === undefined || token === null) {
     navigate('/');
   }
-  const [selectedTab, setSelectedTab] = useState('usermgmt');
+  const selectedTab = useSettingsStore((state) => state.selectedTab);
   const [userDetails, setUserDetails] = useState({});
   const setGridRefresh = useUserStore((state) => state.setGridRefresh);
-
-  const handleSettingsTabChange = (tab) => {
-    setSelectedTab(tab);
-  };
 
   const modalChangeHandler = (state) =>{
     setIsModalOpen(state);
@@ -50,7 +44,6 @@ function Settings() {
   const editUserPopup = (isEditUserOpen)?<EditUser action={handleEditUserClose} user={userDetails}/>:'';
   return (
     <div>
-      <Header props={{page: 'settings', onTabChange: handleSettingsTabChange}}/>
       {popup}
       {editUserPopup}
       <div className={`${(popup=='' && editUserPopup=='')?'':'modal-overlay'}`}></div>

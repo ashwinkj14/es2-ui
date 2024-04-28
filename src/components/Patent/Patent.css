@@ -1,6 +1,6 @@
 .publication-container{
     position: relative;
-    margin-top: 30px;
+    /* margin-top: 30px; */
     width: 100%;
 }
 
@@ -14,6 +14,7 @@
 .publication-title{
     font-size: 50px;
     color: black;
+    margin-top: 20px;
 }
 
 .patent-search-container{

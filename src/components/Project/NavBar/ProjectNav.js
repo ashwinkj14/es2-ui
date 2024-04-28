@@ -2,9 +2,12 @@
 /* eslint-disable max-len */
 /* eslint-disable require-jsdoc */
 /* eslint-disable react/react-in-jsx-scope */
+import {useProjectGridStore} from '../../../store/es2Store';
 import './ProjectNav.css';
 
-function ProjectNav({selectedTab, setSelectedTab}) {
+function ProjectNav() {
+  const selectedTab = useProjectGridStore((state) => state.selectedTab);
+  const setSelectedTab = useProjectGridStore((state) => state.setSelectedTab);
   const handleTabClick = (value) => {
     setSelectedTab(value);
   };

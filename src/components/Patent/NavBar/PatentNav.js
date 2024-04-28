@@ -3,9 +3,10 @@
 /* eslint-disable require-jsdoc */
 /* eslint-disable react/react-in-jsx-scope */
 import './PatentNav.css';
-import {useUserStore} from '../../../store/es2Store';
+import {usePatentNavigation, useUserStore} from '../../../store/es2Store';
 
-function PatentNav({selectedTab, setSelectedTab}) {
+function PatentNav() {
+  const {selectedTab, setSelectedTab} = usePatentNavigation((state) => state);
   const userTypeId = useUserStore((state) => state.userTypeId);
   const handleTabClick = (value) => {
     setSelectedTab(value);

@@ -2,17 +2,16 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable require-jsdoc */
 /* eslint-disable react/react-in-jsx-scope */
-import React, {useState} from 'react';
-import {useUserStore} from '../../../store/es2Store';
+import React from 'react';
+import {useSettingsStore, useUserStore} from '../../../store/es2Store';
 
 import '../../Publication/NavBar/PublicationNav.css';
 
-function SettingsNav({onSelect}) {
+function SettingsNav() {
   const userTypeId = useUserStore((state) => state.userTypeId);
-  const [selectedTab, setSelectedTab] = useState('usermgmt');
+  const {selectedTab, setSelectedTab} = useSettingsStore((state) => state);
 
   const handleTabClick = (tab) => {
-    onSelect(tab);
     setSelectedTab(tab);
   };
 

@@ -5,7 +5,6 @@ import {useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 
 import Footer from '../../containers/Footer/Footer';
-import Header from '../../containers/Header/Header';
 
 import Comments from './Comments/Comments';
 import AddProject from './AddProject/AddProject';
@@ -17,7 +16,6 @@ function Project() {
   const navigate = useNavigate();
   const commentsProjectId = useProjectGridStore((state) => state.commentsProjectId);
   const selectedTab = useProjectGridStore((state) => state.selectedTab);
-  const setSelectedTab = useProjectGridStore((state) => state.setSelectedTab);
   const resetProjectStore = useProjectGridStore((state) => state.resetProjectStore);
 
   const token = localStorage.getItem('token');
@@ -53,7 +51,6 @@ function Project() {
 
   return (
     <div>
-      <Header props={{page: 'project'}} selectedTab={selectedTab} setSelectedTab={setSelectedTab}/>
       {popup}
       <div className={`${(popup=='')?'':'modal-overlay'}`}></div>
       {toRender}

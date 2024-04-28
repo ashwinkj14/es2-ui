@@ -467,3 +467,10 @@ export const usePatentStore = create()(
 
     })),
 );
+
+export const useSettingsStore = create()(
+    devtools((set, get) => ({
+      selectedTab: 'usermgmt',
+      setSelectedTab: (value) => set({selectedTab: value}),
+    })),
+);

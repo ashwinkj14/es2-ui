@@ -10,7 +10,6 @@ import DataGrid from './Grid/DataGrid';
 import Abstract from './SideBar/Abstract';
 
 import Footer from '../../containers/Footer/Footer';
-import Header from '../../containers/Header/Header';
 import AddPublication from './AddPublication/AddPublication';
 import ManagePublication from './ManagePublication/ManagePublication';
 
@@ -18,7 +17,7 @@ import './Publication.css';
 
 function Publication() {
   const navigate = useNavigate();
-  const {selectedTab, setSelectedTab} = usePublicationNavigation((state) => state);
+  const selectedTab = usePublicationNavigation((state) => state.selectedTab);
   const token = localStorage.getItem('token');
   if (token === undefined || token === null) {
     navigate('/');
@@ -69,7 +68,6 @@ function Publication() {
 
   return (
     <div>
-      <Header props={{page: 'publication'}} selectedTab={selectedTab} setSelectedTab={setSelectedTab}/>
       {toRender}
       <Footer/>
     </div>
