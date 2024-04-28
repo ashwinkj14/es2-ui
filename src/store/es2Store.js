@@ -42,6 +42,13 @@ export const useUserStore = create()(
           displayToast('Unable to fetch users.', FAILURE);
         };
       },
+
+      resetUserStore: () => {
+        const {setUserList, setPageSize, setCurrentPage} = get();
+        setUserList({});
+        setPageSize(10);
+        setCurrentPage(1);
+      },
     })),
 );
 

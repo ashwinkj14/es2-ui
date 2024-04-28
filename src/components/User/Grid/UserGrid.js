@@ -28,6 +28,7 @@ function UserGrid({setUserDetails, editUserAction}) {
   const setPageSize = useUserStore((state) => state.setPageSize);
   const gridRefresh = useUserStore((state) => state.gridRefresh);
   const setGridRefresh = useUserStore((state) => state.setGridRefresh);
+  const resetUserStore = useUserStore((state) => state.resetUserStore);
 
   const handleUserEdit = (props) => {
     const userDetails = {
@@ -44,6 +45,9 @@ function UserGrid({setUserDetails, editUserAction}) {
 
   useEffect(() => {
     fetchUserData();
+    return () => {
+      resetUserStore();
+    };
   }, [gridRefresh]);
 
   const handleDelete = async (props) => {
