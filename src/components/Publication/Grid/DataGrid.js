@@ -95,7 +95,7 @@ function DataGrid({popupContent, setSelectedRecord}) {
       }
     } catch (error) {
       console.error(error);
-      displayToast('Error occurred', FAILURE);
+      displayToast('Unable to delete publication.', FAILURE);
     }
   };
 

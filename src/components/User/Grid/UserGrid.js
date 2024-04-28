@@ -75,7 +75,7 @@ function UserGrid({setUserDetails, editUserAction}) {
       }
     } catch (error) {
       console.error(error);
-      displayToast('Error occurred', FAILURE);
+      displayToast('Unable to delete the user.', FAILURE);
     };
   };
 

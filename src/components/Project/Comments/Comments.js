@@ -63,7 +63,7 @@ function Comments() {
         }
       }
     } catch (error) {
-      displayToast('Error occurred', FAILURE);
+      displayToast('Unable to add comment.', FAILURE);
     };
   };
 
@@ -101,7 +101,7 @@ function Comments() {
         const result = response.data;
         setComments(result.comments);
       } catch (error) {
-        displayToast('Error occurred', FAILURE);
+        displayToast('Unable to fetch comments.', FAILURE);
       };
     };
     onLoad();

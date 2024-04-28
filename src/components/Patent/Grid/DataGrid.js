@@ -58,7 +58,7 @@ function DataGrid({data, popupContent, selectedTab, setSelectedRecord}) {
         setGridRefresh();
       }
     } catch (error) {
-      displayToast('Error occurred', FAILURE);
+      displayToast('Unable to delete patent.', FAILURE);
     }
   };
 

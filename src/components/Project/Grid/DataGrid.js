@@ -58,7 +58,7 @@ function DataGrid() {
         setGridRefresh();
       }
     } catch (error) {
-      displayToast('Error occurred', FAILURE);
+      displayToast('Unable to delete project.', FAILURE);
     }
   };
 

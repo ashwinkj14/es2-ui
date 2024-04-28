@@ -5,7 +5,7 @@ import {useNavigate} from 'react-router-dom';
 import {usePublicationStore, useUserStore} from '../../store/es2Store';
 import {usePublicationNavigation} from '../../store/es2Store';
 
-import Search from '../Search/Search';
+import Search from './Search/Search';
 import DataGrid from './Grid/DataGrid';
 import Abstract from './SideBar/Abstract';
 

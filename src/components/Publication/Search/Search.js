@@ -4,7 +4,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 import './Search.css';
 import {useEffect} from 'react';
-import {usePublicationStore} from '../../store/es2Store';
+import {usePublicationStore} from '../../../store/es2Store';
 
 function Search() {
   const {

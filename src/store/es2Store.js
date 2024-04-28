@@ -39,7 +39,7 @@ export const useUserStore = create()(
           setUserList(result);
         } catch (error) {
           console.error(error);
-          displayToast('Error occurred', FAILURE);
+          displayToast('Unable to fetch users.', FAILURE);
         };
       },
     })),
@@ -113,7 +113,7 @@ export const usePresentationGridStore = create()(
 
           setPresentationList(result);
         } catch (error) {
-          displayToast('Error occurred', FAILURE);
+          displayToast('Unable to fetch presentations.', FAILURE);
         };
       },
 
@@ -138,7 +138,7 @@ export const usePresentationGridStore = create()(
 
           setPresentationList(result);
         } catch (error) {
-          displayToast('Error occurred', FAILURE);
+          displayToast('Unable to fetch presentations.', FAILURE);
         };
       },
 
@@ -238,7 +238,7 @@ export const useProjectGridStore = create()(
 
           setProjectList(result);
         } catch (error) {
-          displayToast('Error occurred', FAILURE);
+          displayToast('Unable to fetch projects.', FAILURE);
         };
       },
 
@@ -263,7 +263,7 @@ export const useProjectGridStore = create()(
 
           setProjectList(result);
         } catch (error) {
-          displayToast('Error occurred', FAILURE);
+          displayToast('Unable to fetch projects.', FAILURE);
         };
       },
 
@@ -333,7 +333,7 @@ export const usePublicationStore = create()(
 
           setSearchResults(result);
         } catch (error) {
-          displayToast('Error occurred', FAILURE);
+          displayToast('Unable to fetch publications.', FAILURE);
         }
       },
 
@@ -358,7 +358,7 @@ export const usePublicationStore = create()(
 
           setSearchResults(result);
         } catch (error) {
-          displayToast('Error occurred', FAILURE);
+          displayToast('Unable to fetch publications.', FAILURE);
         };
       },
 
@@ -425,7 +425,7 @@ export const usePatentStore = create()(
 
           setSearchResults(result);
         } catch (error) {
-          displayToast('Error occurred', FAILURE);
+          displayToast('Unable to fetch patents.', FAILURE);
         }
       },
 
@@ -450,7 +450,7 @@ export const usePatentStore = create()(
 
           setSearchResults(result);
         } catch (error) {
-          displayToast('Error occurred', FAILURE);
+          displayToast('Unable to fetch patents.', FAILURE);
         };
       },
 

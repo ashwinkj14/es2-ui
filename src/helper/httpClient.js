@@ -37,6 +37,9 @@ httpClient.interceptors.response.use((response) => {
       case 403: // Forbidden
         displayToast('You do not have permission to perform this action.', FAILURE);
         break;
+      case 429: // Too many requests
+        displayToast('You have performed too many requests. Please wait for a minute before performing any request.', FAILURE);
+        break;
       case 500: // Server Error
         displayToast('Internal server error occurred. Please try again later.', FAILURE);
         break;
