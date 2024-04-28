@@ -150,9 +150,9 @@ h-11V9.1z M12.3,15.4c0-1,0.8-1.7,1.7-1.7h32c1,0,1.7,0.8,1.7,1.7v1.3H12.3V15.4z">
   const defaultColDef = useMemo(() => {
     return {
       editable: false,
-      sortable: true,
+      sortable: false,
       flex: 1,
-      filter: true,
+      filter: false,
       resizable: true,
       headerComponentParams: {
         menuIcon: 'fa-bars',

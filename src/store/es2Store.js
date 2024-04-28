@@ -6,10 +6,41 @@ import {FAILURE, displayToast} from '../components/ToastUtil';
 import httpClient from '../helper/httpClient';
 
 export const useUserStore = create()(
-    devtools((set) => ({
+    devtools((set, get) => ({
+      gridRefresh: false,
+      setGridRefresh: () => {
+        set((state) => ({gridRefresh: !state.gridRefresh}));
+      },
+
       userTypeId: 0,
       setUserTypeId: (value) => {
         set((state) => ({userTypeId: value}));
+      },
+      userList: {},
+      setUserList: (value) => set((state) => ({userList: value})),
+
+      currentPage: 1,
+      setCurrentPage: (page) => set((state) => ({currentPage: page})),
+
+      pageSize: 10,
+      setPageSize: (size) => set((state) => ({pageSize: size})),
+
+      fetchUserData: async () => {
+        const {setUserList, currentPage, pageSize} = get();
+        const requestData = {
+          page: currentPage,
+          pageSize: pageSize,
+        };
+        try {
+          const response = await httpClient.get('/api/user/list', {
+            params: requestData,
+          });
+          const result = response.data;
+          setUserList(result);
+        } catch (error) {
+          console.error(error);
+          displayToast('Error occurred', FAILURE);
+        };
       },
     })),
 );

@@ -5,6 +5,7 @@
 import React, {useEffect, useMemo} from 'react';
 import {useUserStore} from '../../../store/es2Store';
 import {AgGridReact} from 'ag-grid-react';
+import TablePagination from '@mui/material/TablePagination';
 import CustomCellRenderer from '../../Publication/Grid/CustomCellRenderer';
 import {FAILURE, SUCCESS, displayToast} from '../../ToastUtil';
 
@@ -17,10 +18,17 @@ import httpClient from '../../../helper/httpClient';
 // "Organization Name" can be your company name or the university name.
 
 // Check where we can add the add user button only for admin anyway.
-function UserGrid({setUserDetails, editUserAction, shouldRender}) {
+function UserGrid({setUserDetails, editUserAction}) {
   const userTypeId = useUserStore((state) => state.userTypeId);
-  const [userList, setUserList] = React.useState([]);
-  const [renderGrid, setRenderGrid] = React.useState(false);
+  const userList = useUserStore((state) => state.userList);
+  const fetchUserData = useUserStore((state) => state.fetchUserData);
+  const currentPage = useUserStore((state) => state.currentPage);
+  const setCurrentPage = useUserStore((state) => state.setCurrentPage);
+  const pageSize = useUserStore((state) => state.pageSize);
+  const setPageSize = useUserStore((state) => state.setPageSize);
+  const gridRefresh = useUserStore((state) => state.gridRefresh);
+  const setGridRefresh = useUserStore((state) => state.setGridRefresh);
+
   const handleUserEdit = (props) => {
     const userDetails = {
       userId: props.node.data.userId,
@@ -35,18 +43,8 @@ function UserGrid({setUserDetails, editUserAction, shouldRender}) {
   };
 
   useEffect(() => {
-    const onLoad = async () => {
-      try {
-        const response = await httpClient.get('/api/user/list');
-        const result = response.data;
-        setUserList(result.data);
-      } catch (error) {
-        console.error(error);
-        displayToast('Error occurred', FAILURE);
-      };
-    };
-    onLoad();
-  }, [shouldRender, renderGrid]);
+    fetchUserData();
+  }, [gridRefresh]);
 
   const handleDelete = async (props) => {
     if (!window.confirm('Are you sure you want to delete this user?')) {
@@ -73,7 +71,7 @@ function UserGrid({setUserDetails, editUserAction, shouldRender}) {
         displayToast(error, status);
       }
       if (status === SUCCESS) {
-        setRenderGrid(!renderGrid);
+        setGridRefresh();
       }
     } catch (error) {
       console.error(error);
@@ -109,9 +107,9 @@ function UserGrid({setUserDetails, editUserAction, shouldRender}) {
   const defaultColDef = useMemo(() => {
     return {
       editable: false,
-      sortable: true,
+      sortable: false,
       flex: 1,
-      filter: true,
+      filter: false,
       resizable: true,
       headerComponentParams: {
         menuIcon: 'fa-bars',
@@ -119,25 +117,46 @@ function UserGrid({setUserDetails, editUserAction, shouldRender}) {
     };
   }, []);
 
-  if (userList.length === 0) {
+  if (Object.keys(userList).length === 0 || userList.data.length === 0) {
     return (
       <div></div>
     );
   }
 
-  const pagination = true; // True only for admin users
-  const paginationPageSize = 10;
+  const pagination = false;
+  const rowCount = (userList.totalRecords)?userList.totalRecords:0;
+
+  const handleChangePage = (event, newPage) => {
+    setCurrentPage(newPage+1);
+    fetchUserData();
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setPageSize(parseInt(event.target.value, 10));
+    setCurrentPage(1);
+    fetchUserData();
+  };
 
   return (
     <div className="ag-theme-alpine" style={{width: '100%', height: '100'}}>
       <AgGridReact
-        rowData={userList}
+        rowData={userList.data}
         columnDefs={columnDefs}
         defaultColDef={defaultColDef}
         pagination={pagination}
-        paginationPageSize={paginationPageSize}
+        paginationPageSize={pageSize}
         rowHeight="auto"
         domLayout='autoHeight'
+      />
+      <TablePagination
+        component="div"
+        count={rowCount}
+        page={currentPage-1}
+        onPageChange={handleChangePage}
+        rowsPerPage={pageSize}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        showFirstButton={true}
+        showLastButton={true}
       />
     </div>
   );

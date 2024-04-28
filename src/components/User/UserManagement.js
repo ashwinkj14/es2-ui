@@ -6,7 +6,7 @@ import UserGrid from './Grid/UserGrid';
 import {useUserStore} from '../../store/es2Store';
 import './UserManagement.css';
 
-function UserMgmt({setModalState, setUserDetails, editUserAction, shouldRender}) {
+function UserMgmt({setModalState, setUserDetails, editUserAction}) {
   const userTypeId = useUserStore((state) => state.userTypeId);
   const handleAddUser = () => {
     setModalState(true);
@@ -21,7 +21,7 @@ function UserMgmt({setModalState, setUserDetails, editUserAction, shouldRender})
         {/* <hr className='line-break-sm'></hr> */}
       </div>
       <div className='usermgmt-grid-container'>
-        <UserGrid setUserDetails={setUserDetails} editUserAction={editUserAction} shouldRender={shouldRender}/>
+        <UserGrid setUserDetails={setUserDetails} editUserAction={editUserAction}/>
       </div>
     </div>
   );

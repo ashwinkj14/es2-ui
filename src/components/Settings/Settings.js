@@ -26,7 +26,7 @@ function Settings() {
   }
   const [selectedTab, setSelectedTab] = useState('usermgmt');
   const [userDetails, setUserDetails] = useState({});
-  const [shouldRender, setShouldRender] = useState(false);
+  const setGridRefresh = useUserStore((state) => state.setGridRefresh);
 
   const handleSettingsTabChange = (tab) => {
     setSelectedTab(tab);
@@ -34,7 +34,7 @@ function Settings() {
 
   const modalChangeHandler = (state) =>{
     setIsModalOpen(state);
-    setShouldRender(!shouldRender);
+    setGridRefresh();
   };
 
   const handleEditUserClose = () => {
@@ -55,7 +55,7 @@ function Settings() {
       {editUserPopup}
       <div className={`${(popup=='' && editUserPopup=='')?'':'modal-overlay'}`}></div>
       <div className={`${selectedTab == 'usermgmt'?'usermgmt-container':'default-container'}`}>
-        <UserMgmt setModalState={setIsModalOpen} setUserDetails={setUserDetails} editUserAction={setIsEditUserOpen} shouldRender={shouldRender}/>
+        <UserMgmt setModalState={setIsModalOpen} setUserDetails={setUserDetails} editUserAction={setIsEditUserOpen}/>
       </div>
       {(userTypeId != 1)?<></>:<div className={`${selectedTab == 'dbsettings'?'database-settings-container':'default-container'}`}>
         {(selectedTab == 'dbsettings')?<DatabaseSettings/>:<></>}
