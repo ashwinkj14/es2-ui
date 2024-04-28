@@ -11,7 +11,7 @@
 
 .ag-root-wrapper{
     border: none;
-    border-radius: 15px;
+    border-radius: 15px 15px 0px 0px;
 }
 
 .ag-header-cell-menu-button:not(.ag-header-menu-always-show) {
