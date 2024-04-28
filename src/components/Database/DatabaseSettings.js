@@ -2,7 +2,6 @@
 /* eslint-disable max-len */
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable require-jsdoc */
-import axios from 'axios';
 import dayjs from 'dayjs';
 import {useState, useMemo, useRef, useCallback} from 'react';
 import {Switch} from '@mui/material';
@@ -20,14 +19,12 @@ import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import {useNavigate} from 'react-router-dom';
 import {FAILURE, SUCCESS, INPROGRESS, displayToast} from '../ToastUtil';
 
 import './DatabaseSettings.css';
-import {BASE_URL} from '../../server-constants';
+import httpClient from '../../helper/httpClient';
 
 function DatabaseSettings() {
-  const navigate = useNavigate();
   const fileInput = useRef(null);
   const [activeTab, setActiveTab] = useState('configuration');
   const [checked, setChecked] = useState(false);
@@ -58,48 +55,32 @@ function DatabaseSettings() {
     event.preventDefault();
   };
 
-  const getConfiguration = () => {
-    const api = BASE_URL + `/backup/configuration`;
-    const token = localStorage.getItem('token');
-
-    axios.defaults.headers.common.Authorization = `Bearer ${token}`;
-    axios.get(api, {
-      withCredentials: true,
-      headers: {
-        'Authorization': 'Bearer ' + token,
-        'Content-Type': 'application/json',
-      },
-    }).then((response) => {
+  const getConfiguration = async () => {
+    try {
+      const response = await httpClient.get(`/api/backup/configuration`);
       const config = response.data.config;
       setHost(config['host']);
       setUsername(config['username']);
       setDirectory(config['directory']);
-    }) .catch((error) => {
+    } catch (error) {
+      displayToast('Error while fetching backup remote server config', FAILURE);
       console.log(error);
-    });
+    };
   };
 
-  const getSchedule = () => {
-    const api = BASE_URL + `/backup/schedule`;
-    const token = localStorage.getItem('token');
-
-    axios.defaults.headers.common.Authorization = `Bearer ${token}`;
-    axios.get(api, {
-      withCredentials: true,
-      headers: {
-        'Authorization': 'Bearer ' + token,
-        'Content-Type': 'application/json',
-      },
-    }).then((response) => {
+  const getSchedule = async () => {
+    try {
+      const response = await httpClient.get(`/api/backup/schedule`);
       const schedule = response.data.schedule;
       if (schedule['enable']) {
         setChecked(schedule['enable']);
         setPeriod(schedule['frequency']);
         setTime(dayjs('2022-04-17T'+schedule['time']));
       }
-    }) .catch((error) => {
+    } catch (error) {
+      displayToast('Error while fetching backup schedule details', FAILURE);
       console.log(error);
-    });
+    };
   };
 
   useMemo(() => {
@@ -135,14 +116,11 @@ function DatabaseSettings() {
     setDirectoryError('');
   };
 
-  const handleAddConfiguration = () => {
+  const handleAddConfiguration = async () => {
     if (handleConfigValidation()) {
       return;
     }
     resetConfigErrors();
-    const api = BASE_URL + `/backup/configuration`;
-    const token = localStorage.getItem('token');
-
     const requestData = {
       host: host,
       username: username,
@@ -150,46 +128,34 @@ function DatabaseSettings() {
       directory: directory,
     };
 
-    axios.defaults.headers.common.Authorization = `Bearer ${token}`;
-    axios.put(api, requestData, {
-      withCredentials: true,
-      headers: {
-        'Authorization': 'Bearer ' + token,
-        'Content-Type': 'application/json',
-      },
-    }).then((response) => {
+    try {
+      const response = await httpClient.put(`/api/backup/configuration`, requestData);
       const data = response.data;
       if (data.result && data.result === 'success') {
         displayToast(data.message, SUCCESS);
       } else {
         displayToast(data.error, FAILURE);
       }
-    }) .catch((error) => {
-      if (error.response.status == 401) {
-        localStorage.removeItem('token');
-        navigate('/');
-      }
-    });
+    } catch (error) {
+      displayToast('Error while updating backup configurations', FAILURE);
+      console.log(error);
+    };
   };
 
   const generateBackup = async () => {
-    const api = BASE_URL+`/backup/generate`;
-
-    const token = localStorage.getItem('token');
-    axios.defaults.headers.common.Authorization = `Bearer ${token}`;
     displayToast('Invoking backup generation. Please hang tight.', INPROGRESS);
-    const response = await axios.post(api, {
-      withCredentials: true,
-      headers: {
-        'Authorization': 'Bearer ' + token,
-        'Content-Type': 'application/json',
-      },
-    });
-    const data = response.data;
-    if (data.result && data.result === 'success') {
-      displayToast(data.message, SUCCESS);
-    } else {
-      displayToast(data.error, FAILURE);
+
+    try {
+      const response = await httpClient.post(`/api/backup/generate`);
+      const data = response.data;
+      if (data.result && data.result === 'success') {
+        displayToast(data.message, SUCCESS);
+      } else {
+        displayToast(data.error, FAILURE);
+      }
+    } catch (error) {
+      displayToast('Error while generating backup', FAILURE);
+      console.log(error);
     }
   };
 
@@ -224,10 +190,7 @@ function DatabaseSettings() {
     setPeriod(event.target.value);
   };
 
-  const handleScheduleSettings = () => {
-    const api = BASE_URL + `/backup/schedule`;
-    const token = localStorage.getItem('token');
-
+  const handleScheduleSettings = async () => {
     const enabledRequest = {
       enable: checked,
       frequency: period,
@@ -238,26 +201,18 @@ function DatabaseSettings() {
     };
     const requestData = (checked) ? enabledRequest : disabledRequest;
 
-    axios.defaults.headers.common.Authorization = `Bearer ${token}`;
-    axios.put(api, requestData, {
-      withCredentials: true,
-      headers: {
-        'Authorization': 'Bearer ' + token,
-        'Content-Type': 'application/json',
-      },
-    }).then((response) => {
+    try {
+      const response = await httpClient.put(`/api/backup/schedule`, requestData);
       const data = response.data;
       if (data.result && data.result === 'success') {
         displayToast(data.message, SUCCESS);
       } else {
         displayToast(data.error, FAILURE);
       }
-    }) .catch((error) => {
-      if (error.response.status == 401) {
-        localStorage.removeItem('token');
-        navigate('/');
-      }
-    });
+    } catch (error) {
+      displayToast('Error while updating backup schedule', FAILURE);
+      console.log(error);
+    };
   };
 
   const handleRestoreDBSubmit = async () => {
@@ -266,14 +221,10 @@ function DatabaseSettings() {
     }
     const formData = new FormData();
     formData.append('file', selectedFile);
-    const api = BASE_URL+'/backup/restore';
 
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.post(api, formData, {
-        withCredentials: true,
+      const response = await httpClient.post('/api/backup/restore', formData, {
         headers: {
-          'Authorization': 'Bearer ' + token,
           'Content-Type': 'multipart/form-data',
         },
       });

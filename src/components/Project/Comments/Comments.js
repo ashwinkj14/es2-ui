@@ -4,14 +4,13 @@
 /* eslint-disable require-jsdoc */
 /* eslint-disable react/react-in-jsx-scope */
 import {useState, useEffect} from 'react';
-import axios from 'axios';
 import {useUserStore, useProjectGridStore} from '../../../store/es2Store';
 import {FAILURE, SUCCESS, displayToast} from '../../ToastUtil';
 import CustomSideBar from '../CustomSideBar/CustomSideBar';
+import httpClient from '../../../helper/httpClient';
 import Comment from './Comment';
 
 import './Comments.css';
-import {BASE_URL} from '../../../server-constants';
 
 function Comments() {
   const [comments, setComments] = useState([]);
@@ -27,53 +26,45 @@ function Comments() {
     const val = comment;
     handleAddComment(null, val);
   };
-  const handleAddComment = (parentId, content) => {
+  const handleAddComment = async (parentId, content) => {
     if (content == '' || !/[a-zA-Z]/.test(content)) {
       return;
     }
-    const api = BASE_URL+`/project/comments/add`;
 
     const requestData = {
       projectId: commentsProjectId,
       parentId: parentId,
       content: content,
     };
-    const token = localStorage.getItem('token');
-    axios.post(api, requestData, {
-      withCredentials: true,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token,
-      },
-    })
-        .then((response) => {
-          let status = FAILURE;
-          if (response.status === 200) {
-            if (response.data.result === 'success') {
-              status = SUCCESS;
-            }
-          }
 
-          if (status === FAILURE) {
-            const message = response.data.message;
-            if (message) {
-              displayToast(message, status);
-            } else {
-              const error = response.data.error;
-              displayToast(error, status);
-            }
-          } else {
-            const message = response.data.message;
-            if (message) {
-              displayToast(message, status);
-              setCommentRefresh(!commentRefresh);
-              setComment('');
-            }
-          }
-        })
-        .catch((error) => {
-          displayToast('Error occurred', FAILURE);
-        });
+    try {
+      const response = await httpClient.post(`/api/project/comments/add`, requestData);
+      let status = FAILURE;
+      if (response.status === 200) {
+        if (response.data.result === 'success') {
+          status = SUCCESS;
+        }
+      }
+
+      if (status === FAILURE) {
+        const message = response.data.message;
+        if (message) {
+          displayToast(message, status);
+        } else {
+          const error = response.data.error;
+          displayToast(error, status);
+        }
+      } else {
+        const message = response.data.message;
+        if (message) {
+          displayToast(message, status);
+          setCommentRefresh(!commentRefresh);
+          setComment('');
+        }
+      }
+    } catch (error) {
+      displayToast('Error occurred', FAILURE);
+    };
   };
 
   const addComment = <div className='add-comment-container'>
@@ -98,31 +89,22 @@ function Comments() {
   </div>;
 
   useEffect(() => {
-    const api = BASE_URL+`/project/comments/list`;
+    const onLoad = async () => {
+      const requestData = {
+        projectId: commentsProjectId,
+      };
 
-    const requestData = {
-      projectId: commentsProjectId,
-    };
-    const token = localStorage.getItem('token');
-    axios.get(api, {
-      withCredentials: true,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token,
-      },
-      params: requestData,
-    })
-        .then((response) => {
-          const result = response.data;
-          setComments(result.comments);
-        })
-        .catch((error) => {
-          if (error.response.status == 401) {
-            localStorage.removeItem('token');
-            navigate('/');
-          }
-          displayToast('Error occurred', FAILURE);
+      try {
+        const response = await httpClient.get(`/api/project/comments/list`, {
+          params: requestData,
         });
+        const result = response.data;
+        setComments(result.comments);
+      } catch (error) {
+        displayToast('Error occurred', FAILURE);
+      };
+    };
+    onLoad();
   }, [commentRefresh]);
 
   return (

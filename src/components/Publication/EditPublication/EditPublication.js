@@ -6,17 +6,14 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable require-jsdoc */
 import {useState, useCallback, useRef} from 'react';
-import axios from 'axios';
-import {useNavigate} from 'react-router-dom';
 import {usePublicationGridStore} from '../../../store/es2Store';
 
 import './EditPublication.css';
 import '../AddPublication/AddPublication.css';
-import {BASE_URL} from '../../../server-constants';
 import {SUCCESS, FAILURE, displayToast} from '../../ToastUtil';
+import httpClient from '../../../helper/httpClient';
 
 function EditPublication({data, setSelectedRecord}) {
-  const navigate = useNavigate();
   const setGridRefresh = usePublicationGridStore((state) => state.setGridRefresh);
 
   const fileInput = useRef(null);
@@ -110,14 +107,10 @@ function EditPublication({data, setSelectedRecord}) {
     formData.append('publication_abstract', abstract);
     formData.append('publication_id', data.publicationId);
 
-    const api = BASE_URL+'/publication/update';
-
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.post(api, formData, {
+      const response = await httpClient.post('/api/publication/update', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          'Authorization': 'Bearer ' + token,
         },
       });
 
@@ -136,10 +129,6 @@ function EditPublication({data, setSelectedRecord}) {
         displayToast(error, status);
       }
     } catch (error) {
-      if (error.response.status == 401) {
-        localStorage.removeItem('token');
-        navigate('/');
-      }
       displayToast('Unable to update publication. Please try again.', FAILURE);
       console.error(error);
     }

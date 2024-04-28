@@ -2,11 +2,9 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable require-jsdoc */
 import React, {useMemo} from 'react';
-import axios from 'axios';
 import {AgGridReact} from 'ag-grid-react';
 import TablePagination from '@mui/material/TablePagination';
 
-import {useNavigate} from 'react-router-dom';
 import {FAILURE, SUCCESS, displayToast} from '../../ToastUtil';
 import {useGridStore, usePresentationGridStore, useProjectGridStore} from '../../../store/es2Store';
 
@@ -14,11 +12,9 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import './Action.css';
 import './DataGrid.css';
-import {BASE_URL} from '../../../server-constants';
+import httpClient from '../../../helper/httpClient';
 
 function DataGrid() {
-  const navigate = useNavigate();
-
   const selectedTab = useProjectGridStore((state) => state.selectedTab);
   const setSelectedRecord = useProjectGridStore((state) => state.setSelectedRecord);
   const currentPage = useProjectGridStore((state) => state.currentPage);
@@ -39,18 +35,11 @@ function DataGrid() {
   };
 
   const deleteProject = async (projectId) => {
-    const api = BASE_URL+`/project/delete`;
     try {
       const requestData = {
         projectId: projectId,
       };
-      const token = localStorage.getItem('token');
-      const response = await axios.post(api, requestData, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token,
-        },
-      });
+      const response = await httpClient.post(`/api/project/delete`, requestData);
 
       let status = FAILURE;
       if (response.status === 200) {
@@ -69,10 +58,6 @@ function DataGrid() {
         setGridRefresh();
       }
     } catch (error) {
-      if (error.response.status == 401) {
-        localStorage.removeItem('token');
-        navigate('/');
-      }
       displayToast('Error occurred', FAILURE);
     }
   };

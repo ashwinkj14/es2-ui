@@ -3,8 +3,6 @@
 /* eslint-disable require-jsdoc */
 /* eslint-disable react/react-in-jsx-scope */
 import {useState} from 'react';
-import axios from 'axios';
-import {useNavigate} from 'react-router-dom';
 import {FAILURE, SUCCESS, displayToast} from '../../ToastUtil';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -17,7 +15,7 @@ import MenuItem from '@mui/material/MenuItem';
 import SideBar from '../../SideBar/SideBar';
 
 import './AddUser.css';
-import {BASE_URL} from '../../../server-constants';
+import httpClient from '../../../helper/httpClient';
 
 function AddUser({action}) {
   const [showPassword, setShowPassword] = useState(false);
@@ -47,7 +45,6 @@ function AddUser({action}) {
     },
   ];
 
-  const navigate = useNavigate();
   const handleClose = () => action(false);
 
   const [selectedType, setSelectedType] = useState('1');
@@ -106,11 +103,10 @@ function AddUser({action}) {
     return errorExists;
   };
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
     if (handleValidation()) {
       return;
     }
-    const api = BASE_URL+`/user/add`;
 
     const data = {
       'userTypeId': selectedType,
@@ -120,39 +116,27 @@ function AddUser({action}) {
       'password': password,
     };
 
-    const token = localStorage.getItem('token');
-    axios.post(api, data, {
-      withCredentials: true,
-      headers: {
-        'Authorization': 'Bearer ' + token,
-        'Content-Type': 'application/json',
-      },
-    })
-        .then((response) => {
-          let status = FAILURE;
-          if (response.status === 200) {
-            if (response.data.result === 'success') {
-              status = SUCCESS;
-            }
-          }
-          const message = response.data.message;
-          if (message) {
-            displayToast(message, status);
-          } else {
-            const error = response.data.error;
-            displayToast(error, status);
-          }
-          if (status === SUCCESS) {
-            handleClose();
-          }
-        })
-        .catch((error) => {
-          if (error.response.status == 401) {
-            localStorage.removeItem('token');
-            navigate('/');
-          }
-          console.log(error);
-        });
+    try {
+      const response = await httpClient.post(`/api/user/add`, data);
+      let status = FAILURE;
+      if (response.status === 200) {
+        if (response.data.result === 'success') {
+          status = SUCCESS;
+        }
+      }
+      const message = response.data.message;
+      if (message) {
+        displayToast(message, status);
+      } else {
+        const error = response.data.error;
+        displayToast(error, status);
+      }
+      if (status === SUCCESS) {
+        handleClose();
+      }
+    } catch (error) {
+      console.log(error);
+    };
   };
 
   const toRender = <div>

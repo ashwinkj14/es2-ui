@@ -5,16 +5,13 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable require-jsdoc */
 import {useRef, useState, useCallback} from 'react';
-import axios from 'axios';
 import {SUCCESS, FAILURE, displayToast} from '../../ToastUtil';
-import {useNavigate} from 'react-router-dom';
 import {usePublicationNavigation} from '../../../store/es2Store';
 
 import './AddPublication.css';
-import {BASE_URL} from '../../../server-constants';
+import httpClient from '../../../helper/httpClient';
 
 function AddPublication() {
-  const navigate = useNavigate();
   const setSelectedTab = usePublicationNavigation((state) => state.setSelectedTab);
 
   const fileInput = useRef(null);
@@ -171,14 +168,9 @@ function AddPublication() {
     formData.append('publication_date', date);
     formData.append('publication_abstract', abstract);
 
-    const api = BASE_URL+'/publication/add';
-
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.post(api, formData, {
-        withCredentials: true,
+      const response = await httpClient.post('/api/publication/add', formData, {
         headers: {
-          'Authorization': 'Bearer ' + token,
           'Content-Type': 'multipart/form-data',
         },
       });
@@ -198,10 +190,6 @@ function AddPublication() {
         displayToast(error, status);
       }
     } catch (error) {
-      if (error.response.status == 401) {
-        localStorage.removeItem('token');
-        navigate('/');
-      }
       displayToast('Unable to add the Publication record. Please try again.', FAILURE);
       console.error(error);
     }

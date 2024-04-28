@@ -2,11 +2,9 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable require-jsdoc */
 import React, {useMemo} from 'react';
-import axios from 'axios';
 import {AgGridReact} from 'ag-grid-react';
 import TablePagination from '@mui/material/TablePagination';
 import CustomCellRenderer from './CustomCellRenderer';
-import {useNavigate} from 'react-router-dom';
 import {FAILURE, SUCCESS, displayToast} from '../../ToastUtil';
 import {usePublicationGridStore, usePublicationNavigation, usePublicationStore} from '../../../store/es2Store';
 
@@ -14,10 +12,9 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import './Action.css';
 import './DataGrid.css';
-import {BASE_URL} from '../../../server-constants';
+import httpClient from '../../../helper/httpClient';
 
 function DataGrid({popupContent, setSelectedRecord}) {
-  const navigate = useNavigate();
   const selectedTab = usePublicationNavigation((state) => state.selectedTab);
   const setGridRefresh = usePublicationGridStore((state) => state.setGridRefresh);
   const searchResults = usePublicationStore((state) => state.searchResults);
@@ -29,47 +26,34 @@ function DataGrid({popupContent, setSelectedRecord}) {
   const listPublications = usePublicationStore((state) => state.listPublications);
 
   const downloadPublication = async (publicationId) => {
-    const api = BASE_URL+`/publication/download`;
-
-    const token = localStorage.getItem('token');
     const requestData = {
       publication_id: publicationId,
     };
-    axios.get(api, {
-      withCredentials: true,
-      headers: {
-        'Authorization': 'Bearer ' + token,
-        'Content-Type': 'application/json',
-      },
-      responseType: 'blob',
-      params: requestData,
-    })
-        .then(async (response) => {
-          if (response.status === 200) {
-            const blob = new Blob([response.data]);
-            const url = window.URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            const contentDisposition = response.headers.get('content-disposition');
-            link.download = publicationId + '.pdf';
-            if (contentDisposition != undefined) {
-              link.download = contentDisposition.split('filename=')[1];
-            }
-            document.body.appendChild(link);
-            link.click();
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(link);
-          } else {
-            displayToast('Unable to Download the file', FAILURE);
-          }
-        })
-        .catch((error) => {
-          if (error.response.status == 401) {
-            localStorage.removeItem('token');
-            navigate('/');
-          }
-          displayToast('Unable to Download the file', FAILURE);
-        });
+    try {
+      const response = await httpClient.get(`/api/publication/download`, {
+        responseType: 'blob',
+        params: requestData,
+      });
+      if (response.status === 200) {
+        const blob = new Blob([response.data]);
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        const contentDisposition = response.headers.get('content-disposition');
+        link.download = publicationId + '.pdf';
+        if (contentDisposition != undefined) {
+          link.download = contentDisposition.split('filename=')[1];
+        }
+        document.body.appendChild(link);
+        link.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(link);
+      } else {
+        displayToast('Unable to Download the file', FAILURE);
+      }
+    } catch (error) {
+      displayToast('Unable to Download the file', FAILURE);
+    };
   };
 
   const handleAbstractButtonClick = (props) => {
@@ -87,18 +71,11 @@ function DataGrid({popupContent, setSelectedRecord}) {
   };
 
   const deletePublication = async (publicationId) => {
-    const api = BASE_URL+`/publication/delete`;
     try {
       const requestData = {
         publication_id: publicationId,
       };
-      const token = localStorage.getItem('token');
-      const response = await axios.post(api, requestData, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token,
-        },
-      });
+      const response = await httpClient.post(`/api/publication/delete`, requestData);
 
       let status = FAILURE;
       if (response.status === 200) {
@@ -117,10 +94,6 @@ function DataGrid({popupContent, setSelectedRecord}) {
         setGridRefresh();
       }
     } catch (error) {
-      if (error.response.status == 401) {
-        localStorage.removeItem('token');
-        navigate('/');
-      }
       console.error(error);
       displayToast('Error occurred', FAILURE);
     }

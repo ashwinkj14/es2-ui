@@ -2,11 +2,9 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable require-jsdoc */
 import React, {useMemo} from 'react';
-import axios from 'axios';
 import {AgGridReact} from 'ag-grid-react';
 import TablePagination from '@mui/material/TablePagination';
 import CustomCellRenderer from './CustomCellRenderer';
-import {useNavigate} from 'react-router-dom';
 import {FAILURE, SUCCESS, displayToast} from '../../ToastUtil';
 import {useGridStore, usePatentStore} from '../../../store/es2Store';
 
@@ -14,10 +12,9 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import './Action.css';
 import './DataGrid.css';
-import {BASE_URL} from '../../../server-constants';
+import httpClient from '../../../helper/httpClient';
 
 function DataGrid({data, popupContent, selectedTab, setSelectedRecord}) {
-  const navigate = useNavigate();
   const setGridRefresh = useGridStore((state) => state.setGridRefresh);
   const searchResults = usePatentStore((state) => state.searchResults);
   const pageSize = usePatentStore((state) => state.pageSize);
@@ -37,18 +34,12 @@ function DataGrid({data, popupContent, selectedTab, setSelectedRecord}) {
   };
 
   const deletePublication = async (patentId) => {
-    const api = BASE_URL+`/patent/delete`;
     try {
       const requestData = {
         patent_id: patentId,
       };
-      const token = localStorage.getItem('token');
-      const response = await axios.post(api, requestData, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token,
-        },
-      });
+
+      const response = await httpClient.post(`/api/patent/delete`, requestData);
 
       let status = FAILURE;
       if (response.status === 200) {
@@ -67,10 +58,6 @@ function DataGrid({data, popupContent, selectedTab, setSelectedRecord}) {
         setGridRefresh();
       }
     } catch (error) {
-      if (error.response.status == 401) {
-        localStorage.removeItem('token');
-        navigate('/');
-      }
       displayToast('Error occurred', FAILURE);
     }
   };

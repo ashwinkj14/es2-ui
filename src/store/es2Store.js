@@ -1,11 +1,9 @@
 /* eslint-disable max-len */
 /* eslint-disable react/react-in-jsx-scope */
-import axios from 'axios';
 import {create} from 'zustand';
 import {devtools} from 'zustand/middleware';
-import {useNavigate} from 'react-router-dom';
 import {FAILURE, displayToast} from '../components/ToastUtil';
-import {BASE_URL} from '../server-constants';
+import httpClient from '../helper/httpClient';
 
 export const useUserStore = create()(
     devtools((set) => ({
@@ -64,70 +62,51 @@ export const usePresentationGridStore = create()(
 
       getPresentationList: async () => {
         const {setPresentationList, presentationRequest, setRenderNoData, currentPage, pageSize} = get();
-        const api = BASE_URL+`/project/presentation/list`;
-        const token = localStorage.getItem('token');
+        const requestData = {
+          projectId: presentationRequest.project_id,
+          page: currentPage,
+          pageSize: pageSize,
+        };
 
         try {
-          const requestData = {
-            projectId: presentationRequest.project_id,
-            page: currentPage,
-            pageSize: pageSize,
-          };
-          const response = await axios.get(api, {
-            withCredentials: true,
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer ' + token,
-            },
+          const response = await httpClient.get(`/api/project/presentation/list`, {
             params: requestData,
           });
+
           const result = response.data;
           if (result.data.length == 0) {
             setRenderNoData(<div className='no-data'>No Data Found</div>);
           } else {
             setRenderNoData(<></>);
           }
+
           setPresentationList(result);
         } catch (error) {
-          if (error.response && error.response.status == 401) {
-            localStorage.removeItem('token');
-            navigate('/');
-          }
           displayToast('Error occurred', FAILURE);
         };
       },
 
       getUserPresentations: async () => {
         const {setPresentationList, presentationRequest, setRenderNoData, currentPage, pageSize} = get();
-        const api = BASE_URL+`/project/presentation/manage`;
-        const token = localStorage.getItem('token');
-
+        const requestData = {
+          projectId: presentationRequest.project_id,
+          page: currentPage,
+          pageSize: pageSize,
+        };
         try {
-          const requestData = {
-            projectId: presentationRequest.project_id,
-            page: currentPage,
-            pageSize: pageSize,
-          };
-          const response = await axios.get(api, {
-            withCredentials: true,
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer ' + token,
-            },
+          const response = await httpClient.get(`/api/project/presentation/manage`, {
             params: requestData,
           });
+
           const result = response.data;
           if (result.data.length == 0) {
             setRenderNoData(<div className='no-data'>No Data Found</div>);
           } else {
             setRenderNoData(<></>);
           }
+
           setPresentationList(result);
         } catch (error) {
-          if (error.response && error.response.status == 401) {
-            localStorage.removeItem('token');
-            navigate('/');
-          }
           displayToast('Error occurred', FAILURE);
         };
       },
@@ -209,69 +188,50 @@ export const useProjectGridStore = create()(
 
       getProjectList: async () => {
         const {setProjectList, setRenderNoData, currentPage, pageSize} = get();
-        const api = BASE_URL+`/project/list`;
-        const token = localStorage.getItem('token');
+        const requestData = {
+          page: currentPage,
+          pageSize: pageSize,
+        };
 
         try {
-          const requestData = {
-            page: currentPage,
-            pageSize: pageSize,
-          };
-          const response = await axios.get(api, {
-            withCredentials: true,
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer ' + token,
-            },
+          const response = await httpClient.get(`/api/project/list`, {
             params: requestData,
           });
-          console.log(response);
+
           const result = response.data;
           if (result.data.length == 0) {
             setRenderNoData(<div className='no-data'>No Data Found</div>);
           } else {
             setRenderNoData(<></>);
           }
+
           setProjectList(result);
         } catch (error) {
-          if (error.response && error.response.status == 401) {
-            localStorage.removeItem('token');
-            navigate('/');
-          }
           displayToast('Error occurred', FAILURE);
         };
       },
 
       getUserProjects: async () => {
         const {setProjectList, setRenderNoData, currentPage, pageSize} = get();
-        const api = BASE_URL+`/project/manage`;
-        const token = localStorage.getItem('token');
+        const requestData = {
+          page: currentPage,
+          pageSize: pageSize,
+        };
 
         try {
-          const requestData = {
-            page: currentPage,
-            pageSize: pageSize,
-          };
-          const response = await axios.get(api, {
-            withCredentials: true,
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer ' + token,
-            },
+          const response = await httpClient.get(`/api/project/manage`, {
             params: requestData,
           });
+
           const result = response.data;
           if (result.data.length == 0) {
             setRenderNoData(<div className='no-data'>No Data Found</div>);
           } else {
             setRenderNoData(<></>);
           }
+
           setProjectList(result);
         } catch (error) {
-          if (error.response && error.response.status == 401) {
-            localStorage.removeItem('token');
-            navigate('/');
-          }
           displayToast('Error occurred', FAILURE);
         };
       },
@@ -317,7 +277,6 @@ export const usePublicationStore = create()(
       handleSearch: async () => {
         const {searchField, searchFromDate, searchToDate, searchType,
           setSearchResults, setRenderNoData, pageSize, currentPage} = get();
-        const api = BASE_URL+`/publication/search`;
 
         const requestData = {
           search: searchField,
@@ -328,62 +287,46 @@ export const usePublicationStore = create()(
           pageSize: pageSize,
         };
 
-        const token = localStorage.getItem('token');
         try {
-          const response = await axios.get(api, {
-            withCredentials: true,
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer ' + token,
-            },
+          const response = await httpClient.get(`/api/publication/search`, {
             params: requestData,
           });
+
           const result = response.data;
+
           if (result.data.length == 0) {
             setRenderNoData(<div className='no-data'>No Data Found</div>);
           } else {
             setRenderNoData(<></>);
           }
+
           setSearchResults(result);
         } catch (error) {
-          if (error.response && error.response.status == 401) {
-            localStorage.removeItem('token');
-            useNavigate('/');
-          }
           displayToast('Error occurred', FAILURE);
         }
       },
 
       listPublications: async () => {
         const {setSearchResults, setRenderNoData, currentPage, pageSize} = get();
-        const api = BASE_URL+`/publication/list`;
-        const token = localStorage.getItem('token');
+        const requestData = {
+          page: currentPage,
+          pageSize: pageSize,
+        };
 
         try {
-          const requestData = {
-            page: currentPage,
-            pageSize: pageSize,
-          };
-          const response = await axios.get(api, {
-            withCredentials: true,
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer ' + token,
-            },
+          const response = await httpClient.get(`/api/publication/list`, {
             params: requestData,
           });
           const result = response.data;
+
           if (result.data.length == 0) {
             setRenderNoData(<div className='no-data'>No Data Found</div>);
           } else {
             setRenderNoData(<></>);
           }
+
           setSearchResults(result);
         } catch (error) {
-          if (error.response && error.response.status == 401) {
-            localStorage.removeItem('token');
-            navigate('/');
-          }
           displayToast('Error occurred', FAILURE);
         };
       },
@@ -428,7 +371,6 @@ export const usePatentStore = create()(
       handleSearch: async () => {
         const {searchField, searchType,
           setSearchResults, setRenderNoData, pageSize, currentPage} = get();
-        const api = BASE_URL+`/patent/search`;
 
         const requestData = {
           search: searchField,
@@ -437,62 +379,46 @@ export const usePatentStore = create()(
           pageSize: pageSize,
         };
 
-        const token = localStorage.getItem('token');
         try {
-          const response = await axios.get(api, {
-            withCredentials: true,
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer ' + token,
-            },
+          const response = await httpClient.get(`/api/patent/search`, {
             params: requestData,
           });
+
           const result = response.data;
+
           if (result.data.length == 0) {
             setRenderNoData(<div className='no-data'>No Data Found</div>);
           } else {
             setRenderNoData(<></>);
           }
+
           setSearchResults(result);
         } catch (error) {
-          if (error.response && error.response.status == 401) {
-            localStorage.removeItem('token');
-            useNavigate('/');
-          }
           displayToast('Error occurred', FAILURE);
         }
       },
 
       listPatents: async () => {
         const {setSearchResults, setRenderNoData, currentPage, pageSize} = get();
-        const api = BASE_URL+`/patent/list`;
-        const token = localStorage.getItem('token');
+        const requestData = {
+          page: currentPage,
+          pageSize: pageSize,
+        };
 
         try {
-          const requestData = {
-            page: currentPage,
-            pageSize: pageSize,
-          };
-          const response = await axios.get(api, {
-            withCredentials: true,
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer ' + token,
-            },
+          const response = await httpClient.get(`/api/patent/list`, {
             params: requestData,
           });
+
           const result = response.data;
           if (result.data.length == 0) {
             setRenderNoData(<div className='no-data'>No Data Found</div>);
           } else {
             setRenderNoData(<></>);
           }
+
           setSearchResults(result);
         } catch (error) {
-          if (error.response && error.response.status == 401) {
-            localStorage.removeItem('token');
-            navigate('/');
-          }
           displayToast('Error occurred', FAILURE);
         };
       },

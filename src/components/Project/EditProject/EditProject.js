@@ -5,13 +5,12 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable require-jsdoc */
 import {useState} from 'react';
-import axios from 'axios';
 import {useGridStore, useProjectGridStore} from '../../../store/es2Store';
 import {SUCCESS, FAILURE, displayToast} from '../../ToastUtil';
 
 import './EditProject.css';
 import '../AddProject/AddProject.css';
-import {BASE_URL} from '../../../server-constants';
+import httpClient from '../../../helper/httpClient';
 
 function EditProject() {
   const setGridRefresh = useGridStore((state) => state.setGridRefresh);
@@ -128,16 +127,8 @@ function EditProject() {
       projectId: selectedRecord.project_id,
     };
 
-    const api = BASE_URL+'/project/update';
-
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.post(api, requestData, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token,
-        },
-      });
+      const response = await httpClient.post('/api/project/update', requestData);
 
       let status = FAILURE;
       if (response.status === 200) {

@@ -5,22 +5,19 @@
 import React, {useEffect, useMemo} from 'react';
 import {useUserStore} from '../../../store/es2Store';
 import {AgGridReact} from 'ag-grid-react';
-import {useNavigate} from 'react-router-dom';
-import axios from 'axios';
 import CustomCellRenderer from '../../Publication/Grid/CustomCellRenderer';
 import {FAILURE, SUCCESS, displayToast} from '../../ToastUtil';
 
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import '../../Publication/Grid/DataGrid.css';
-import {BASE_URL} from '../../../server-constants';
+import httpClient from '../../../helper/httpClient';
 
 // Add a information icon near organization name and on hover display that
 // "Organization Name" can be your company name or the university name.
 
 // Check where we can add the add user button only for admin anyway.
 function UserGrid({setUserDetails, editUserAction, shouldRender}) {
-  const navigate = useNavigate();
   const userTypeId = useUserStore((state) => state.userTypeId);
   const [userList, setUserList] = React.useState([]);
   const [renderGrid, setRenderGrid] = React.useState(false);
@@ -38,73 +35,50 @@ function UserGrid({setUserDetails, editUserAction, shouldRender}) {
   };
 
   useEffect(() => {
-    const api = BASE_URL+'/user/list';
-    const token = localStorage.getItem('token');
-    axios.get(api, {
-      withCredentials: true,
-      headers: {
-        'Authorization': 'Bearer ' + token,
-        'Content-Type': 'application/json',
-      },
-    })
-        .then((response) => {
-          const result = response.data;
-          setUserList(result.data);
-        })
-        .catch((error) => {
-          if (error.response.status == 401) {
-            localStorage.removeItem('token');
-            navigate('/');
-          }
-          console.error(error);
-          displayToast('Error occurred', FAILURE);
-        });
+    const onLoad = async () => {
+      try {
+        const response = await httpClient.get('/api/user/list');
+        const result = response.data;
+        setUserList(result.data);
+      } catch (error) {
+        console.error(error);
+        displayToast('Error occurred', FAILURE);
+      };
+    };
+    onLoad();
   }, [shouldRender, renderGrid]);
 
-  const handleDelete = (props) => {
+  const handleDelete = async (props) => {
     if (!window.confirm('Are you sure you want to delete this user?')) {
       return;
     }
-    const api = BASE_URL+`/user/delete`;
 
     const data = {
       'userId': props.node.data.userId,
     };
 
-    const token = localStorage.getItem('token');
-    axios.post(api, data, {
-      withCredentials: true,
-      headers: {
-        'Authorization': 'Bearer ' + token,
-        'Content-Type': 'application/json',
-      },
-    })
-        .then((response) => {
-          let status = FAILURE;
-          if (response.status === 200) {
-            if (response.data.result === 'success') {
-              status = SUCCESS;
-            }
-          }
-          const message = response.data.message;
-          if (message) {
-            displayToast(message, status);
-          } else {
-            const error = response.data.error;
-            displayToast(error, status);
-          }
-          if (status === SUCCESS) {
-            setRenderGrid(!renderGrid);
-          }
-        })
-        .catch((error) => {
-          if (error.response.status == 401) {
-            localStorage.removeItem('token');
-            navigate('/');
-          }
-          console.error(error);
-          displayToast('Error occurred', FAILURE);
-        });
+    try {
+      const response = await httpClient.post(`/api/user/delete`, data);
+      let status = FAILURE;
+      if (response.status === 200) {
+        if (response.data.result === 'success') {
+          status = SUCCESS;
+        }
+      }
+      const message = response.data.message;
+      if (message) {
+        displayToast(message, status);
+      } else {
+        const error = response.data.error;
+        displayToast(error, status);
+      }
+      if (status === SUCCESS) {
+        setRenderGrid(!renderGrid);
+      }
+    } catch (error) {
+      console.error(error);
+      displayToast('Error occurred', FAILURE);
+    };
   };
 
   const userAction = (props) =>

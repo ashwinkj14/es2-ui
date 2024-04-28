@@ -65,7 +65,7 @@ function Login() {
       return false;
     }
 
-    const api = BASE_URL+'/login';
+    const api = BASE_URL+'/api/login';
 
     const requestData = {
       username: username,
@@ -102,7 +102,7 @@ function Login() {
   };
 
   const validateToken = (token) => {
-    const api = BASE_URL+'/login';
+    const api = BASE_URL+'/api/login';
 
     axios.post(api, {}, {
       withCredentials: true,

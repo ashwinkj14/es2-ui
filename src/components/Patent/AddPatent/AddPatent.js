@@ -4,16 +4,13 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable require-jsdoc */
 import {useState} from 'react';
-import axios from 'axios';
 import {SUCCESS, FAILURE, displayToast} from '../../ToastUtil';
-import {useNavigate} from 'react-router-dom';
 import {usePatentNavigation} from '../../../store/es2Store';
 
 import './AddPatent.css';
-import {BASE_URL} from '../../../server-constants';
+import httpClient from '../../../helper/httpClient';
 
 function AddPatent() {
-  const navigate = useNavigate();
   const setSelectedTab = usePatentNavigation((state) => state.setSelectedTab);
 
   const today = new Date().toISOString().split('T')[0];
@@ -111,17 +108,8 @@ function AddPatent() {
       abstract: abstract,
     };
 
-    const api = BASE_URL+'/patent/add';
-
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.post(api, requestData, {
-        withCredentials: true,
-        headers: {
-          'Authorization': 'Bearer ' + token,
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await httpClient.post('/api/patent/add', requestData);
 
       let status = FAILURE;
       if (response.status === 200) {
@@ -142,10 +130,6 @@ function AddPatent() {
         displayToast('Patent added successfully', status);
       }
     } catch (error) {
-      if (error.response.status == 401) {
-        localStorage.removeItem('token');
-        navigate('/');
-      }
       displayToast('Unable to add the patent record. Please try again.', FAILURE);
       console.error(error);
     }

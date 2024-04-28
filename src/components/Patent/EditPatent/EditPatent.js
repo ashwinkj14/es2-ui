@@ -5,17 +5,14 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable require-jsdoc */
 import {useState} from 'react';
-import axios from 'axios';
-import {useNavigate} from 'react-router-dom';
 import {useGridStore} from '../../../store/es2Store';
 import {SUCCESS, FAILURE, displayToast} from '../../ToastUtil';
 
 import './EditPatent.css';
 import '../AddPatent/AddPatent.css';
-import {BASE_URL} from '../../../server-constants';
+import httpClient from '../../../helper/httpClient';
 
 function EditPatent({data, setSelectedRecord}) {
-  const navigate = useNavigate();
   const setGridRefresh = useGridStore((state) => state.setGridRefresh);
 
   const today = new Date().toISOString().split('T')[0];
@@ -119,16 +116,8 @@ function EditPatent({data, setSelectedRecord}) {
       patent_id: data.patent_id,
     };
 
-    const api = BASE_URL+'/patent/update';
-
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.post(api, requestData, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token,
-        },
-      });
+      const response = await httpClient.post('/api/patent/update', requestData);
 
       let status = FAILURE;
       if (response.status === 200) {
@@ -145,10 +134,6 @@ function EditPatent({data, setSelectedRecord}) {
         displayToast(error, status);
       }
     } catch (error) {
-      if (error.response.status == 401) {
-        localStorage.removeItem('token');
-        navigate('/');
-      }
       displayToast('Unable to update the Patent record. Please try again.', FAILURE);
       console.error(error);
     }

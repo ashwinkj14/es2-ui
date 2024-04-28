@@ -3,8 +3,6 @@
 /* eslint-disable require-jsdoc */
 /* eslint-disable react/react-in-jsx-scope */
 import {useState} from 'react';
-import axios from 'axios';
-import {useNavigate} from 'react-router-dom';
 import {useUserStore} from '../../../store/es2Store';
 import {FAILURE, SUCCESS, displayToast} from '../../ToastUtil';
 import Box from '@mui/material/Box';
@@ -19,7 +17,7 @@ import SideBar from '../../SideBar/SideBar';
 
 import './EditUser.css';
 import './AddUser.css';
-import {BASE_URL} from '../../../server-constants';
+import httpClient from '../../../helper/httpClient';
 
 function EditUser({action, user}) {
   const [showPassword, setShowPassword] = useState(false);
@@ -48,7 +46,6 @@ function EditUser({action, user}) {
     },
   ];
   const userTypeId = useUserStore((state) => state.userTypeId);
-  const navigate = useNavigate();
   const handleClose = () => action();
   const [selectedType, setSelectedType] = useState(user.userTypeId);
   const handleTypeSelection = (event) => {
@@ -96,11 +93,10 @@ function EditUser({action, user}) {
     return errorExists;
   };
 
-  const handleUpdate = () => {
+  const handleUpdate = async () => {
     if (handleValidation()) {
       return;
     }
-    const api = BASE_URL+`/user/update`;
 
     const data = {
       userId: user.userId,
@@ -111,39 +107,27 @@ function EditUser({action, user}) {
       password: password,
     };
 
-    const token = localStorage.getItem('token');
-    axios.post(api, data, {
-      withCredentials: true,
-      headers: {
-        'Authorization': 'Bearer ' + token,
-        'Content-Type': 'application/json',
-      },
-    })
-        .then((response) => {
-          let status = FAILURE;
-          if (response.status === 200) {
-            if (response.data.result === 'success') {
-              status = SUCCESS;
-            }
-          }
-          const message = response.data.message;
-          if (message) {
-            displayToast(message, status);
-          } else {
-            const error = response.data.error;
-            displayToast(error, status);
-          }
-          if (status === SUCCESS) {
-            handleClose();
-          }
-        })
-        .catch((error) => {
-          if (error.response.status == 401) {
-            localStorage.removeItem('token');
-            navigate('/');
-          }
-          console.log(error);
-        });
+    try {
+      const response = await httpClient.post(`/api/user/update`, data);
+      let status = FAILURE;
+      if (response.status === 200) {
+        if (response.data.result === 'success') {
+          status = SUCCESS;
+        }
+      }
+      const message = response.data.message;
+      if (message) {
+        displayToast(message, status);
+      } else {
+        const error = response.data.error;
+        displayToast(error, status);
+      }
+      if (status === SUCCESS) {
+        handleClose();
+      }
+    } catch (error) {
+      console.log(error);
+    };
   };
   const toRender = <div>
     <div className="add-user-title">

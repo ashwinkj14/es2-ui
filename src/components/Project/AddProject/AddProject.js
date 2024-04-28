@@ -5,12 +5,11 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable require-jsdoc */
 import {useState} from 'react';
-import axios from 'axios';
+import {useProjectGridStore} from '../../../store/es2Store';
+import httpClient from '../../../helper/httpClient';
 import {SUCCESS, FAILURE, displayToast} from '../../ToastUtil';
 
 import './AddProject.css';
-import {BASE_URL} from '../../../server-constants';
-import {useProjectGridStore} from '../../../store/es2Store';
 
 function AddProject() {
   const setSelectedTab = useProjectGridStore((state) => state.setSelectedTab);
@@ -118,17 +117,8 @@ function AddProject() {
       iab_mentors: JSON.stringify(mentors),
     };
 
-    const api = BASE_URL+'/project/add';
-
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.post(api, requestData, {
-        withCredentials: true,
-        headers: {
-          'Authorization': 'Bearer ' + token,
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await httpClient.post('/api/project/add', requestData);
 
       let status = FAILURE;
       if (response.status === 200) {

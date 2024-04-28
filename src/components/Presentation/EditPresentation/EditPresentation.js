@@ -6,16 +6,13 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable require-jsdoc */
 import {useRef, useState, useCallback} from 'react';
-import axios from 'axios';
 import {SUCCESS, FAILURE, displayToast} from '../../ToastUtil';
-import {useNavigate} from 'react-router-dom';
 import {usePresentationGridStore} from '../../../store/es2Store';
 
 import './EditPresentation.css';
-import {BASE_URL} from '../../../server-constants';
+import httpClient from '../../../helper/httpClient';
 
 function EditPresentation() {
-  const navigate = useNavigate();
   const fileInput = useRef(null);
 
   const selectedRecord = usePresentationGridStore((state) => state.selectedRecord);
@@ -73,14 +70,9 @@ function EditPresentation() {
     formData.append('presentationType', presentationType);
     formData.append('presentationDate', presentationDate);
 
-    const api = BASE_URL+'/project/presentation/update';
-
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.post(api, formData, {
-        withCredentials: true,
+      const response = await httpClient.post('/api/project/presentation/update', formData, {
         headers: {
-          'Authorization': 'Bearer ' + token,
           'Content-Type': 'multipart/form-data',
         },
       });
@@ -105,10 +97,6 @@ function EditPresentation() {
         displayToast('Presentation updated successfully', status);
       }
     } catch (error) {
-      if (error.response.status == 401) {
-        localStorage.removeItem('token');
-        navigate('/');
-      }
       displayToast('Unable to update the presentation record. Please try again.', FAILURE);
       console.error(error);
     }

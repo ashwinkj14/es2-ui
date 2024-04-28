@@ -2,10 +2,8 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable require-jsdoc */
 import React, {useMemo} from 'react';
-import axios from 'axios';
 import {AgGridReact} from 'ag-grid-react';
 import TablePagination from '@mui/material/TablePagination';
-import {useNavigate} from 'react-router-dom';
 import {FAILURE, SUCCESS, displayToast} from '../../ToastUtil';
 import {usePresentationGridStore, useProjectGridStore} from '../../../store/es2Store';
 
@@ -13,11 +11,9 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import './Action.css';
 import './DataGrid.css';
-import {BASE_URL} from '../../../server-constants';
+import httpClient from '../../../helper/httpClient';
 
 function DataGrid() {
-  const navigate = useNavigate();
-
   const setGridRefresh = usePresentationGridStore((state) => state.setGridRefresh);
   const presentationList = usePresentationGridStore((state) => state.presentationList);
   const setSelectedRecord = usePresentationGridStore((state) => state.setSelectedRecord);
@@ -35,18 +31,11 @@ function DataGrid() {
   };
 
   const deletePresentation = async (presentationId) => {
-    const api = BASE_URL+`/project/presentation/delete`;
     try {
       const requestData = {
         presentationId: presentationId,
       };
-      const token = localStorage.getItem('token');
-      const response = await axios.post(api, requestData, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token,
-        },
-      });
+      const response = await httpClient.post(`/api/project/presentation/delete`, requestData);
 
       let status = FAILURE;
       if (response.status === 200) {
@@ -65,10 +54,6 @@ function DataGrid() {
         setGridRefresh();
       }
     } catch (error) {
-      if (error.response.status == 401) {
-        localStorage.removeItem('token');
-        navigate('/');
-      }
       displayToast('Error occurred', FAILURE);
     }
   };
@@ -81,43 +66,34 @@ function DataGrid() {
   };
 
   const downloadPresentation = async (presentationId) => {
-    const api = BASE_URL+`/project/presentation/download`;
-
-    const token = localStorage.getItem('token');
     const requestData = {
       presentationId: presentationId,
     };
-    axios.get(api, {
-      withCredentials: true,
-      headers: {
-        'Authorization': 'Bearer ' + token,
-        'Content-Type': 'application/json',
-      },
-      responseType: 'blob',
-      params: requestData,
-    })
-        .then(async (response) => {
-          if (response.status === 200) {
-            const blob = new Blob([response.data]);
-            const url = window.URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            const contentDisposition = response.headers.get('content-disposition');
-            link.download = presentationId + '.pdf';
-            if (contentDisposition != undefined) {
-              link.download = contentDisposition.split('filename=')[1];
-            }
-            document.body.appendChild(link);
-            link.click();
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(link);
-          } else {
-            displayToast('Unable to Download the file', FAILURE);
-          }
-        })
-        .catch((error) => {
-          displayToast('Unable to Download the file', FAILURE);
-        });
+    try {
+      const response = await httpClient.get(`/api/project/presentation/download`, {
+        responseType: 'blob',
+        params: requestData,
+      });
+      if (response.status === 200) {
+        const blob = new Blob([response.data]);
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        const contentDisposition = response.headers.get('content-disposition');
+        link.download = presentationId + '.pdf';
+        if (contentDisposition != undefined) {
+          link.download = contentDisposition.split('filename=')[1];
+        }
+        document.body.appendChild(link);
+        link.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(link);
+      } else {
+        displayToast('Unable to Download the file', FAILURE);
+      }
+    } catch (error) {
+      displayToast('Unable to Download the file', FAILURE);
+    };
   };
 
   const handleDownloadButtonClick = (props) => {

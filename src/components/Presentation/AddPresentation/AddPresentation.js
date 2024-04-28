@@ -6,12 +6,11 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable require-jsdoc */
 import {useRef, useState, useCallback} from 'react';
-import axios from 'axios';
 import {SUCCESS, FAILURE, displayToast} from '../../ToastUtil';
 
 import './AddPresentation.css';
-import {BASE_URL} from '../../../server-constants';
 import {usePresentationGridStore, useProjectGridStore} from '../../../store/es2Store';
+import httpClient from '../../../helper/httpClient';
 
 function AddPresentation() {
   const fileInput = useRef(null);
@@ -72,14 +71,9 @@ function AddPresentation() {
     formData.append('presentationType', presentationType);
     formData.append('presentationDate', presentationDate);
 
-    const api = BASE_URL+'/project/presentation/add';
-
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.post(api, formData, {
-        withCredentials: true,
+      const response = await httpClient.post('/api/project/presentation/add', formData, {
         headers: {
-          'Authorization': 'Bearer ' + token,
           'Content-Type': 'multipart/form-data',
         },
       });
