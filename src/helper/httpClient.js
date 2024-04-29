@@ -31,6 +31,7 @@ httpClient.interceptors.response.use((response) => {
     // Handle common errors centrally
     switch (error.response.status) {
       case 401: // Unauthorized
+        displayToast('You are not authorized to perform this action.', FAILURE);
         localStorage.removeItem('token');
         useNavigate('/');
         break;
