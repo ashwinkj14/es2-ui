@@ -472,7 +472,7 @@ function DatabaseSettings() {
       </div>
       <div className='dbsettings-tab-container'>
         <div onClick={() => handleTabSelect('configuration')} className={`${tabHeaderContainer} ${activeTab==='configuration'?'dbsettings-tab-header-container-active':''}`}>
-          <h3 className='dbsettings-header-content'>Server Settings</h3>
+          <h3 className='dbsettings-header-content'>Remote Server Settings</h3>
         </div>
         <div onClick={() => handleTabSelect('trigger')} className={`${tabHeaderContainer} ${activeTab==='trigger'?'dbsettings-tab-header-container-active':''}`}>
           <h3 className='dbsettings-header-content'>Trigger</h3>
