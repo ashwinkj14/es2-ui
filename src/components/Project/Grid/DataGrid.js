@@ -7,6 +7,7 @@ import TablePagination from '@mui/material/TablePagination';
 
 import {FAILURE, SUCCESS, displayToast} from '../../ToastUtil';
 import {useGridStore, usePresentationGridStore, useProjectGridStore} from '../../../store/es2Store';
+import CustomCellRenderer from './CustomCellRenderer';
 
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
@@ -115,11 +116,11 @@ h-11V9.1z M12.3,15.4c0-1,0.8-1.7,1.7-1.7h32c1,0,1.7,0.8,1.7,1.7v1.3H12.3V15.4z">
     {field: 'project_id', headerName: 'Project ID', hide: true, width: 0},
     {field: 'pi_students_list', headerName: 'Students List', hide: true, width: 0},
     {field: 'iab_mentors_list', headerName: 'Mentors List', hide: true, width: 0},
-    {field: 'project_title', headerName: 'Title', autoHeight: true, minWidth: 350},
-    {field: 'pi_students', headerName: 'PI and Student(s)', autoHeight: true, minWidth: 200},
-    {field: 'iab_mentors', headerName: 'IAB Mentor(s)', autoHeight: true, minWidth: 200},
-    {headerName: 'Presentations', cellRenderer: presentationAction, minWidth: 20},
-    (selectedTab=='manage')?{hide: true}:{headerName: 'Comments/Response', cellRenderer: commentsAction, minWidth: 20},
+    {field: 'project_title', headerName: 'Title', cellRenderer: CustomCellRenderer, autoHeight: true, minWidth: 250},
+    {field: 'pi_students', headerName: 'PI and Student(s)', cellRenderer: CustomCellRenderer, autoHeight: true, minWidth: 150},
+    {field: 'iab_mentors', headerName: 'IAB Mentor(s)', cellRenderer: CustomCellRenderer, autoHeight: true, minWidth: 150},
+    {headerName: 'Presentations', cellRenderer: presentationAction, minWidth: 100},
+    (selectedTab=='manage')?{hide: true}:{headerName: 'Comments/Response', cellRenderer: commentsAction, minWidth: 100},
     (selectedTab=='manage')?{headerName: 'Action', cellRenderer: manageProjectAction, minWidth: 50}:{hide: true},
   ];
 

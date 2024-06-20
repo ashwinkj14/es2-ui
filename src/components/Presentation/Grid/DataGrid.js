@@ -11,6 +11,7 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import './Action.css';
 import './DataGrid.css';
+import './CustomCellRenderer.css';
 import httpClient from '../../../helper/httpClient';
 
 function DataGrid() {
@@ -114,7 +115,7 @@ function DataGrid() {
   const presentationLinkRender = (props) => {
     const presentationName = props.node.data.presentation_name;
     return <div className='presentation-link-container'>
-      <div>{presentationName}</div>
+      <div className='custom-cell'>{presentationName}</div>
     </div>;
   };
 
