@@ -15,8 +15,8 @@ function AddProject() {
   const setSelectedTab = useProjectGridStore((state) => state.setSelectedTab);
 
   const [title, setTitle] = useState('');
-  const [students, setStudents] = useState([{firstName: '', middleName: '', lastName: ''}]);
-  const [mentors, setMentors] = useState([{firstName: '', middleName: '', lastName: ''}]);
+  const [students, setStudents] = useState([{firstName: '', lastName: '', organization: ''}]);
+  const [mentors, setMentors] = useState([{firstName: '', lastName: '', organization: ''}]);
 
   const [titleError, setTitleError] = useState('');
   const [studentsError, setStudentsError] = useState('');
@@ -28,9 +28,9 @@ function AddProject() {
     setStudents(updatedStudent);
   };
 
-  const updateStudentMiddleName = (event, index) => {
+  const updateStudentOrganization = (event, index) => {
     const updatedStudent = [...students];
-    updatedStudent[index].middleName = event.target.value;
+    updatedStudent[index].organization = event.target.value;
     setStudents(updatedStudent);
   };
 
@@ -47,9 +47,9 @@ function AddProject() {
     setMentors(updatedMentor);
   };
 
-  const updateMentorMiddleName = (event, index) => {
+  const updateMentorOrganization = (event, index) => {
     const updatedMentor = [...mentors];
-    updatedMentor[index].middleName = event.target.value;
+    updatedMentor[index].organization = event.target.value;
     setMentors(updatedMentor);
   };
 
@@ -61,12 +61,12 @@ function AddProject() {
 
 
   const addStudent = () => {
-    const newStudent = {firstName: '', middleName: '', lastName: ''};
+    const newStudent = {firstName: '', lastName: '', organization: ''};
     setStudents([...students, newStudent]);
   };
 
   const addMentor = () => {
-    const newMentor = {firstName: '', middleName: '', lastName: ''};
+    const newMentor = {firstName: '', lastName: '', organization: ''};
     setMentors([...mentors, newMentor]);
   };
 
@@ -148,8 +148,8 @@ function AddProject() {
     return students.map((student, index) =>
       <div className='add-pub-author-details-container'>
         <input value={student.firstName} onChange={(event) => updateStudentFirstName(event, index)} placeholder='First Name' className="text-field author-field" type="text"/>
-        <input value={student.middleName} onChange={(event) => updateStudentMiddleName(event, index)} placeholder='Middle Name' className="text-field author-field field-margin" type="text"/>
         <input value={student.lastName} onChange={(event) => updateStudentLastName(event, index)} placeholder='Last Name' className="text-field author-field field-margin" type="text"/>
+        <input value={student.organization} onChange={(event) => updateStudentOrganization(event, index)} placeholder='Organization' className="text-field author-field field-margin" type="text"/>
         <div className='add-pub-author-delete-btn' onClick={() => handleStudentDelete(index)}>
           <svg xmlns="http://www.w3.org/2000/svg" enableBackground="new 0 0 60 60" viewBox="0 0 60 60" id="Delete"><path d="M18.3,56h23.6c2.7,0,4.8-2.2,4.8-4.8V18.7h2.1c0.6,0,1-0.4,1-1v-2.3c0-2.1-1.7-3.7-3.7-3.7h-8.5V9.1c0-1.7-1.4-3.1-3.1-3.1
 	h-8.9c-1.7,0-3.1,1.4-3.1,3.1v2.6H14c-2.1,0-3.7,1.7-3.7,3.7v2.3c0,0.6,0.4,1,1,1h2.1v32.5C13.4,53.8,15.6,56,18.3,56z M44.7,51.2
@@ -164,8 +164,8 @@ function AddProject() {
     return mentors.map((mentor, index) =>
       <div className='add-pub-author-details-container'>
         <input value={mentor.firstName} onChange={(event) => updateMentorFirstName(event, index)} placeholder='First Name' className="text-field author-field" type="text"/>
-        <input value={mentor.middleName} onChange={(event) => updateMentorMiddleName(event, index)} placeholder='Middle Name' className="text-field author-field field-margin" type="text"/>
         <input value={mentor.lastName} onChange={(event) => updateMentorLastName(event, index)} placeholder='Last Name' className="text-field author-field field-margin" type="text"/>
+        <input value={mentor.organization} onChange={(event) => updateMentorOrganization(event, index)} placeholder='Organization' className="text-field author-field field-margin" type="text"/>
         <div className='add-pub-author-delete-btn' onClick={() => handleMentorDelete(index)}>
           <svg xmlns="http://www.w3.org/2000/svg" enableBackground="new 0 0 60 60" viewBox="0 0 60 60" id="Delete"><path d="M18.3,56h23.6c2.7,0,4.8-2.2,4.8-4.8V18.7h2.1c0.6,0,1-0.4,1-1v-2.3c0-2.1-1.7-3.7-3.7-3.7h-8.5V9.1c0-1.7-1.4-3.1-3.1-3.1
 	h-8.9c-1.7,0-3.1,1.4-3.1,3.1v2.6H14c-2.1,0-3.7,1.7-3.7,3.7v2.3c0,0.6,0.4,1,1,1h2.1v32.5C13.4,53.8,15.6,56,18.3,56z M44.7,51.2
