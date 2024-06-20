@@ -25,10 +25,10 @@ function NavBar() {
           <a onClick={() => handleNavigation('/publication')}>Publication</a>
         </section>
         <section className='navbar-item'>
-          <a onClick={() => handleNavigation('/patent')}>Patent</a>
+          <a onClick={() => handleNavigation('/project')}>Project</a>
         </section>
         <section className='navbar-item'>
-          <a onClick={() => handleNavigation('/project')}>Project</a>
+          <a onClick={() => handleNavigation('/patent')}>Patent</a>
         </section>
         <section className='navbar-item'>
           <a onClick={() => handleNavigation('/settings')}>Settings</a>
