@@ -75,6 +75,7 @@ function Comments() {
       <div className='add-comment-btn' onClick={handleBtnClick}>Add Comment</div>
     </div>
   </div>;
+
   const toRender = <div className='abstract-container'>
     <div className="abstract-title">
             Comments
