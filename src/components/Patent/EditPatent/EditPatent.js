@@ -160,7 +160,7 @@ function EditPatent({data, setSelectedRecord}) {
       <div className='back-btn-container'>
         <div className='back-btn' onClick={handleClickBack}>
           <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M11.62 3.81 7.43 8l4.19 4.19-1.53 1.52L4.38 8l5.71-5.71 1.53 1.52z"/></svg>
-            back
+            Back
         </div>
       </div>
       <div className="add-pub-header">Edit Patent</div>
