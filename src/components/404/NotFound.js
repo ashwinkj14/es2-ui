@@ -3,6 +3,7 @@
 /* eslint-disable require-jsdoc */
 import logo from '../../es2-logo-final.jpg';
 import '../Login/Login.css';
+import './NotFound.css';
 
 function NotFound() {
   return (
@@ -12,13 +13,15 @@ function NotFound() {
           <img src={logo} alt='ES2'/>
         </div>
       </section>
-      <section className='login-section'>
+      <section className='not-found-content'>
         <div className='login-header'>
           <div style={{width: '500px', display: 'flex', justifyContent: 'center'}}>
             <span style={{fontSize: '100px'}}>404</span>
           </div>
-          <br></br>
-          <span>Page Not Found</span>
+          <div style={{display: 'flex', justifyContent: 'center'}}>
+            <br></br>
+            <span>Page Not Found</span>
+          </div>
         </div>
       </section>
     </div>
