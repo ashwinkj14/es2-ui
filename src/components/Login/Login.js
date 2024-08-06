@@ -2,10 +2,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable require-jsdoc */
 import axios from 'axios';
-import {useState} from 'react';
-import {useNavigate} from 'react-router-dom';
-import {useUserStore} from '../../store/es2Store';
-import {FAILURE, displayToast} from '../ToastUtil';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
@@ -13,12 +9,16 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import MenuItem from '@mui/material/MenuItem';
+import {useState, useEffect} from 'react';
+import {useNavigate} from 'react-router-dom';
 
-import {BASE_URL} from '../../server-constants';
 import logo from '../../es2-logo-final.jpg';
+import {BASE_URL} from '../../server-constants';
+import {useUserStore} from '../../store/es2Store';
+import {FAILURE, displayToast} from '../ToastUtil';
 
 import './Login.css';
-import {useEffect} from 'react';
+
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -65,7 +65,7 @@ function Login() {
       return false;
     }
 
-    const api = BASE_URL+'/api/login';
+    const api = BASE_URL+'/api/auth/login';
 
     const requestData = {
       username: username,
@@ -102,7 +102,7 @@ function Login() {
   };
 
   const validateToken = (token) => {
-    const api = BASE_URL+'/api/login';
+    const api = BASE_URL+'/api/auth/login';
 
     axios.post(api, {}, {
       withCredentials: true,
@@ -245,6 +245,9 @@ function Login() {
             </Box>
             <section className='login-btn-container'>
               <button className='login-btn' onClick={() => doLogin()}>Login</button>
+            </section>
+            <section className='login-forgot-password'>
+              <div onClick={() => navigate('/ForgotPassword')}>forgot password?</div>
             </section>
           </section>
         </div>
