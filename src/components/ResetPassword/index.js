@@ -24,7 +24,7 @@ function ResetPassword() {
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(window.location.search);
   const token = queryParams.get('token');
-  if (!token || token.length !== 32) {
+  if (!token || token.length !== 64) {
     return <NotFound/>;
   }
   const [password, setPassword] = useState('');
