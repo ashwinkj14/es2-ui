@@ -33,3 +33,31 @@
     height: 100%;
     width: 55rem;
 }
+
+.popup-open-animation{
+    transform: translateX(55rem);
+    animation: moveLeft 0.5s forwards;
+}
+
+.popup-close-animation{
+    transform: translateX(0);
+    animation: moveRight 0.5s forwards;
+}
+
+@keyframes moveRight {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(55rem); /* Moves the div across the entire viewport width */
+    }
+}
+
+@keyframes moveLeft {
+    from {
+        transform: translateX(55rem);
+    }
+    to {
+        transform: translateX(0); /* Moves the div across the entire viewport width */
+    }
+}

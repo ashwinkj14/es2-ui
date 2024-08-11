@@ -90,6 +90,7 @@
 }
 
 .restore-db-upload-field-container{
+    max-width: 500px;
     display: flex;
     flex-direction: column;
     margin-top: 15px;
