@@ -1,6 +1,5 @@
 /* eslint-disable max-len */
 import axios from 'axios';
-import {useNavigate} from 'react-router-dom';
 import {FAILURE, displayToast} from '../components/ToastUtil';
 import {BASE_URL} from '../server-constants';
 
@@ -33,7 +32,7 @@ httpClient.interceptors.response.use((response) => {
       case 401: // Unauthorized
         displayToast('You are not authorized to perform this action.', FAILURE);
         localStorage.removeItem('token');
-        useNavigate('/');
+        window.location = '/';
         break;
       case 403: // Forbidden
         displayToast('You do not have permission to perform this action.', FAILURE);
