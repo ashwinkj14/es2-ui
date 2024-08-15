@@ -2,8 +2,9 @@
 /* eslint-disable max-len */
 /* eslint-disable require-jsdoc */
 /* eslint-disable react/react-in-jsx-scope */
-import './PatentNav.css';
+import {useEffect} from 'react';
 import {usePatentNavigation, useUserStore} from '../../../store/es2Store';
+import './PatentNav.css';
 
 function PatentNav() {
   const {selectedTab, setSelectedTab} = usePatentNavigation((state) => state);
@@ -11,6 +12,10 @@ function PatentNav() {
   const handleTabClick = (value) => {
     setSelectedTab(value);
   };
+
+  useEffect(()=>{
+    setSelectedTab('search');
+  }, []);
 
   return (
     <div>

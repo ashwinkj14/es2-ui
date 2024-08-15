@@ -3,6 +3,7 @@
 /* eslint-disable require-jsdoc */
 /* eslint-disable react/react-in-jsx-scope */
 import React from 'react';
+import {useEffect} from 'react';
 import {useSettingsStore, useUserStore} from '../../../store/es2Store';
 
 import '../../Publication/NavBar/PublicationNav.css';
@@ -14,6 +15,10 @@ function SettingsNav() {
   const handleTabClick = (tab) => {
     setSelectedTab(tab);
   };
+
+  useEffect(()=>{
+    setSelectedTab('usermgmt');
+  }, []);
 
   return (
     <div>

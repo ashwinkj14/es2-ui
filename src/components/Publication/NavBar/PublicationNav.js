@@ -2,6 +2,7 @@
 /* eslint-disable max-len */
 /* eslint-disable require-jsdoc */
 /* eslint-disable react/react-in-jsx-scope */
+import {useEffect} from 'react';
 import {usePublicationNavigation, useUserStore} from '../../../store/es2Store';
 
 import './PublicationNav.css';
@@ -12,6 +13,10 @@ function PublicationNav() {
   const handleTabClick = (value) => {
     setSelectedTab(value);
   };
+
+  useEffect(()=>{
+    setSelectedTab('search');
+  }, []);
 
   return (
     <div>

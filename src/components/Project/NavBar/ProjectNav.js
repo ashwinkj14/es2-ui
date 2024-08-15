@@ -2,6 +2,7 @@
 /* eslint-disable max-len */
 /* eslint-disable require-jsdoc */
 /* eslint-disable react/react-in-jsx-scope */
+import {useEffect} from 'react';
 import {useProjectGridStore} from '../../../store/es2Store';
 import './ProjectNav.css';
 
@@ -11,6 +12,10 @@ function ProjectNav() {
   const handleTabClick = (value) => {
     setSelectedTab(value);
   };
+
+  useEffect(()=>{
+    setSelectedTab('search');
+  }, []);
 
   return (
     <div>
