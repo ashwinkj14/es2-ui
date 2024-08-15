@@ -141,7 +141,7 @@ function EditPatent({data, setSelectedRecord}) {
 
   const renderInventors = () => {
     return inventors.map((inventor, index) =>
-      <div className='add-pub-author-details-container'>
+      <div key={index} className='add-pub-author-details-container'>
         <input value={inventor.firstName} onChange={(event) => updateFirstName(event, index)} placeholder='First Name' className="text-field author-field" type="text"/>
         <input value={inventor.middleName} onChange={(event) => updateMiddleName(event, index)} placeholder='Middle Name' className="text-field author-field field-margin" type="text"/>
         <input value={inventor.lastName} onChange={(event) => updateLastName(event, index)} placeholder='Last Name' className="text-field author-field field-margin" type="text"/>

@@ -81,9 +81,8 @@ function ForgotPassword() {
               autoComplete="off"
             >
               <TextField
-                id="outlined-username"
+                id="outlined-emailId"
                 label="Email"
-                defaultValue=""
                 className="login-input"
                 size="small"
                 color='success'

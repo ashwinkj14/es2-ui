@@ -146,7 +146,7 @@ function AddProject() {
 
   const renderPIStudents = () => {
     return students.map((student, index) =>
-      <div className='add-pub-author-details-container'>
+      <div key={index} className='add-pub-author-details-container'>
         <input value={student.firstName} onChange={(event) => updateStudentFirstName(event, index)} placeholder='First Name' className="text-field author-field" type="text"/>
         <input value={student.lastName} onChange={(event) => updateStudentLastName(event, index)} placeholder='Last Name' className="text-field author-field field-margin" type="text"/>
         <input value={student.organization} onChange={(event) => updateStudentOrganization(event, index)} placeholder='Organization' className="text-field author-field field-margin" type="text"/>
@@ -162,7 +162,7 @@ function AddProject() {
 
   const renderIABMentors = () => {
     return mentors.map((mentor, index) =>
-      <div className='add-pub-author-details-container'>
+      <div key={index} className='add-pub-author-details-container'>
         <input value={mentor.firstName} onChange={(event) => updateMentorFirstName(event, index)} placeholder='First Name' className="text-field author-field" type="text"/>
         <input value={mentor.lastName} onChange={(event) => updateMentorLastName(event, index)} placeholder='Last Name' className="text-field author-field field-margin" type="text"/>
         <input value={mentor.organization} onChange={(event) => updateMentorOrganization(event, index)} placeholder='Organization' className="text-field author-field field-margin" type="text"/>

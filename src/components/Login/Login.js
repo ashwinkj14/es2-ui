@@ -155,7 +155,6 @@ function Login() {
               <TextField
                 id="outlined-username"
                 label="Username"
-                defaultValue=""
                 className="login-input"
                 size="small"
                 color='success'
@@ -178,7 +177,6 @@ function Login() {
               <TextField
                 id="outlined-password"
                 label="Password"
-                defaultValue=""
                 className="login-input"
                 size="small"
                 type={showPassword ? 'text' : 'password'}

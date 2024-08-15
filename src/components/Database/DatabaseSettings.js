@@ -346,7 +346,6 @@ function DatabaseSettings() {
           <TextField
             id="outlined-host"
             label="Server host address"
-            defaultValue=""
             className="login-input"
             size="small"
             color='success'
@@ -370,7 +369,6 @@ function DatabaseSettings() {
           <TextField
             id="outlined-username"
             label="Username"
-            defaultValue=""
             className="login-input"
             size="small"
             color='success'
@@ -394,7 +392,6 @@ function DatabaseSettings() {
           <TextField
             id="outlined-password"
             label="Password"
-            defaultValue="1"
             size="small"
             type={showPassword ? 'text' : 'password'}
             sx={{
@@ -432,7 +429,6 @@ function DatabaseSettings() {
           <TextField
             id="outlined-directory"
             label="Backup Directory"
-            defaultValue=""
             className="login-input"
             size="small"
             color='success'

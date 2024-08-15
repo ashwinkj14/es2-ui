@@ -116,7 +116,6 @@ function ResetPassword() {
               <TextField
                 id="outlined-password"
                 label="Password"
-                defaultValue=""
                 className="login-input"
                 size="small"
                 type={showPassword ? 'text' : 'password'}
@@ -154,7 +153,6 @@ function ResetPassword() {
               <TextField
                 id="outlined-confirm-password"
                 label="Confirm Password"
-                defaultValue=""
                 className="login-input"
                 size="small"
                 type={showConfirmPassword ? 'text' : 'password'}

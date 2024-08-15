@@ -186,7 +186,6 @@ function AddUser({action}) {
             <TextField
               id="outlined-username"
               label="Username"
-              defaultValue=""
               className="login-input"
               size="small"
               color='success'
@@ -208,9 +207,8 @@ function AddUser({action}) {
             ></TextField>
             {displayError(usernameError)}
             <TextField
-              id="outlined-username"
+              id="outlined-emailId"
               label="Email ID"
-              defaultValue=""
               className="login-input"
               size="small"
               color='success'
@@ -232,9 +230,8 @@ function AddUser({action}) {
             ></TextField>
             {displayError(emailIdError)}
             <TextField
-              id="outlined-username"
+              id="outlined-org"
               label="Organization"
-              defaultValue=""
               className="login-input"
               size="small"
               color='success'
@@ -258,7 +255,6 @@ function AddUser({action}) {
             <TextField
               id="outlined-password"
               label="Password"
-              defaultValue="1"
               size="small"
               type={showPassword ? 'text' : 'password'}
               sx={{
@@ -296,7 +292,6 @@ function AddUser({action}) {
             <TextField
               id="outlined-confirm-password"
               label="Confirm Password"
-              defaultValue="1"
               size="small"
               type={showConfirmPassword ? 'text' : 'password'}
               sx={{

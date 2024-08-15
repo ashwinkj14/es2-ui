@@ -2,7 +2,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import {create} from 'zustand';
 import {devtools} from 'zustand/middleware';
-import {FAILURE, displayToast} from '../components/ToastUtil';
 import httpClient from '../helper/httpClient';
 
 export const useUserStore = create()(
@@ -38,8 +37,7 @@ export const useUserStore = create()(
           const result = response.data;
           setUserList(result);
         } catch (error) {
-          console.error(error);
-          displayToast('Unable to fetch users.', FAILURE);
+          console.log(error);
         };
       },
 
@@ -120,7 +118,7 @@ export const usePresentationGridStore = create()(
 
           setPresentationList(result);
         } catch (error) {
-          displayToast('Unable to fetch presentations.', FAILURE);
+          console.log(error);
         };
       },
 
@@ -145,7 +143,7 @@ export const usePresentationGridStore = create()(
 
           setPresentationList(result);
         } catch (error) {
-          displayToast('Unable to fetch presentations.', FAILURE);
+          console.log(error);
         };
       },
 
@@ -245,7 +243,7 @@ export const useProjectGridStore = create()(
 
           setProjectList(result);
         } catch (error) {
-          displayToast('Unable to fetch projects.', FAILURE);
+          console.log(error);
         };
       },
 
@@ -270,7 +268,7 @@ export const useProjectGridStore = create()(
 
           setProjectList(result);
         } catch (error) {
-          displayToast('Unable to fetch projects.', FAILURE);
+          console.log(error);
         };
       },
 
@@ -340,7 +338,7 @@ export const usePublicationStore = create()(
 
           setSearchResults(result);
         } catch (error) {
-          displayToast('Unable to fetch publications.', FAILURE);
+          console.log(error);
         }
       },
 
@@ -365,7 +363,7 @@ export const usePublicationStore = create()(
 
           setSearchResults(result);
         } catch (error) {
-          displayToast('Unable to fetch publications.', FAILURE);
+          console.log(error);
         };
       },
 
@@ -432,7 +430,7 @@ export const usePatentStore = create()(
 
           setSearchResults(result);
         } catch (error) {
-          displayToast('Unable to fetch patents.', FAILURE);
+          console.log(error);
         }
       },
 
@@ -457,7 +455,7 @@ export const usePatentStore = create()(
 
           setSearchResults(result);
         } catch (error) {
-          displayToast('Unable to fetch patents.', FAILURE);
+          console.log(error);
         };
       },
 

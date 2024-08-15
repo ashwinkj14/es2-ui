@@ -19,6 +19,9 @@ function Project() {
   const resetProjectStore = useProjectGridStore((state) => state.resetProjectStore);
 
   const token = localStorage.getItem('token');
+  if (token === undefined || token === null) {
+    navigate('/');
+  }
 
   useEffect(() => {
     if (!token) {
