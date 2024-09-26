@@ -8,7 +8,6 @@ import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import MenuItem from '@mui/material/MenuItem';
 import {useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 
@@ -24,30 +23,10 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [userType, setUserType] = useState('');
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
-
-  const userTypeOptions = [
-    {
-      value: 'admin',
-      label: 'admin',
-    },
-    {
-      value: 'member company',
-      label: 'member company',
-    },
-    {
-      value: 'student',
-      label: 'student',
-    },
-    {
-      value: 'faculty',
-      label: 'faculty',
-    },
-  ];
 
   const navigate = useNavigate();
   const setUserTypeId = useUserStore((state) => state.setUserTypeId);
@@ -60,17 +39,12 @@ function Login() {
       alert('password is required');
       return false;
     }
-    if (userType === '') {
-      alert('usertype is required');
-      return false;
-    }
 
     const api = BASE_URL+'/api/auth/login';
 
     const requestData = {
       username: username,
       password: password,
-      usertype: userType,
     };
 
     axios.post(api, requestData).then((response) => {
@@ -210,35 +184,6 @@ function Login() {
                   </InputAdornment>,
                 }}
               >
-              </TextField>
-              <TextField
-                id="outlined-usertype-select"
-                select
-                label="User Type"
-                defaultValue=""
-                className="login-input"
-                size="small"
-                color='success'
-                onChange={(event) => setUserType(event.target.value)}
-                sx={{
-                  mb: 1,
-                  width: '30ch',
-                  fontSize: '0.9rem',
-                  fontWeight: 300,
-                }}
-                InputLabelProps={{
-                  sx: {
-                    'fontSize': '0.9rem',
-                    'fontWeight': 400,
-                    '&.MuiOutlinedInput-notchedOutline': {fontSize: '0.9rem'},
-                  },
-                }}
-              >
-                {userTypeOptions.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
               </TextField>
             </Box>
             <section className='login-btn-container'>
