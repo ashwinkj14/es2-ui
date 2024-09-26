@@ -94,6 +94,11 @@ function ForgotPassword() {
                 }}
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') {
+                    event.preventDefault();
+                  }
+                }}
                 InputLabelProps={{
                   sx: {
                     'fontSize': '0.9rem',
